@@ -1237,5 +1237,373 @@ dosIguales ((x,y,z):xs) | (x==y) || (x==z) = dosIguales xs      2
 --2) 
 
 sumaPares [(Int, Int)] -> [Int] 
-sumaPares [] = 0
-sumaPares ((x,y):xs) = (x + y) : sumaPares xs
+sumaPares [] = []                                       1
+sumaPares ((x,y):xs) = (x + y) : sumaPares xs                 2
+
+--Evaluacion manuakl con sumaPares [(3,4),(1,13),(2,2)]
+
+  sumaPares [(3,4),(1,13),(2,2)]
+={Notacion en terminos de constructores}
+ sumaPares  (3,4):(1,13):(2,2):[]
+={Caso 2 sumaPares}
+  3 + 4 : sumaPares (1,13):(2,2):[]
+={Airmetica y notacion en constructores}
+  7 : (sumaPares (1,13):(2,2):[])
+={Caso 2 sumaPares}
+  7 : ((1 + 13) sumaPares (2,2):[])
+={Aritmetica y notacion en constructores}
+  7 : ((14) : sumaPares (2,2):[])
+={Caso 2 sumaPares}
+  7 : 14 : (2+2 : sumaPares [])
+={Aritmetica y caso base}
+  7 : 14 : 4 : []
+={Construccion de lista}
+  [7,14,4]
+
+--3) 
+
+cuantos :: Int -> [Int] -> Int 
+cuantos n [] = 0                                  1
+cuantos n (x:xs) | n == x = 1 + cuantos n xs      2 
+                 | otherwise = cuantos n xs             3
+
+--b) Evaluacion manual
+cuantos 1 [1,1,2,1] = 3
+
+  cuantos 1 [1,1,2,1] 
+={Notacion en terminos de constructores}
+  cuantos 1 1:1:2:1:[]
+={Caso 2}
+  1 == 1 = 1 + cuantos 1 1:2:1[]
+={Notacion en terminos de consturcotres }
+  1 + (cuantos 1 1:2:1:[])
+={Caso 2}
+  1 + (1 == 1 = 1 + cuantos 1 2:1[])
+={Notacion en terminos de consturcotres}
+ 1 + 1 + (cuantos 1 2:1[])
+={caso 3} 
+  1 + 1 + (cuantos 1 1:[])
+={Caso 2 }
+  1 + 1 + (1 == 1 = 1 + cuantos 1 [])
+={Caso base}
+  1 + 1 + 1 + 0 
+={Aritmetica }
+  3
+
+
+--Parcial 2017 
+
+--3 
+
+noAparece :: Char -> [Char] -> Bool
+noAparece _ [] = True                         1
+noAparece n (x:xs)                
+  | n == x    = False                   2 
+  | otherwise = noAparece n xs                3
+
+
+--b Evaluacion manual
+
+noAparece "z" "Famaf" = True 
+  noAparece "z" ["Famaf"]
+={Notacion en terminos constructores}
+  noAparece "z" 'f':'a':'m':'a':'f':[]
+={caso 3}
+  noAparece z 'a':'m':'a':'f':[]
+={caso 3}
+  noAparece z 'm':'a':'f':[]
+={caso 3}
+  noAparece z 'a':'f':[]
+={caso 3}
+  noAparece z 'f':[]
+={caso 3}
+  noAparece z []
+={Caso base }
+  True 
+
+
+--2)
+
+siguientes : [Int] -> [(Int, Int)]
+siguientes [] = []                              1
+siguientes (x:xs) = (x, x + 1) : siguientes xs  2
+
+--b) evaluacion manual
+
+  siguientes [11,7]
+={Notacion en terminos constructores}
+  siguientes 11:7:[]
+={Caso 2}
+  (11, 11 + 1) : siguientes 7:[] 
+={Aritmetica y notacion en terminos de constructroes}
+  (11,12) : (siguientes 7:[])
+={Caso 2}
+  ((11,12) : (7, 7+1) : siguientes [])
+={caso base, aritmetica}
+  (11,12) : (7,8) : []
+={Construccion de lista}
+  [(11,12), (7,8)]
+
+--1 
+
+distancia [(Int, Int)] -> Int
+distancia [] = 0
+distancia ((x,y): xs) =  abs (x - y) + distancia xs 
+
+--Parcial 2021
+
+pegarEn3 :: [(String, String)] -> [(String, String, String)]
+pegarEn3 [] = []                                                       1 
+pegarEn3 ((x,y): xs) = (x,y, x ++ y) : pegarEn3 xs                         2  
+
+pegarEn3 [("ab", "cd"), ("fg", "hi")]
+
+--b) evaluacion manual
+
+  pegarEn3 [("ab", "cd"), ("fg", "hi")]
+={notacion en terminos constructores}
+  pegarEn3 ("ab", "cd"):("fg", "hi"):[]
+={caso 2 pegarEn3}
+  ("ab","cd", "ab" ++ "cd") : pegarEn3 ("fg", "hi"):[]
+={Func. Concatenar. Notacion en terminos constructores}
+  ("ab","cd", "abcd") : (pegarEn3 ("fg", "hi"):[])
+={Caso 2 pegarEn3}
+  ("ab","cd", "abcd") : (("fg", "hi", "fg" ++ "hi") : pegarEn3 [])
+={Funcion concatenar y caso base }
+  ("ab","cd", "abcd") : ("fg", "hi", "fghi") :[]
+={construccion}
+   pegarEn3 [("ab", "cd"), ("fg", "hi")]
+
+
+cocientes :: Int -> [Int] -> [Int]
+cocientes n [] = []
+cocientes n (x:xs) = (x `div` n) : cocientes n xs 
+
+
+--3 induccionn
+
+concatena :: [[a]] -> [a]
+concatena [] = [] --- (1)
+concatena (xs:xss) = xs ++ (concatena xss) --- (2)
+
+sum :: [Int] -> Int
+sum [] = 0 --- (3)
+sum (x:xs) = x + sum xs --- (4)
+
+cuenta :: [[Int]] -> Int
+cuenta [] = 0 --- (5)
+cuenta (xs:xss) = (sum xs) + (cuenta xss) --- (6)
+
+--demuestre por inducci´on la siguiente propiedad
+
+sum (concatena xss) = (cuenta xss)
+
+--1 Caso base, xss = []
+
+  sum (concatena []) = (cuenta [])
+={Caso base concatena y cuenta}
+  sum ([]) = 0
+={caso base sum 3}
+  0 = 0
+
+--2) Hipotesis inductiva
+
+  sum (concatena xss) = (cuenta xss)
+
+--3) Paso indcutivoi, demuestro que vale para p(xs:xss)
+
+  sum (concatena xs:xss) = (cuenta xs:xss)
+={Caso recursivo de concatena (2)}
+    sum (xs ++ (concatena xss)) = (cuenta xs:xss)
+={Caso recursivo de cuenta 6}
+    sum (xs ++ (concatena xss)) = (sum xs) + (cuenta xss)
+={por sum caso 4}
+    sum(xs) + sum(concatena xss) = (sum xs) + (cuenta xss)
+={Hi}
+    sum(xs) + (cuenta xss) = (cuenta xss)
+
+
+--5) 
+
+sacaUnos :: [Int] -> [Int]
+sacaUnos [] = []                                  1
+sacaUnos (x:xs) | x == 1 = sacaUnos xs            2 
+                | x != 1 = x :( sacaUnos xs)          3   
+
+productoria :: [Int] -> Int 
+productoria [] = 1                                4
+productoria (x:xs) = x * (productoria xs)             5
+
+  productoria (sacaUnos xs) = productoria xs 
+
+--1C Caso base xs = []
+   productoria (sacaUnos []) = productoria [] 
+={Caso base de sacaUnos 1 }
+  productoria ([]) = productoria []
+={Caso base de productoria}
+  1=1
+
+--2) Hipotesis inductiva 
+  productoria (sacaUnos xs) = productoria xs 
+
+--3) Paso indutivo, demuestro que vale para P(x:xs)
+
+    productoria (sacaUnos x:xs) = productoria x:xs 
+={Caso recursivo de productoria caso 5}
+    productoria (sacaUnos x:xs) = x * (productoria xs)
+
+Divido en 2 casos ya que sacaUnois tiene dos casos
+
+caso 2) 
+    productoria (sacaUnos x:xs) = x * (productoria xs)
+={Caso 2 }
+      productoria (sacaUnos xs) = x * (productoria xs)
+={Caso 5 }
+     x * (productoria (sacaUnos xs)) = x * (productoria xs)
+={Tachado}
+    (productoria (sacaUnos xs)) = (productoria xs)
+={valido por HI}
+
+
+caso 3)
+
+    productoria (sacaUnos x:xs) = x * (productoria xs)
+={Caso 3}
+        productoria (x : (sacaUnos xs)) = x * (productoria xs)
+={Caso 5 productoria}
+    x * productoria (sacaUnos xs) = x * (productoria xs)
+={Tachado de x *}
+  productoria (sacaUnos xs ) = productoria xs
+={Valido por HI }
+
+--parcial 2023
+
+dolariza :: [Int] -> Int -> [Int]
+dolariza [] n = []                              1
+dolariza (x:xs) n = x / n : dolariza xs n       2
+
+PUSE MULTIPLICACION EN VEZ DE DIVISON AIOUJSDHQWIOJU 
+
+--b) evaluacion manual
+
+  dolariza [400,2000,10000] 400
+={Notacion en terminos de constructores}
+  dolariza 400:2000:10000:[] 400
+={Matcheo caso 2} 
+  300 / 400 : dolariza 2000:10000:[] 400
+={Aritmetica, notacion en terminos consturctores}
+  7000 : (dolariza 2000:10000:[] 400)
+={Matcheo caso 2}
+  7000 : (2000 / 400 : dolariza 10000:[] 400)
+={Aritmetica, notacion en terminos consturcotres}
+  7000 : (8000 :( dolariza 10000:[] 400))
+={Matcheo caso 2}
+  7000 : (8000 : (10000 / 400) dolariza [] 400)
+={Aritmetica y notacion en terminos constructores}
+  7000 : (8000 : (40000) dolariza [] 400)
+={Caso base}
+  7000 : 8000 : 40000 : []
+={Notacion}
+  [7000,8000,40000]
+
+
+topes :: [[a]] -> [a]
+topes [] = []
+topes (xs:xss) | lenght xs /= 0 = head xs : topes xss
+               | length xs == 0 = topes xss 
+
+--3
+
+contarOtros :: [Int] -> Int
+contarOtros [] = 0
+contarOtros (x:xs) | x == 0 = contarOtros xs 
+                   | x /= 1 + contarOtros xs  
+
+contarCeros :: [Int] -> Int 
+contarCeros [] = 0 
+contarCeros (x:xs) | x == 0 = 1 + contarCeros xs 
+                   | x /= 0 = contarCeros xs +
+
+length :: [Int] -> Int 
+length [] = 0
+length (x:xs) = 1 + length xs
+
+contarCeros xs = length xs - contarOtros xs 
+
+--Caso base xs = []
+
+  contarCeros[] = length[] - contarOtros []
+={Caso base de contarCeros }
+  0 = length [] - 0
+={Caso base length }
+  0 = 0 
+
+--Hipotesis inductiva
+
+contarCeros xs = length xs - contarOtros xs 
+
+--Paso inductivo, demuestro que vale para P(x:xs) 
+
+  contarCeros x:xs = length x:xs - contarOtros x:xs   
+={Caso 7 de length}
+  contarCeros x:xs = 1 + length xs - contarOtros x:xs   
+
+Como veo que hay 2 casos en 2 codigos distintos, debo hacer 4 casos separados 
+
+--1) Caso de 2 con 5
+
+  contarCeros x:xs = 1 + length xs - contarOtros x:xs   
+={Caso recursivo contarOtros 2}
+  contarCeros x:xs = 1 + length xs - contarOtros xs 
+={ContarCeros caso 5}
+  1 + contarCeros xs = 1 + length xs - contarOtros xs 
+={Tachado de 1 +}
+  contarCeros xs = length xs - contarOtros xs 
+={Valido por HI}
+
+--2) Caso de 2 con 6
+
+  contarCeros x:xs = 1 + length xs - contarOtros x:xs   
+={Caso recursivo contarOtros 2}
+  contarCeros x:xs = 1 + length xs - contarOtros xs 
+={Caso recursivo contarCeros  en 6}
+  contarCeros xs = 1 + length xs - contarOtros xs +
+  
+  ?
+
+--3) caso de 3 con 5
+
+  contarCeros x:xs = 1 + length xs - contarOtros x:xs     
+={Caso 3 contarCeros y caso 6 de contarOtros}
+  1 + contarCeros xs = 1 + length xs - 1 + contarOtros xs
+={Tachado}
+  contarCeros xs = 1 + length xs - contarOtros xs 
+ 
+ ?
+
+--4) caso de 3 con 6
+  contarCeros x:xs = 1 + length xs - contarOtros x:xs     
+={Caso 3 contarCeros, caso 6 contarOtros }
+  1 + contarCeros xs = 1 + length xs - contarOtros xs
+={Tachado 1 +} 
+  contarCeros xs = length xs - contarOtros xs
+={Valido por HI}
+
+
+--Parcial 2024
+
+empiezaConA :: [String] -> [String]
+empiezaConA [] = []
+empiezaConA (xs:xss) | xs = "" = comienzaConA xss
+                     | head xs == `A` = xs : empiezaConA xss 
+                     | otherwise = empiezaConA xss
+
+aparea :: [Int] -> [(Int, Int)]
+aparea [x,y]  = [(x,y)]
+aparea (x:y:xs) = (x,y) : aparea  (y:xs)
+
+--Parcial 2016
+
+algunOrden : [(Int, Int, Int)] -> Bool 
+algunOrden [] = True 
+algunOrden ((x,y,z):xs) = x > y && y > z + algunOrden xs 
