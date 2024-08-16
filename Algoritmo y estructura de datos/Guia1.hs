@@ -297,4 +297,117 @@ b)
 
 ???
 
-c) N OQ PAJDA IPSDJOASD JQFO'J2Q1!!
+c)
+
+6. Escrib ́ı f ́ormulas para las siguientes expresiones en lenguaje natural.
+a) Todos los elementos de xs e ys son iguales (¡ojo! ¡sujeta a interpretaci ́on!).
+<Ai: 0 <= i ^ i < lenght.xs : <Aj : 0 <= j ^ j < lenght.ys : xs !! i == ys !! j>
+
+b) Todos los elementos de xs ocurren en ys.
+<Ai: 0 <= i ^ i < lenght.xs : <Aj : 0 <= j ^ j < lenght.ys : take i xs == take j xs>
+
+c) Todos los elementos de xs ocurren en ys en la misma posici ́on.
+<Ai: 0 <= i ^ i < lenght.xs : <Aj : 0 <= j ^ j < lenght.ys : drop xs i == drop ys j>
+
+(dudo de b y c)
+
+7 y 8, lab 4)
+
+Para cada una de las siguientes f ́ormulas, describ ́ı su significado utilizando el lenguaje natural.
+a) ⟨Prod i : 1 ≤ i ≤ n : i ⟩
+El producto de todos los elementos del 1 a n.
+
+    ⟨ ∀ i : 1 ≤ i < n : i ⟩
+≡ { Implemento n }
+    ⟨ ∀ i : 1 <= i < 5 : xs.i > 0 ⟩           //son elementos de n
+≡ { aplico el t ́ermino a cada elemento del rango }
+    1 * 2 * 3 * 4 * 5
+={aritmetica}
+    120
+
+    variable libre: n 
+
+prod :: Int -> Int
+prod n = n * prod 
+
+b) ⟨Sum i: 0 ≤ i < #xs : xs.i ⟩/ #xs
+Promedio de los elementos de la lista xs en su sumatoria.
+
+    ⟨Sum i: 0 ≤ i < #xs : xs.i ⟩ / #xs
+={ Implemento xs }
+    ⟨Sum i: i e {6, 9, 3, 9, 8} : xs.i ⟩/ 5
+={Impl en xs}
+    xs.1 + xs.2 + xs.3 + xs.4 + xs.5
+={Aritmetica}
+    (6 + 9 + 3 + 9 + 8 )/5
+={Aritmetica}
+    7 
+
+    no hay variable libre
+
+
+sum :: [Int] -> Int
+sum [] = 0                          1
+sum (x:xs) = x + sum xs 'div' lenght xs            2
+
+
+c) ⟨Max i : 0 ≤ i < #xs : xs.i ⟩ < ⟨Min i : 0 ≤ i < #ys : ys.i ⟩
+El mayor elemento en la lista xs es menor que el menor elemento en la lista ys
+
+    ⟨Max i : 0 ≤ i < #xs : xs.i ⟩ < ⟨Min i : 0 ≤ i < #ys : ys.i ⟩
+={Imp xs y ys}
+    ⟨Max i : i e  {-3, 9, 8} : xs.i ⟩ < ⟨Min i : i e {6, 7, 8} : ys.i ⟩
+={Impl func. max y min.}
+    max(xs.1, xs.2, xs.3) < min(xs.1, xs.2, xs.3)
+={Impl. xs.i y ys.i}
+    max(-3, 9, 8) < min(6, 7, 8)
+={func max y min}
+    9 < 6
+    false????????????????????????'''
+
+    no hay variable libre, sujeta a min y max
+
+esMenorMaxQueMin :: [Int] -> [Int] -> Bool
+esMenorMaxQueMin xs ys = maximum xs < minimum ys
+
+
+d) ⟨ ∃ i, j : (2 ≤ i < n) ∧ (2 ≤ j < n) : i ∗ j = n ⟩
+Existen 2 elementos tal que su producto es igual a n 
+
+    ⟨ ∃ i, j : (2 ≤ i < n) ∧ (2 ≤ j < n) : i ∗ j = n ⟩
+={Impl. de n}
+    ⟨ ∃ i, j : (2 ≤ i < 5) ∧ (2 ≤ j < 5) : i ∗ j = 5 ⟩
+={aritmeticamente, no hay un numero enero tq i * j = 5}
+
+    variable libre n
+
+prod :: Int, Int, Int -> Bool
+prod i j n | i > n = False
+           | j > n = False
+           | i * j == n = True
+           | otherwise = False 
+
+9)
+Suponiendo que f : A → Bool es una funci ́on fija cualquiera, y xs : [A], caracteriz ́a con una cuantificaci ́on
+la siguiente funci ́on recursiva:
+
+algunof : [A] -> Bool
+algunof.[] = False
+algunof.(x:xs) = f.x || algunof.xs
+
+si me dice alguno, de entrada me doy cuenta que es un E (existe)
+devuelve un bool
+parece que pide que si esta en una funcion f o en algunof algun tipo de valor A (cuaql)
+
+<E i : 0 <= i ^ i < length.xs : f(xs.i)>
+
+10 y lab 5)
+
+10. Defin ́ı recursivamente una funci ́on todos : [Bool] → Bool que verifica que todos los elementos de una lista
+son T rue, es decir, que satisface la siguiente especificaci ́on:
+
+todos.xs ≡ ⟨ ∀ i : 0 ≤ i < #xs : xs.i ⟩
+
+todosxs :: [Bool] -> Bool 
+todosxs [] = True 
+todos (x:xs) = x && todos xs
