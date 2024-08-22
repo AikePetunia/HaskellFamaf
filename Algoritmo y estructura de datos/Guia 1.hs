@@ -530,6 +530,26 @@ sumPar (x:xs) | mod 2 x = x + sumPar xs
 
 12) facil pero q flojera dio esMaximo
 
+⟨ ∀ i :     i = 0 ∨ 4 > i ≥ 1    :   ¬ f.i  ∨  ¬ f.n    ⟩ 
+≡ { ⊕ es ∧, ⓧ es ∨ , C es ¬ f.n , luego puedo aplicar distributividad ya que se cumple todos
+     los requisitos  }
+ ⟨ ∀ i :     i = 0 ∨ 4 > i ≥ 1    :   ¬ f.i  ⟩  ∨  ¬ f.n   
+
+Ejemplo (ejercicio 12d):
+  ⟨Max i :  0 ≤ i < #xs   :   k + xs!i   ⟩
+= { conmutatividad }
+  ⟨Max i :  0 ≤ i < #xs   :   xs!i  +  k   ⟩
+= { ⊕ es max , ⓧ es + , C es  k,  ¿distribuyen? 
+                  ( x  +  y )  max  ( z  +  y )  =    (  x  max  z  )  +   y   . Sí vale, siempre.
+      ¿es el rango no vacío? no sabemos, si xs = [ ], el rango es vacío.
+       luego, debe suceder que el neutro de max ( -infinito ) es absorbente para +  (la suma),
+      o sea que (-infinito)  + x  = - infinito . 
+      En esta materia vamos a asumir que esto vale, así que vamos a permitir distribuir.
+  }
+   ⟨Max i :  0 ≤ i < #xs   :   xs!i   ⟩  +  k
+
+
+
 13)
 
 a) ⟨ ∃ i : i = 3 ∧ i mod 2 = 0 : 2 ∗ i = 6 ⟩
@@ -686,3 +706,72 @@ si x = -1, xs = [1, 0, 3]
 ={Aritmetica}
 0, -1, 2
 
+19)
+
+19. Aplic ́a el cambio de variable indicado, si es que se puede. Explic ́a porqu ́e puede o no puede aplicarse.
+a) ⟨Sum i : |i| < 5 : i div 2 ⟩                         con i → 2 ∗ i (o sea f.i = 2 ∗ i)
+
+⟨Sum 2 * i : |2 * i| < 5 : 2 * i div 2 ⟩
+
+¿aplicable pero con los i = -inf, 0, 1, 2 ? 2 * i es div de 2 siemrpe? 
+
+b) ⟨Sum i : i mod 2 = 0 ∧ |i| < 5 : i div 2 ⟩           con i → 2 ∗ i (o sea f.i = 2 ∗ i)
+
+⟨Sum (2 * i) : (2 * i) mod 2 = 0 ∧ |(2 * i)| < 5 : (2 * i) div 2 ⟩
+
+Cambio de variable aplicable, con menor rango de i para |(2 * i)| < 5, con i siendo (-inf, 0, 1, 2]
+
+c) ⟨Prod : 0 < i ≤ #(x ▷ xs) : (x ▷ xs).i ⟩           con i → i + 1 (o sea f.i = i + 1)
+
+⟨Prod (i + 1): 0 < (i + 1) ≤ lenght(x:xs) : (x:xs).(i + 1) ⟩
+
+No es posible por que se pega un elemento de una lsita que se le suma un item por asi decirlo, que no estara en el rango de la lista
+
+d) ⟨Max as : as ̸= [ ] : #as ⟩                           con (a, as) → a ▷ as  (la funci ́on es f.(a, as) = a ▷ as)
+
+⟨Max as : as ̸= [ ] : #as ⟩
+
+No existe tal variable
+
+20. Simplific ́a el rango y aplic ́a alguna de las reglas para la cuantificaci ́on de conteo:
+a) ⟨N a, as : a ▷ as = xs ∧ xs = [ ] : #as = 1 ⟩
+
+={Reescritura}
+    ⟨N a, as : a:as = xs ∧ xs = [ ] : length.as = 1 ⟩
+={Axioma de coso q es xs ^xs = xs}
+    <N a, as : a:as = xs = [ ] : length.as = 1 ⟩
+={xs = []}
+    <N a, as : a:as = [ ] : length.as = 1 ⟩
+={a:as no es una lista vacia, false} 
+    <N a, as : False : length.as = 1 ⟩
+={Rango vacio}
+    0
+
+b) ⟨N i : i − n = 1 : i mod 2 = 0 ⟩
+
+={AN11 Definicion de conteo}
+    ⟨Sum i : i − n = 1 ^ i mod 2 = 0: 1 ⟩
+={Aritmetcia )?)}
+    ⟨Sum i : i = 1 + n ^ i mod 2 = 0: 1 ⟩
+={Cambio de variable}
+    ⟨Sum i : i = 1 + n ^ 1 + n mod 2 = 0: 1 ⟩
+={False para un conjunto tq n mod 2 = 0}
+    ⟨Sum i : i = 1 + n ^ False = 0: 1 ⟩
+={Abs de false en ^}
+    ⟨Sum i : False : 1 ⟩
+={A1 Rango vacio}
+    e
+
+c) ⟨N i : i = 0 ∨ 1 ≤ i < #xs + 1 : ((x ▷ xs).i) mod 2 = 0 ⟩
+
+={TN5 Particion de rango}
+    ⟨N i : i = 0 : ((x : xs).i) mod 2 = 0 ⟩ + ⟨N i : 1 ≤ i < #xs + 1 : ((x : xs).i) mod 2 = 0 ⟩
+={Cambio de variable}
+    ⟨N i : i = 0 : ((x : xs).0) mod 2 = 0 ⟩ + ⟨N i : 1 ≤ i < #xs + 1 : ((x : xs).i) mod 2 = 0 ⟩
+={AN 11 Definicion de conteo}
+    ⟨Sum i : i = 0 ^ ((x : xs).0) mod 2 = 0  : 1⟩ + ⟨Sum i : 1 ≤ i < #xs + 1 ^ ((x : xs).i) mod 2 = 0 : 1 ⟩
+
+no sè
+
+21) 
+⟨Sum i: 0 ≤ i < #(x:xs) : T.((x:xs).i) ⟩ = T.x + ⟨Sum i : 0 ≤ i < #xs : T.(xs.i) ⟩
