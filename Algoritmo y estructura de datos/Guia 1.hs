@@ -775,3 +775,318 @@ no sè
 
 21) 
 ⟨Sum i: 0 ≤ i < #(x:xs) : T.((x:xs).i) ⟩ = T.x + ⟨Sum i : 0 ≤ i < #xs : T.(xs.i) ⟩
+
+//lab clase 2
+
+27 y lab 7. Defin ́ı recursivamente las siguientes funciones.
+a) La funci ́on paratodo, que dada una lista de valores xs : [A] y un predicado T : A → Bool, determina
+si todos los elementos en xs hacen verdadero el predicado T, es decir:
+
+
+paratodo.xs.T ≡ ⟨ ∀ i : 0 ≤ i < #xs : T.(xs.i) ⟩
+
+
+todos.xs ≡ ⟨ ∀ i : 0 ≤ i < #xs : xs.i ⟩
+
+--func ej 10
+todosxs :: [Bool] -> Bool 
+todosxs [] = True 
+todosxs (x:xs) = x && todos xs
+
+
+paraTodo :: [a] -> (a -> Bool) -> Bool
+paraTodo [] _ = True
+paraTodo (x:xs) t = t x && paraTodo xs t
+
+chekiado !
+
+b)La funci ́on existe, que dada una lista de valores xs : [A] y un predicado T : A → Bool, determina si
+alg ́un elemento en xs hace verdadero el predicado T, es decir:
+
+    existe : [A] → (A → Bool) → Bool
+    
+    existe.xs.T ≡ ⟨ ∃ i : 0 ≤ i < #xs : T.(xs.i) ⟩
+
+Puede ser de ayuda recordar la funci ́on del ejercicio 9.
+
+--ej 9 
+
+algunof : [A] -> Bool
+algunof.[] = False
+algunof.(x:xs) = f.x || algunof.xs
+
+->
+
+existe : [a] -> (a -> Bool) -> Bool
+existe [] _ = True
+existe (x:xs) t = t x && paraTodo xs t
+
+chekiado !
+
+c)
+
+La funci ́on sumatoria, que dada una lista de valores xs : [A] y una funci ́on T : A → Num (toma
+elementos de A y devuelve n ́umeros), calcula la suma de la aplicaci ́on de T a los elementos en xs es
+decir:
+
+sumatoria : [A] → (A → Num) → Num
+sumatoria.xs.T = ⟨sum i : 0 ≤ i < #xs : T.(xs.i) ⟩
+
+sumatoria :: [a] -> (a -> Int) -> Int 
+sumatoria [] _ = 0
+sumatoria (x:xs) t = t x + sumatoria xs t
+
+chekiado !
+
+d)
+
+d) La funci ́on productoria, que dada una lista de valores xs : [A] y una funci ́on T : A → Num, calcula
+el producto de la aplicaci ́on de T a los elementos de xs, es decir:
+
+productoria : [A] → (A → Num) → Num
+productoria.xs.T = ⟨Prod i : 0 ≤ i < #xs : T.(xs.i) ⟩
+
+productoria :: [a] -> (a -> Int) -> Int
+productoria [] _ = 0
+productoria (x:xs) t = t x + productoria xs t
+
+chekiado !
+
+lab 8)
+
+
+paraTodo :: [a] -> (a -> Bool) -> Bool
+paraTodo [] _ = True                            1
+paraTodo (x:xs) t = t x && paraTodo xs t        2
+
+evaluado:
+
+esCero -> Funcion que hace descarte de un elemento para ver si es 0 o no, y para todo verificara en una lista entera
+
+    paraTodo [0,0,0,0] esCero
+={Notacion en terminos de constructores}
+    paraTodo 0:0:0:0[] esCero
+={Caso 2}
+    esCero 0 && paraTodo 0:0:0[] esCero
+={Caso 2}
+    esCero 0 && paraTodo 0:0[] esCero
+={Caso 2}
+    esCero 0 && paraTodo 0[] esCero
+={Caso 2}
+    esCero 0 && paraTodo [] esCero
+={Caso 1}
+    True
+
+    paraTodo [0,0,1,0] esCero
+={Notacion en terminos de construcotres}
+    paraTODO 0:0:1:0:[] esCero
+={Caso 2}
+    esCero 0 && paraTodo 0:0:1[] esCero
+={Caso 2}
+    esCero 0 && paraTodo 0:1[] esCero
+={Caso 2}
+    esCero 0 && paraTodo 1:[] esCero
+={Caso 2}
+    esCero 1 && paraTodo [] esCero
+False
+
+    paraTodo "hola" esVocal
+={Notacion en terminos de contrcutores}
+    paraTodo 'h':'o':'l':'a':[] esVocal
+={Caso 2}
+    esVocal 'h' && paraTodo 'o':'l':'a':[] esVocal
+False
+
+existe : [a] -> (a -> Bool) -> Bool
+existe [] _ = True
+existe (x:xs) t = t x && paraTodo xs t
+
+    existe "hola" esVocal
+={Notacion en terminos de constructors}
+    existe 'h':'o':'l':'a':[] esVocal
+={Caso 2}
+    esVocal 'h' && existe 'o':'l':'a':[] esVocal
+False 
+
+
+Lab 9)
+a)
+todosPares :: [Int] -> Bool
+todosPares = all even 
+
+chekiado ! 
+
+b)
+hayMultiplo :: Int -> [Int] -> Bool
+hayMultiplo x = any (\y -> y `mod` x == 0)
+
+chekiado ! 
+c)
+sumaCuadrados :: Int -> Int 
+sumaCuadrados n = n >= 0 && sum (map (^2) [0..(n-1)])
+ 
+ noanda
+d)
+existeDivisor :: Int-> [Int] -> Bool
+existeDivisior n (x:xs) = (\x -> x /= 0 && n `mod` x == 0)
+
+como lo hago recursivo sin usar recursividad
+
+e)
+
+f)
+
+g)
+
+h)
+
+i)
+
+lab 9 en casa
+
+28
+
+MAP
+map :: (a -> b) -> [a] -> [b]
+
+definida:
+map f [] = []
+map f (x:xs) = f x : map f xs
+
+La función map:
+    Toma 2 argumentos, uno de los cuales es una función
+    Aplica f a cada elemento de xs
+    El resultado es una lista con la aplicación en el mismo orden
+
+EJ:
+
+Prelude> map succ [1,2,3,4]
+[2,3,4,5]
+Prelude> map not [False, False, True]
+[True,True,False]
+
+FILTER
+filter :: (a -> Bool) -> [a] -> [a]
+
+definida:
+
+filter p [] = []
+filter p (x:xs) | p x = x : filter p xs
+                | otherwise = filter p xs
+
+La función filter:
+    Toma 2 argumentos, uno de los cuales es un predicado
+    El resultado es una lista con los elementos que cumplen el predicado
+
+Prelude> filter (<2) [3,1,0,6,9]
+[1,0]
+Prelude> filter even [8,2,3,6,11]
+[8,2,6]
+
+
+b)
+
+Prelude> map succ [1,-4, 6, 2, -8]
+[3, -1, 8, 4, -6]
+
+c)
+Prelude>filter esPositivo [1, -4, 6, 2, -8]
+[1, 6, 2]
+
+29.
+
+duplicaValorXS :: [Int] -> [Int]
+duplicaValorXS [] = []
+duplicaValorXS (x:xs) = x * 2 : duplicaValorXS xs 
+
+b) 
+
+duplicaValorXS :: [Int] -> [Int]
+duplicaValorXS [] = []
+duplicaValorXS (x:xs) = map (* 2 ) xs  
+
+
+chekiado !
+
+lab 10 hecho arriba lol)
+
+lab 11)
+
+esPrimo :: Int -> Bool
+esPrimo n | n < 2 = False
+          | otherwise = all (\x -> n `mod` x /= 0) [2..(n-1)]
+
+primosRec :: [Int] -> [Int]
+primosRec [] = []
+primosRec (x:xs)
+    | esPrimo x = x : primosRec xs
+    | otherwise = primosRec xs
+
+
+chekiado !
+
+con filter:
+
+esPrimo :: Int -> Bool
+esPrimo n | n < 2 = False
+          | otherwise = all (\x -> n `mod` x /= 0) [2..(n-1)]
+
+primosFilter :: [Int] -> [Int]
+primosFilter xs = filter esPrimo xs
+
+
+chekiado !
+
+
+Lab 12)
+a)
+primIgualesA :: a -> [a] -> [a]
+primIgualesA n [] = []
+primIgualesA n (x:xs) | n == x = x : primIguales n xs 
+                      | otherwise = []
+
+
+chekiado !
+
+b)
+primIgualesA :: Eq a => a -> [a] -> [a]
+primIgualesA n = takeWhile (== n)
+
+
+chekiado !
+
+Takewhile toma elementos de una lista mientras se cumple la condicion dada en ()
+
+lab 13) 
+DA ES LO MISMO
+
+primIguales :: [a] -> [a]
+primIguales [] = []
+primIguales (x:xs) = x : takeWhile (==x) xs 
+
+Chekiado !
+
+primIguales :: Eq a => [a] -> [a]
+primIguales [] = []
+primIguales (x:xs) = primIgualesA x (x:xs)
+
+chekiado !
+
+30, lab 14) pasa palabra
+
+lab 15)
+
+primQueCumplen :: [a] -> (a -> Bool) -> [a]
+primQueCumplen [] _ = []
+primQueCumplen (x:xs) p
+    | p x       = x : primQueCumplen xs p
+    | otherwise = []
+
+    esta esta cool
+
+primQueCumplen :: [a] -> (a -> Bool) -> [a]
+primQueCumplen ls p = takeWhile p ls
+
+lab 16) https://prnt.sc/42X9B29JjDxH
+
+falto lab 10, algu nque otro ej suetlo ,y lab 17 :)
