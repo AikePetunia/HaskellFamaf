@@ -771,10 +771,85 @@ c) ⟨N i : i = 0 ∨ 1 ≤ i < #xs + 1 : ((x ▷ xs).i) mod 2 = 0 ⟩
 ={AN 11 Definicion de conteo}
     ⟨Sum i : i = 0 ^ ((x : xs).0) mod 2 = 0  : 1⟩ + ⟨Sum i : 1 ≤ i < #xs + 1 ^ ((x : xs).i) mod 2 = 0 : 1 ⟩
 
-no sè
-
 21) 
 ⟨Sum i: 0 ≤ i < #(x:xs) : T.((x:xs).i) ⟩ = T.x + ⟨Sum i : 0 ≤ i < #xs : T.(xs.i) ⟩
+
+22. (*) (Separacion de un t ́ermino) Demostr ́a los siguientes teoremas  ́utiles para la materia.
+Supon ́e que CG es un cuantificador asociado a un operador generico ⊕, que es conmutativo y asociativo
+(asi como el ∀ es el cuantificador asociado a la conjunci ́on ∧) y n : Nat.
+
+a) ⟨CG i : 0 ≤ i < n + 1 : T.i ⟩ = ⟨CG i : 0 ≤ i < n : T.i ⟩ ⊕ T.n
+
+asumo el +
+
+    ⟨CG i : 0 ≤ i < n + 1 : T.i ⟩ = ⟨CG i : 0 ≤ i < n : T.i ⟩ + T.n
+={}
+
+???
+
+
+b) ⟨CG i : 0 ≤ i < n + 1 : T.i ⟩ = T.0 ⊕ ⟨CG i : 0 ≤ i < n : T.(i + 1) ⟩
+
+??
+
+
+
+23. (Rango unitario generalizado) Sea ⊕ un cuantificador asociado a un operador conmutativo y asocia-
+tivo. Proba la siguiente regla de rango unitario generalizado (Z no depende de i ni de j):
+
+⟨CG i, j : i = Z ∧ R.i.j : T.i.j ⟩ = ⟨CG j : R.Z.j : T.Z.j ⟩ .
+
+    <CG i, j : i = Z ∧ R.i.j : T.i.j ⟩ = ⟨CG j : R.Z.j : T.Z.j ⟩
+={A7 Anidado}  
+    <CG i : i = Z <CG j: R.i.j : T.i.j>⟩ = ⟨CG j : R.Z.j : T.Z.j ⟩>
+={A2 Unitario}
+    <CG i : i = Z <CG j: R.z.j : T.z.j>⟩ = ⟨CG j : R.Z.j : T.Z.j ⟩>
+={A2 unitario}
+    <CG j: R.z.j : T.z.j> = <CG j: R.z.j : T.z.j>
+
+kreo k esta bien
+
+24. Podemos definir un cuantificador de conteo N utilizando la sumatoria:
+
+⟨N i : R.i : T.i ⟩ = ⟨Sum i : R.i ∧ T.i : 1 ⟩
+
+Demostra que ⟨Sum i : R.i ∧ T.i : k⟩ = ⟨Ni : R.i : T.i⟩ ∗ k
+
+    ⟨Sum i : R.i ∧ T.i : k⟩ = ⟨Ni : R.i : T.i⟩ ∗ k
+={Termino de constante}
+    k = ⟨Ni : R.i : T.i⟩ ∗ k
+={Distributividad a6}
+    k = ⟨Ni : R.i : T.i ∗ k⟩ 
+
+creo q asi no es, pero es mas facil si asumo q k es 1
+
+entonces queda:
+    ⟨Sum i : R.i ∧ T.i : k⟩ = ⟨Ni : R.i : T.i⟩ ∗ k
+={Asumo k = 1}
+    ⟨Sum i : R.i ∧ T.i : 1⟩ = ⟨Ni : R.i : T.i⟩ ∗ 1
+={ * 1 es neutro}
+    ⟨Sum i : R.i ∧ T.i : 1⟩ = ⟨Ni : R.i : T.i⟩
+={Definicion de conteo}
+    ⟨N i : R.i : T.i⟩ = ⟨Ni : R.i : T.i⟩
+
+sino bue qsy
+
+25. (*) Demostr ́a la siguiente relaci ́on entre los cuantificadores de m ́aximo y m ́ınimo cuando R es no vac ́ıo:
+
+n = ⟨Min i : R.i : −T.i⟩ ≡ n = −⟨Max i : R.i : T.i⟩
+
+me recuerda a algo... 
+a uno del cuatri pasado... 
+
+
+
+26. (*) Demostr ́a los siguientes teoremas sobre ∀, utilizando los axiomas y teoremas del digesto:
+a) Intercambio de ∀ (generalizada):
+⟨∀i : R.i ∧ S.i : T.i⟩ ≡ ⟨∀i : R.i : S.i ⇒ T.i⟩
+
+b) Instanciaci ́on de ∀:
+⟨∀i : : T.i⟩ ⇒ T.x, cuando x no esta cuantificada.
+¿Como seria la regla de instanciacion para ∃? Enunciala y demostrala.
 
 //lab clase 2
 
@@ -933,18 +1008,51 @@ existeDivisior n (x:xs) = (\x -> x /= 0 && n `mod` x == 0)
 como lo hago recursivo sin usar recursividad
 
 e)
+esPrimo :: Int -> Bool
+esPrimo n = n mod 2 /= 0 && esPrimo n
+
+Por que me dice me fije si n es primo si me pide ver una lista? en todo caso hecho antes.
 
 f)
 
+factorial :: Int -> Int
+factorial 0 = 1 
+factorial n = n * factorial (n-1)
+
+CREO que esta eviatada 
+
+sino
+
+factorial :: Int -> Int
+factorial n = product [1..n]
+
 g)
+esPrimo :: Int -> Bool
+esPrimo n
+  | n <= 1    = False
+  | n == 2    = True
+  | even n    = False
+  
+multiplicaPrimos :: [Int] -> Int 
+multiplicaPrimos (x:xs) = product (filter esPrimo xs) 
 
 h)
 
+fib :: Int -> Int
+fib 0 = 0
+fib 1 = 1
+fib n = fib (n - 1) + fib (n - 2)
+
+esFib :: Int -> Int
+esFib n
+  | n < 0     = esFib n 
+  | otherwise = fib n 
+
 i)
 
-lab 9 en casa
+PARAA q pedia
 
-28
+28)
 
 MAP
 map :: (a -> b) -> [a] -> [b]
@@ -982,7 +1090,6 @@ Prelude> filter (<2) [3,1,0,6,9]
 [1,0]
 Prelude> filter even [8,2,3,6,11]
 [8,2,6]
-
 
 b)
 
@@ -1089,4 +1196,18 @@ primQueCumplen ls p = takeWhile p ls
 
 lab 16) https://prnt.sc/42X9B29JjDxH
 
-falto lab 10, algu nque otro ej suetlo ,y lab 17 :)
+lab 17)
+a) f :: (a, b) -> b
+f (a, b)= b
+
+b)f :: (a, b) -> c
+f (a, b) = c
+
+c) f :: (a -> b) -> a -> b
+f a b = a b
+
+d)
+f :: (a -> b) -> [a] -> [b]
+f a b = [] []
+
+falto: 21-26
