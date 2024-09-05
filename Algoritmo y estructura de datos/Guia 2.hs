@@ -1,3 +1,4 @@
+0) Logica proposicional salteado, redundate.
 1)
 a)Dada una lista de números enteros, que devuelve un único elemento entero de forma recursiva, siendo el caso base una lista vacía de enteros devolviendo 0, siendo el 2 caso definido por como funciona la sumatoria en lenguaje matemático en programación.
 b)
