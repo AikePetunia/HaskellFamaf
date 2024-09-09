@@ -34,13 +34,7 @@ c)
     p v q = p v q 
 ={Valido t1}
 
-d)
---p ∨ (p ∧ q) ≡ p
-
-    p ∨ (p ∧ q) ≡ p
-={}
-
-para q hacerlos si los hioce hace 1 mes...
+para q hacerlos si los hice hace 1 mes...
 
 Lab 1)
 a)--esCero :: Int -> Bool, que verifica si un entero es igual a 0.
@@ -76,7 +70,7 @@ d) ya lo hice en otra ocacion cuatri pasado
 
 --ej 1)
 
-xs = {Lista de figuras}
+xs = {Lista de figuras}. No se que tanta explicites hay que tener.
 a) ⟨ ∀ i : 0 ≤ i < #xs : rojo.(xs.i) ⟩
 "Para toda i en el rango del 0 a el lenght de la lista xs, hay una figura roja en algun lugar de la lista
 b) ⟨ ∃ i : 0 ≤ i < #xs : rombo.(xs.i) ⟩
@@ -88,28 +82,30 @@ d) ⟨ ∃ i : 0 ≤ i < #xs : ⟨ ∃ j : i < j < #xs : xs.i = xs.j ⟩ ⟩
 e)⟨Sum i : 0 ≤ i < #xs : tam.(xs.i) ⟩
 "La suma de los elemenots de i en el rango de 0 al length de xs, en termino de la suma es el tamaño de xs.i" (?)
 
-2. Escrib ́ı f ́ormulas para las siguientes expresiones en lenguaje natural.
+2. Escribi formulas para las siguientes expresiones en lenguaje natural.
 
 a) Todas las figuras de xs son amarillas.
 <Ax: : amarillo.xs>
+
 b) La suma de los tama ̃nos de todas las figuras de xs es mayor a 10.
-<Sum i : 0 <= i ^ 0 < length.xs : tam.(xs.i) > 10 >
+<Sum i : 0 <= i < #.xs : tam.(xs.i) > 10>
+
 c) Ninguna figura de xs tiene tama ̃no menor a 7.
-<min i : 0 <= i ^ i < lenght.xs : tam.(xs.i) < 7> (?)
+<min i : 0 <= i < #.xs : tam.(xs.i) < 7>                            (?)
 
 3. y lab 2.
  Para cada una de las siguientes funciones escrib ́ı una expresi ́on que las describa formalmente. Por otro
 lado, escrib ́ı un programa recursivo que compute la funci ́on.
 
 a) paratodo :: [Bool] -> Bool, que verifica que todos los elementos de una lista sean True.
-<Ai : 0 <= i ^ i < lenght.xs: xs !! i == true>
+<Ai : 0 <= i < #.xs: xs !! i == true>
 
 paraTodo :: [Bool] -> Bool
 paraTodo [] = True                                      --1
 paraTodo (x:xs) | x == False = False                    --2
                 | otherwise = paraTodo xs               --3
 
-                chekiado !
+chekiado !
 
 Dada la lista Paratodo[True , False, True]
 
@@ -136,7 +132,7 @@ Dada la lista paraTodo[True, True]
     True
 
 b) sumatoria :: [Int] -> Int, que calcula la suma de todos los elementos de una lista de enteros.
-<Sum i : 0 <= i ^ i < length.xs : xs !! i > (?)
+<Sum i : 0 <= i ^ i < length.xs : xs.i> 
 
 sum :: [Int] -> Int
 sum [] = 0                          --1
@@ -161,7 +157,7 @@ sum [1, 5, -4]
     2
 
 c) productoria :: [Int] -> Int, que calcula el producto de todos los elementos de la lista de enteros.
-<Prod i : 0 <= i ^ i < length.xs : xs !! i > (?)
+<Prod i : 0 <= i ^ i < length.xs : xs.i > 
 
 prod :: [Int] -> Int
 prod [] = 0                           --1
@@ -184,7 +180,7 @@ prod [2, 4, 1]
     8
 
 d) factorial :: Int -> Int, que toma un n ́umero n y calcula n!.
-<Fact i : 0 <= i ^ i < length.xs : i>
+<A i : 0 <= i ^ i < length.xs : n * n-1>                (?)
 
 factorial :: Int -> Int
 factorial 0 = 1 
@@ -203,48 +199,51 @@ promedio xs = sum xs `div` length xs
 
 chekiado !
 
-4 y 5. Para cada una de las siguientes f ́ormulas, describ ́ı su significado utilizando el lenguaje natural.
+4. Para cada una de las siguientes f ́ormulas, describ ́ı su significado utilizando el lenguaje natural.
+5. Para cada uno de los  ́ıtems del ejercicio anterior, evalu ́a la f ́ormula en las siguientes listas:
 a) 
-⟨ ∀ i : 0 ≤ i < #xs : xs.i > 0 ⟩
-"Para todo elemento i desde el elemento 0 hasta el length de xs, tal que un elemento es mayor que 0 "
+⟨∀ i : 0 ≤ i < #xs : xs.i > 0⟩
+"Todo elemento de la lista xs debe ser mayor a cero"
 xs = [−5, −3, 4, 8]
 
+={Especificacion}
     ⟨ ∀ i : 0 ≤ i < #xs : xs.i > 0 ⟩
-≡ { calculo rango sabiendo que #xs = 4 }
-    ⟨ ∀ i : i ∈ {0, 1, 2, 3} : xs.i > 0 ⟩           //son 4 elementos.
-≡ { aplico el t ́ermino a cada elemento del rango }
+≡ {Calculo de rango, sabiendo  que #xs = 4 }    //Noto el length para el rango.
+    ⟨ ∀ i : i ∈ {0, 1, 2, 3} : xs.i > 0 ⟩                  
+≡ {Aplico el termino a cada elemento del rango }
     (xs.0 > 0) ∧ (xs.1 > 0) ∧ (xs.2 > 0) ∧ (xs.3 > 0)
-≡ { eval ́uo las indexaciones con xs = [−5, −3, 4, 8] }
+≡ {Evaluacion de las indecciones con xs = [−5, −3, 4, 8] }
     (−5 > 0) ∧ (−3 > 0) ∧ (4 > 0) ∧ (8 > 0)
-≡ { eval ́uo las desigualdades }
+≡ {Evaluo las indecciones }
     False ∧ False ∧True ∧ True
-≡ { resuelvo las conjunciones }
+≡ {resolucion por logica de predicados}
     False
 
 xs = [11, 2, 5, 8]
 
-    ⟨ ∀ i : 0 ≤ i < #xs : xs.i > 0 ⟩
-≡ { calculo rango sabiendo que #xs = 4 }
-    ⟨ ∀ i : i ∈ {0, 1, 2, 3} : xs.i > 0 ⟩       // elementos 
-≡ { aplico el t ́ermino a cada elemento del rango }
+= {Especificacion}
+    ⟨∀ i : 0 ≤ i < #xs : xs.i > 0⟩
+≡ {Calculo de rango, sabiendo  que #xs = 4 }        //Noto el length para el rango.
+    ⟨ ∀ i : i ∈ {0, 1, 2, 3} : xs.i > 0 ⟩       
+≡ {Aplico el termino a cada elemento del rango }
     (xs.0 > 0) ∧ (xs.1 > 0) ∧ (xs.2 > 0) ∧ (xs.3 > 0) // xs en posicion 1, 2, 3, ektgywijfiu etc 
-≡ { eval ́uo las indexaciones con xs = [11, 2, 5, 8] }
+≡ {Evaluacion de las indecciones con xs = [11, 2, 5, 8] }
     (11 > 0) ∧ (2 > 0) ∧ (5 > 0) ∧ (8 > 0)
 ={Evaluacion x digesto}
     True 
 
 
-b) ⟨ ∃ i : 0 ≤ i < #xs : xs.i = x ⟩
-"Existe un elemento i desde el elemento 0 hasta el length de xs, hay un elemento igual"
+b) ⟨∃ i : 0 ≤ i < #xs : xs.i = x ⟩
+"Existe un elemento i tal que hay un elemento igual"
 
 xs = [−5, −3, 4, 8]
 
     ⟨ ∃ i : 0 ≤ i < #xs : xs.i = x ⟩
-≡ { calculo rango sabiendo que #xs = 4 }
-    ⟨ E i : i ∈ {0, 1, 2, 3} : xs.i = 0 ⟩           //son 4 elementos.
-≡ { aplico el t ́ermino a cada elemento del rango }
+≡ {Calculo de rango, sabiendo  que #xs = 4 }        //Noto el length para el rango.
+    ⟨ E i : i ∈ {0, 1, 2, 3} : xs.i = 0 ⟩          
+≡ {Aplico el termino a cada elemento del rango }
     (xs.0 = 0) ∧ (xs.1 = 0) ∧ (xs.2 = 0) ∧ (xs.3 = 0)
-≡ { eval ́uo las indexaciones con xs = [−5, −3, 4, 8] }
+≡ {Evaluacion de las indeccioness con xs = [−5, −3, 4, 8] }
     (−5 = 0) ∧ (−3 = 0) ∧ (4 = 0) ∧ (8 = 0)
 ={ todo false}
     False
@@ -252,13 +251,13 @@ xs = [−5, −3, 4, 8]
 xs = [11, 2, 5, 8]
 
     ⟨ ∃ i : 0 ≤ i < #xs : xs.i = x ⟩
-≡ { calculo rango sabiendo que #xs = 4 }
+≡ {Calculo de rango, sabiendo  que #xs = 4 }        //Noto el length para el rango.
     ⟨ E i : i ∈ {0, 1, 2, 3} : xs.i = 0 ⟩           //son 4 elementos.
-≡ { aplico el t ́ermino a cada elemento del rango }
+≡ {Aplico el termino a cada elemento del rango }
     (xs.0 = 0) ∧ (xs.1 = 0) ∧ (xs.2 = 0) ∧ (xs.3 = 0)
-≡ { eval ́uo las indexaciones con xs = [11, 2, 5, 8] }
+≡ {Evaluacion de las indecciones con xs = [11, 2, 5, 8] }
     (11 = 0) ∧ (2 = 0) ∧ (5 = 0) ∧ (8 = 0)
-={ todo false}
+={Todo false}
     False
 
 c) ⟨ ∀ i : 0 ≤ i < #xs : ⟨ ∃ j : 0 ≤ j < #ys : xs.i = ys.j ⟩ ⟩
@@ -266,12 +265,13 @@ c) ⟨ ∀ i : 0 ≤ i < #xs : ⟨ ∃ j : 0 ≤ j < #ys : xs.i = ys.j ⟩ ⟩
 
 Desconozco si uso las dos listas, creo k si pq son 2 justamente y aca pide dos listas PD: NO LEI EL DE YS Na ya esta perdon 
 xs = [−5, −3, 4, 8] y ys = [11, 2, 5, 8]
+
     ⟨ ∀ i : 0 ≤ i < #xs : ⟨ ∃ i : 0 ≤ i < #ys : xs.i = ys.j⟩ ⟩
-≡ { calculo rango sabiendo que #xs = 4 }
+≡ {Calculo de rango, sabiendo  que #xs = 4 }        //Noto el length para el rango.
     ⟨ ∀ i : i ∈ {0, 1, 2, 3} : ⟨ ∃ j : j ∈ {0, 1, 2, 3} : xs.i = ys.j⟩ ⟩           //son 4 elementos.
-≡ { aplico el t ́ermino a cada elemento del rango }
+≡ {Aplico el termino a cada elemento del rango }
     (xs.0 = ys.0) ∧ (xs.1 = ys.1) ∧ (xs.2 = ys.2) ∧ (xs.3 = ys.3) 
-≡ { eval ́uo las indexaciones con xs = [−5, −3, 4, 8] y ys = [11, 2, 5, 8] }
+≡ {Evalulo las indecciones con xs = [−5, −3, 4, 8] y ys = [11, 2, 5, 8] }
     (-5 = 11) ^ (-3 = 2) ^ ( 4 = 5) ^(8 = 8)
 ={Evaluo}
     false ^ false ^ False ^ True 
@@ -284,28 +284,29 @@ d) ⟨ ∀ i : 0 ≤ i < #xs − 1 : xs.i = xs.(i + 1) ⟩
 xs = [−5, −3, 4, 8]
 
     ⟨ ∀ i : 0 ≤ i < #xs : xs.i > 0 ⟩
-≡ { calculo rango sabiendo que #xs = 4 }
+≡ {Calculo de rango, sabiendo  que #xs = 4 }        //Noto el length para el rango.
     ⟨ ∀ i : i ∈ {0, 1, 2, 3} : xs.i > 0 ⟩           //son 4 elementos.
-≡ { aplico el t ́ermino a cada elemento del rango }
+≡ {Aplico el termino a cada elemento del rango }
     (xs.0 = xs.0 + 1) ∧ (xs.1 = xs.1 + 1) ∧ (xs.2 = xs.2 + 1) ∧ (xs.3 = xs.3 + 1)
-={ Evaluo las indexiones xs = [−5, −3, 4, 8]}
+={Evaluo las indecciones xs = [−5, −3, 4, 8]}
     (-5 = -4) ∧ (-3 = -2) ∧ (4 = 5) ∧ (8 = 9)
-={ Obvio mas falso aksjl}
+={Coso de false}
     false 
 
 xs = [11, 2, 5, 8]
     ⟨ ∀ i : 0 ≤ i < #xs : xs.i > 0 ⟩
-≡ { calculo rango sabiendo que #xs = 4 }
+≡ {Calculo de rango, sabiendo  que #xs = 4 }        //Noto el length para el rango.
     ⟨ ∀ i : i ∈ {0, 1, 2, 3} - 1: xs.i > 0 ⟩       // elementos, no se como interpretar ese -1 la vdd, serian 3 elemetnos evaluado contra 4?? idk
-≡ { aplico el t ́ermino a cada elemento del rango }
+≡ {Aplico el termino a cada elemento del rango }
     (xs.0 = xs.0 + 1) ∧ (xs.1 = xs.1 + 1) ∧ (xs.2 = xs.2 + 1) ∧ (xs.3 = xs.3 + 1)
-={ Evaluo las indexiones xs = [11, 2, 5, 8]}
+={Evaluo las indecciones xs = [11, 2, 5, 8]}
     (11 = 12) ∧ (2 = 3) ∧ (5 = 6) ∧ (8 = 9)
-={ Obvio mas falso aksjl }
+={Coso de false}
     false 
 
 Lab 3. 
 a y b y c)
+    La variable libre no necesariamente tiene que ser un i, j, puede ser una lista.
     a) La variable libre es xs
 
 varA :: [Int] -> Bool   
@@ -342,12 +343,12 @@ xs = [11, 2, 5, 8]
 
 
     b) La variable libre es x, xs
+    x == n
 
 varB :: Eq a => [a] -> a -> Bool
 varB [] n = False                               1
-varB (x:xs) n | n == varB xs = True             2
+varB (x:xs) n | n == x = True                   2
               | otherwise = varB xs n           3
-
 
 chekiado !
 
@@ -356,26 +357,52 @@ xs = [11, 2, 5, 8] 5
     varB xs = [11, 2, 5, 8] 5
 ={Notacion en terminos de constructores}
     varB xs 11:2:5:8[] 5 
-={Matcheo caso }
+={Matcheo caso 3}
+    varB 2:5:8[] 5
+={Mathceo caso 3}
+    5 == 5 = True
+={Coso}
+    True
 
-    c) La variable libre es xs, ys
+    c) La variable libre es xs, ys --NO LO PIDE, PERO LO HICE IGUAL
 
 varC :: Eq a => [a] -> [a] -> Bool
 varC [] [] = True
 varC _ _ = False
 varC (x:xs) (y:ys) = (x == y) && varC xs ys
 
-
     d) La variable libre es xs
 
 varD :: [Int] -> Bool
-varD [] = False
-varD (x:xs) = (x == x + 1) = varD xs  --????????????????
+varD [] = False                                             1
+varD (x:y:xs) = (x == y + 1) && varD xs                2
+
+xs = [−5, −3, 4, 8]
 
 
-c)
+    varD xs = [−5, −3, 4, 8]
+={Notacion en terminos de constructores}
+    varD xs =  -5:-3:4:8:[]
+={Matcheo caso 2}
+    -5 == -3 + 1 && varD  4:8:[]
+={False, caso 2}
+    4 == 8 + 1 && varD []
+={Caso base 1}
+    False
 
-6. Escrib ́ı f ́ormulas para las siguientes expresiones en lenguaje natural.
+xs = [11, 2, 5, 8]
+
+    varD xs = [11, 2, 5, 8]
+={Notacion en terminos de constructores}
+    varD xs = 11:2:5:8:[]
+={Caso 2}
+    11 == 2 + 1 && varD 5:8:[]
+={False, Caso 2}
+    5 == 8 + 1 && varD []
+={False, Caso 1}
+    False
+
+6. Escribi f ́ormulas para las siguientes expresiones en lenguaje natural.
 a) Todos los elementos de xs e ys son iguales (¡ojo! ¡sujeta a interpretaci ́on!).
 <Ai: 0 <= i ^ i < lenght.xs : <Aj : 0 <= j ^ j < lenght.ys : xs !! i == ys !! j>
 
@@ -385,19 +412,22 @@ b) Todos los elementos de xs ocurren en ys.
 c) Todos los elementos de xs ocurren en ys en la misma posici ́on.
 <Ai: 0 <= i ^ i < lenght.xs : <Aj : 0 <= j ^ j < lenght.ys : drop xs i == drop ys j>
 
-(dudo de b y c)
+(dudo de b y c, aùn.)
 
 7 y 8, lab 4)
 
 Para cada una de las siguientes f ́ormulas, describ ́ı su significado utilizando el lenguaje natural.
-a) ⟨Prod i : 1 ≤ i ≤ n : i ⟩
+
+7 a) ⟨Prod i : 1 ≤ i ≤ n : i ⟩
 El producto de todos los elementos del 1 a n.
 
+8 a)
+
     ⟨ ∀ i : 1 ≤ i < n : i ⟩
-≡ { Implemento n }
-    ⟨ ∀ i : 1 <= i < 5 : xs.i > 0 ⟩           //son elementos de n
+≡ {Implemento n = 5}
+    ⟨ ∀ i : 1 ≤ i < 5 : i ⟩                           //son elementos de n
 ≡ { aplico el t ́ermino a cada elemento del rango }
-    1 * 2 * 3 * 4 * 5
+    (1 * 2 * 3 * 4 * 5)
 ={aritmetica}
     120
 
@@ -407,13 +437,16 @@ prod :: Int -> Int
 prod n = n * prod 
 
 b) ⟨Sum i: 0 ≤ i < #xs : xs.i ⟩/ #xs
-Promedio de los elementos de la lista xs en su sumatoria.
+
+Es el promedio de los elementos de la lista xs en su sumatoria.
+
+xs = [6, 9, 3, 9, 8].
 
     ⟨Sum i: 0 ≤ i < #xs : xs.i ⟩ / #xs
-={ Implemento xs }
+={Implemento xs}
     ⟨Sum i: i e {6, 9, 3, 9, 8} : xs.i ⟩/ 5
 ={Impl en xs}
-    xs.1 + xs.2 + xs.3 + xs.4 + xs.5
+    (xs.1 + xs.2 + xs.3 + xs.4 + xs.5 ) / 5
 ={Aritmetica}
     (6 + 9 + 3 + 9 + 8 )/5
 ={Aritmetica}
@@ -421,14 +454,13 @@ Promedio de los elementos de la lista xs en su sumatoria.
 
     Variable libre xs 
 
-
 sum :: [Int] -> Int
 sum [] = 0                                          1
-sum (x:xs) = x + sum xs 'div' lenght xs            2
+sum (x:xs) = x + sum xs 'div' lenght xs             2
 
 
 c) ⟨Max i : 0 ≤ i < #xs : xs.i ⟩ < ⟨Min i : 0 ≤ i < #ys : ys.i ⟩
-El mayor elemento en la lista xs es menor que el menor elemento en la lista ys
+El maximo elemento en la lista xs es menor que el minimo elemento en la lista ys
 
     ⟨Max i : 0 ≤ i < #xs : xs.i ⟩ < ⟨Min i : 0 ≤ i < #ys : ys.i ⟩
 ={Imp xs y ys}
@@ -439,13 +471,12 @@ El mayor elemento en la lista xs es menor que el menor elemento en la lista ys
     max(-3, 9, 8) < min(6, 7, 8)
 ={func max y min}
     9 < 6
-    false????????????????????????'''
+    false
 
     Variable libre xs, ys
 
 esMenorMaxQueMin :: [Int] -> [Int] -> Bool
-esMenorMaxQueMin xs ys = maximum xs < minimum ys
-
+esMenorMaxQueMin xs ys = maximum xs < minimum ys  --Asumo a maximum y minimum como funcionas ya establecidas de haskell, no las defini. Pero en todo caso serian por casos
 
 d) ⟨ ∃ i, j : (2 ≤ i < n) ∧ (2 ≤ j < n) : i ∗ j = n ⟩
 Existen 2 elementos tal que su producto es igual a n 
@@ -454,6 +485,7 @@ Existen 2 elementos tal que su producto es igual a n
 ={Impl. de n}
     ⟨ ∃ i, j : (2 ≤ i < 5) ∧ (2 ≤ j < 5) : i ∗ j = 5 ⟩
 ={aritmeticamente, no hay un numero enero tq i * j = 5}
+    False
 
     variable libre n
 
@@ -464,23 +496,25 @@ prod i j n | i > n = False
            | otherwise = False 
 
 9)
-Suponiendo que f : A → Bool es una funci ́on fija cualquiera, y xs : [A], caracteriz ́a con una cuantificaci ́on
+Suponiendo que f : A → Bool es una funcion fija cualquiera, y xs : [A], caracteriz ́a con una cuantificaci ́on
 la siguiente funcion recursiva:
 
-algunof : [A] -> Bool
-algunof.[] = False
-algunof.(x:xs) = f.x || algunof.xs
+f.x :: a -> Bool
+
+algunof : [a] -> Bool
+algunof [] = False
+algunof (x:xs) = f.x || algunof xs
 
 si me dice alguno, de entrada me doy cuenta que es un E (existe)
 devuelve un bool
 parece que pide que si esta en una funcion f o en algunof algun tipo de valor A (cuaql)
 
-<E i : 0 <= i ^ i < length.xs : f(xs.i)>
+<E i : 0 <= i ^ i < length.xs : f(xs.i)>        (?)
 
 10 y lab 5)
 
 10. Definı recursivamente una funci ́on todos : [Bool] → Bool que verifica que todos los elementos de una lista
-son T rue, es decir, que satisface la siguiente especificaci ́on:
+son True, es decir, que satisface la siguiente especificaci ́on:
 
 todos.xs ≡ ⟨ ∀ i : 0 ≤ i < #xs : xs.i ⟩
 
@@ -488,7 +522,9 @@ todosxs :: [Bool] -> Bool
 todosxs [] = True 
 todosxs (x:xs) = x && todos xs
 
-11)
+chekiado !!
+
+11 y lab 6)
 
 a) n es potenica de 2
 
@@ -496,7 +532,7 @@ a) n es potenica de 2
 
 b) n es el elemento mas grande de xs
 
-<Maxn : n pert xs : n >
+<Max n : n pert xs : n >
 
 variable libre xs
 
@@ -504,9 +540,11 @@ esMaximo :: [Int] -> Bool
 esMaximo [] = True 
 esMaximo (x:xs) = max(xs) esMaximo xs 
 
+chekiado !
+
 c) El producto de los elementos pares de xs
 
-<prod i : 0 ≤ i ^ i < length(xs) ∧ mod 2 (xs !! i) : (xs !! i)>
+<prod i : 0 ≤ i < length(xs) ∧ mod 2 (xs !! i) : (xs !! i)>
 
 variable libre xs 
 
@@ -516,10 +554,11 @@ productoPar (x:xs)
                   | mod 2 x = x * productoPar xs
                   | otherwise = productoPar xs
 
+chekiado !
 
 d) La suma de los elementos en posicion par de xs 
 
-<sum i : 0 <= i ^ i < length xs ^ mod 2 (xs !! i) : xs !! i >
+<sum i : 0 <= i < length xs ^ mod 2 (xs !! i) : xs !! i >
 
 variable libre xs
 
@@ -528,27 +567,45 @@ sumPar [] = 0
 sumPar (x:xs) | mod 2 x = x + sumPar xs 
               | otherwise = sumPar xs 
 
-12) facil pero q flojera dio esMaximo
+chekiado !
 
-⟨ ∀ i :     i = 0 ∨ 4 > i ≥ 1    :   ¬ f.i  ∨  ¬ f.n    ⟩ 
-≡ { ⊕ es ∧, ⓧ es ∨ , C es ¬ f.n , luego puedo aplicar distributividad ya que se cumple todos
-     los requisitos  }
- ⟨ ∀ i :     i = 0 ∨ 4 > i ≥ 1    :   ¬ f.i  ⟩  ∨  ¬ f.n   
+12) facil pero q flojera dio esMaximo --de aca para abajo no corregi mas
 
-Ejemplo (ejercicio 12d):
-  ⟨Max i :  0 ≤ i < #xs   :   k + xs!i   ⟩
-= { conmutatividad }
-  ⟨Max i :  0 ≤ i < #xs   :   xs!i  +  k   ⟩
-= { ⊕ es max , ⓧ es + , C es  k,  ¿distribuyen? 
-                  ( x  +  y )  max  ( z  +  y )  =    (  x  max  z  )  +   y   . Sí vale, siempre.
-      ¿es el rango no vacío? no sabemos, si xs = [ ], el rango es vacío.
-       luego, debe suceder que el neutro de max ( -infinito ) es absorbente para +  (la suma),
-      o sea que (-infinito)  + x  = - infinito . 
-      En esta materia vamos a asumir que esto vale, así que vamos a permitir distribuir.
-  }
-   ⟨Max i :  0 ≤ i < #xs   :   xs!i   ⟩  +  k
+a) 
+    <Prod i : 1 <= i <= n ^ i mod 3 = 1 : i>
+={Impl. n = 10}
+    <Prod i : 1 <= i <= 10 ^ i mod 3 = 1 : i>
+={Aritmetica, busco los i tq mod 3 = 1}
+    4, 7, 10 cumplen
+={Aritmetica}
+    4* 7 * 10
+={aritmetica}
+    280
 
+b)
 
+    <Sum i, j : 0 <= i < #xs ^ 0 <= j <#ys : xs.i*ys.j>
+={Impl. xs = [-3, 9, 8, 9] y ys = [6,9,3]}
+    <Sum i, j : 0 <= i < 4 ^ 0 <= j < 3 : xs.i * ys.j>
+={uso length xs y ys, impl. i va de 0 a 4, y j de 0 a 3}
+    [-3, 9, 8, 9].i * [6,9,3].j
+={Impl i y j}
+    [-3, 9, 8, 9].0 * [6,9,3].0 ^ [-3, 9, 8, 9].1 * [6,9,3].1 ^[-3, 9, 8, 9].2 * [6,9,3].2 ^[-3, 9, 8, 9].3 * [6,9,3].3 ^[-3, 9, 8, 9].4 * [6,9,3].4(?)
+={Impl. i y j}
+    -3 * 6 ^ 9 * 9 ^ 8 * 3 ^ 9
+={Aritmetica y ns cuanto da}
+
+c) 
+
+    ⟨ ∀ i, j : 0 ≤ i < j < #xs : xs.i ̸= xs.j ⟩
+={Impl. xs = [-3, 9, 8, 9] y uso length}
+    ⟨ ∀ i, j : 0 ≤ i < j < 4 : xs.i ̸= xs.j ⟩
+={Impl. Termino}
+    [-3, 9, 8, 9].i /= [-3, 9, 8, 9].j ^[-3, 9, 8, 9].i /= [-3, 9, 8, 9].j ^[-3, 9, 8, 9].i /= [-3, 9, 8, 9].j ^[-3, 9, 8, 9].i /= [-3, 9, 8, 9].^
+={Impl i y j}
+    -3 /= -3 ^ 9 /= 9 ^ 8 /= 8 ^ 9 /= 9 
+={Logica proposiciona}
+    FALSE
 
 13)
 
