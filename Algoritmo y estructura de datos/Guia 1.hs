@@ -607,29 +607,64 @@ c)
 ={Logica proposiciona}
     FALSE
 
+d)
+    <Max as, bs : xs = as ++ bs : sum.as>
+={Impl de xs = [-3, 9, 8, 9]}
+    <Max as, bs : [-3, 9, 8, 9] = as ++ bs : sum.as>
+={Si xs = as ++ bs, entonces as = [-3, 9] y bs=[8,9]}
+    <Max as, bs : [-3, 9, 8, 9] = as ++ bs : sum.[-3,9]>
+={Aritmetica}
+    6
+
+e)
+    ⟨Sum i : 1 ≤ i + 1 < #xs + 1 : (x ▷ xs).(i + 1) ⟩
+={Impl de xs}
+    ⟨Sum i : 1 ≤ i + 1 < #[-3, 9, 8, 9] + 1 : (x ▷ [-3, 9, 8, 9]).(i + 1) ⟩
+={Length xs}
+    ⟨Sum i : 1 ≤ i + 1 < 4 + 1 : (x ▷ [-3, 9, 8, 9]).(i + 1) ⟩
+={Aritmetica}
+    ⟨Sum i : 1 ≤ i + 1 < 5 : (x ▷ [-3, 9, 8, 9]).(i + 1) ⟩
+
+creo q esta bien asi
+    
+    
 13)
 
-a) ⟨ ∃ i : i = 3 ∧ i mod 2 = 0 : 2 ∗ i = 6 ⟩
+a) 
+    ⟨ ∃ i : i = 3 ∧ i mod 2 = 0 : 2 ∗ i = 6 ⟩
+={Rango unitario}
+    ⟨ ∃ i : 3 mod 2 = 0 : 2 ∗ 3 = 6 ⟩
+={Rango vacio}
+    ⟨ ∃ i : False : 2 ∗ 3 = 6 ⟩
+={Neutro de existe es False}    
+    False
 
-⟨ ∃ i : 3 mod 2 = 0 : 2 ∗ 3 = 6 ⟩
+b)
+    ⟨Sum i : 5 ≤ i ∧ i ≤ 5 : −2 ∗ i ⟩
+={Rango unitario}
+    ⟨Sum i : i = 5 : −2 ∗ 5 ⟩
+={Rango unitario}
+    ⟨Sum i : i = 5 : −10 ⟩
+={termino de constante}
+    -10
 
-False 
-3 mod 2 /= 0
-b)⟨Sum i : 5 ≤ i ∧ i ≤ 5 : −2 ∗ i ⟩
+c)
 
-⟨Sum i : i = 5 : −2 ∗ 5 ⟩
+    ⟨Prod i : 0 < i < 1 : 34 ⟩
+={A5 Termino de constante}
+    34          
 
--2 * 5 = -10
+d) 
 
-c)⟨Prod i : 0 < i < 1 : 34 ⟩        ???
+    ⟨Min i : i ≤ 0 ∨ i > 10 : n ∗ (i + 2) − n ∗ i ⟩
+={Deberia de ser particion de rango, pero no se puede usar. asi que}
+    ⟨Min i : i = 0 v i < 0 ∨ i > 10 : n ∗ (i + 2) − n ∗ i ⟩
+={Rango unitario}
+    ⟨Min i : False : n ∗ (0 + 2) − 0 ∗ i ⟩
+={Rango vacio}
+    False
 
-34          (A5 Termino de constante)
-
-d) ⟨Min i : i ≤ 0 ∨ i > 10 : n ∗ (i + 2) − n ∗ i ⟩
-
-⟨Min i : i ≤ 0 : n ∗ (i + 2) − n ∗ i ⟩ v <Min : i > 10 : n ∗ (i + 2) − n ∗ i>
-
-
+en todo caso:
 Rango es i pert {-inf, -1, 0} y i pert {11, 12, inf+}
 
 -> min primer termino es -inf, = 0
@@ -640,7 +675,7 @@ e) ⟨Max a, as : a:as = [ ] : length (as) ⟩
 max length as (?) o 0
 
 
-14 y 15. Aplic ́a partici ́on de rango si es que se puede, y si no se puede, explic ́a porqu ́e.
+14 y 15. Aplica partici ́on de rango si es que se puede, y si no se puede, explic ́a porqu ́e.
 a) ⟨Sum i : i = 0 ∨ 4 > i ≥ 1 : n ∗ (i + 1) ⟩
 
 ⟨Sum i : 4 > 0 ≥ 1 : n ∗ (0 + 1) ⟩ 
