@@ -1,4 +1,4 @@
-0) Logica proposicional salteado, redundate.
+
 1)
 a)Dada una lista de números enteros, que devuelve un único elemento entero de forma recursiva, siendo el caso base una lista vacía de enteros devolviendo 0, siendo el 2 caso definido por como funciona la sumatoria en lenguaje matemático en programación.
 b)
@@ -19,7 +19,41 @@ Caso inductivo, demuestro que vale para todo x:xs
     x + sum xs 
 ={Válido por HI}
 
-d) y como que la derivación es única en este caso?
+d) 
+	<Sum i : 0 <= i < #xs : xs.i >
+
+1. Caso base, xs = []
+
+	<Sum i : 0 <= i < #xs : xs.i >
+={xs = []}
+	<Sum i : 0 <= i < 0 : [].i >
+={Def de legnth de lista vacia}
+	<Sum i :False  : [].i >
+={Rango vacio, neutro de sum}
+	0
+
+2. Hipotesis inductiva sum.xs = <Sum i : 0 ≤  i < #xs : xs.i >
+
+3. Paso inductivo, demuestro que vale para xs=x:xs
+
+	<Sum i : 0 <= i < #(x:xs) : (x:xs).i >
+={Def. de length en recursion}
+	<Sum i : 0 <= i < 1 + #xs : (x:xs).i >
+={ (i = 0)  ∨ (1 ≤  i  < #xs+1) }
+	<Sum i : (i = 0)  ∨ (1 ≤  i  < #xs+1) : (x:xs).i > (¿no entiendo, dice que es impotente pero no hay otra manera de seguirlo mas que haciendolo idempotante)
+={Particion de rango} 
+	<Sum i : 1 ≤  i  < #xs + 1 : xs.i > + <Sum i : i = 0 : (x:xs).i >
+={Hago cambio de variable, i = i + 1}
+	<Sum i : 1 ≤  i + 1  < #xs + 1 : (x:xs).(i + 1) > + <Sum i : i = 0 : (x:xs).i >
+={Algebra, cancelo los +1 term izq}
+	<Sum i : 0 ≤  i < #xs : (x:xs).(i + 1) > + <Sum i : i = 0 : (x:xs).i >
+={Def de .i+1}
+	<Sum i : 0 ≤  i < #xs : xs.i > + <Sum i : i = 0 : (x:xs).i >
+={Term. Derecho, i = 0, entonces toma x}
+	<Sum i : 0 ≤  i < #xs : xs.i > + <Sum i : i = 0 : x>
+={termino de constante}
+	<Sum i : 0 ≤  i < #xs : xs.i > + x
+
 
 2 y lab 1) FALTA DERIVAR ESPEC. 
 a) 
@@ -58,7 +92,7 @@ length (x:xs) = 1 + length xs
 
 Sabiendo esto puedo derivar la especifiacion:
 
-sum cuad.xs = ⟨Sum i :0 ≤ i < length.xs: xs.i ∗ xs.i⟩ 
+sumcuad.xs = ⟨Sum i :0 ≤ i < length.xs: xs.i ∗ xs.i⟩ 
 
 1) Caso base, asumo que xs = []
 
@@ -66,23 +100,30 @@ sum cuad.xs = ⟨Sum i :0 ≤ i < length.xs: xs.i ∗ xs.i⟩
 	sumCuad [] = ⟨Sum i :0 ≤ i < length.[]: [].i ∗ [].i⟩
 ={Def. de length en lista vacia}
 	sumCuad [] = ⟨Sum i :0 ≤ i < 0: [].i ∗ [].i⟩
-={False}
+={Logica}
 	sumCuad [] = ⟨Sum i : False : [].i ∗ [].i⟩
-={rango vacio}
-	False --Alternativamente, 0
-
-2)Paso inductivo, demuestro que vale para x:xs 
-
+={Rango vacio para sum}
+	0
+	
+2. Hipotesis inductiva, pues:
+	sumcuad.xs = ⟨Sum i :0 ≤ i < #.xs: xs.i ∗ xs.i⟩ 
+	
+3.Paso inductivo, demuestro que vale para x:xs 
+	⟨Sum i :0 ≤ i < length.xs: xs.i ∗ xs.i⟩ 
 ={xs = x:xs, sustituyo}
-	sumCuad.xs = ⟨Sum i :0 ≤ i < length.(x:xs) : (x:xs).i ∗ (x:xs).i⟩ 
+	⟨Sum i :0 ≤ i < length.(x:xs) : (x:xs).i ∗ (x:xs).i⟩ 
 ={ Definicion de length en caso recursivo}
-	sumCuad.xs = ⟨Sum i :0 ≤ i <  1 + length.xs: (x:xs).i ∗ (x:xs).i⟩ 
-= {Separacion de termino }
-	sumCuad.xs = ⟨Sum i : i = 0 v 0 ≤ i <  length.xs: (x:xs).i ∗ (x:xs).i⟩ 
+	⟨Sum i :0 ≤ i <  1 + length.xs: (x:xs).i ∗ (x:xs).i⟩ 
+= {(i = 0)  ∨ (1 ≤  i  < #xs+1) }
+	⟨Sum i : (i = 0)  ∨ (1 ≤  i  < #xs+1): (x:xs).i ∗ (x:xs).i⟩ 
 ={Separacion de termino}
-	sumCuad.xs  = (x:xs).0 +⟨Sum i : 0 ≤ i < length.xs: (x:xs).(i + 1) ∗ (x:xs).(i + 1)⟩ 
-={Def de .}
-	sumCuad.xs  = x +⟨Sum i : 0 ≤ i < length.xs: (x:xs).i ∗ (x:xs).i⟩ 
+	⟨Sum i : (i = 0) : (x:xs).i ∗ (x:xs).i⟩ + ⟨Sum i : (1 ≤  i  < #xs+1): (x:xs).i ∗ (x:xs).i⟩ 
+={Hago i = i +1 para hacer algebra}
+	⟨Sum i : (i = 0) : (x:xs).i ∗ (x:xs).i⟩ + ⟨Sum i : 0 ≤  i  < #xs: (x:xs).(i + 1) ∗ (x:xs).(i + 1)⟩
+={Aplico def de .i + 1}
+	⟨Sum i : (i = 0) : (x:xs).i ∗ (x:xs).i⟩ + ⟨Sum i : 0 ≤  i  < #xs: xs.i * xs.i⟩
+={ como i = 0, aplico y hago termino de constante}
+	x * x + ⟨Sum i : 0 ≤  i  < #xs: xs.i * xs.i⟩
 
 b) 
 Asumo que e = True 
@@ -106,15 +147,17 @@ igaE (x:xs) = x == x && igaE xs			2
 	1 == 1 && igaE []
 ={Caso base}
 	True
+
+	Derivacion
 	
-	Caso base: 
+Caso base: 
    iga.e.[  ]
 = { especificación de iga }
-〈 ∀ i : 0 ≤ i < #[ ] :  [ ] ! i = e 〉
+	〈 ∀ i : 0 ≤ i < #[ ] :  [ ] ! i = e 〉
 = { def # }
-〈 ∀ i : 0 ≤ i < 0 :  [ ] ! i = e 〉
+	〈 ∀ i : 0 ≤ i < 0 :  [ ] ! i = e 〉
 = { lógica }
-〈 ∀ i : False :  [ ] ! i = e 〉
+	〈 ∀ i : False :  [ ] ! i = e 〉
 = { rango vacío }
   True
 
@@ -170,6 +213,22 @@ expXN x n = x^n + expXN
 ={Aritmetica}
 	4
 
+
+Derivacion:
+
+1. Caso base, n = 0
+	x^n 
+={n = 0, algebra}
+	1
+
+2. HI, expXN = x^n 
+
+3. Paso inductivo para n+1
+
+	x^n+1
+={Algebra}
+	x^n * x ?
+
 d) 
 sum par.n = ⟨ Sum i : 0 ≤ i ≤ n ∧ par.i : i⟩ donde par.i .= i mod 2 = 0. 
 Suma todo número par.
@@ -193,6 +252,32 @@ Chekiado !
 	2 + 2 + (sumPar [])
 ={Matcheo caso 1 y aritmetica}
 	4
+
+La derivacion tiene dos casos. 
+
+Caso base, n = 0 , y voy a aplicar i mod 2 de una. 
+
+	⟨Sum i : 0 ≤ i ≤ 0 ∧ i mod 2 = 0 : i⟩
+={Rango false y abs}
+	⟨Sum i : False  : i⟩
+={rango vacio de sum}
+	0
+
+Hipotesis inductiva, sumParN = ⟨Sum i : 0 ≤ i ≤ n ∧ i mod 2 = 0 : i⟩
+
+Paso inductivo, para n + 1. Tener en cuenta que son dos casos, uno para mod = 0, y otro para mod /= 1
+ 
+		⟨Sum i : 0 ≤ i ≤ n+1 ∧ i mod 2 = 0 : i⟩
+	={Def de n +1 en rango,(i = 0)  ∨ (1 ≤  i  < n+1)  }
+		⟨Sum i : ((i = 0)  ∨ (1 ≤  i  < n+1)) ∧ i mod 2 = 0 : i⟩
+	={Distributividad de ^ con v y particion de rango}
+		⟨Sum i : (1 ≤  i  < n+1) ∧ i mod 2 = 0 : i⟩ + ⟨Sum i : (i = 0) ∧ i mod 2 = 0 : i⟩
+	={cambio de var i = i + 1, y algebra}
+		⟨Sum i : (0 ≤  i  < n) ∧ (i + 1) mod 2 = 0 : i⟩ + ⟨Sum i : (i = 0) ∧ i mod 2 = 0 : i⟩
+	={i = 0, evaluo siendo true por algebra}
+		⟨Sum i : (0 ≤  i  < n) ∧ (i + 1) mod 2 = 0 : i⟩ + ⟨Sum i : True : i⟩
+	={Evaluo i + 1, siendo false}
+		⟨Sum i : False : i⟩ + ⟨Sum i : True : i⟩ ?
 
 e) 
 cuantos.p.xs = ⟨N i : 0 ≤ i < #xs : p.(xs.i)⟩ 
@@ -610,5 +695,10 @@ Bounded. 				DONE
 Derivacion en cuantificaciones 	DONE 
 Explicar algunos teoremas 
 Una buena diferencia entre Type y Data 
+
+Data constructores
+
+type sinonimo de tipo. 
+
 ¿Como lee haskell todo lo de coso? Ej, lab 13, c) NO ENTIENDO LA LOGICA DE HASKELL
 chusmear que se ve en c 
