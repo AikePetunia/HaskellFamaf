@@ -672,54 +672,39 @@ Rango es i pert {-inf, -1, 0} y i pert {11, 12, inf+}
 
 e) ⟨Max a, as : a:as = [ ] : length (as) ⟩
 
-max length as (?) o 0
+    ⟨Max a, as : a:as = [ ] : length (as) ⟩
+={Logica, si a:as es lista vacia, es false, pues una lista vacia es vacia y no se le pega un elemento}
+    ⟨Max a, as : False : length (as) ⟩
+={Rango vacio}
+    -inf
 
-
-14 y 15. Aplica partici ́on de rango si es que se puede, y si no se puede, explic ́a porqu ́e.
+14. 15 skip Aplica partici ́on de rango si es que se puede, y si no se puede, explic ́a porqu ́e.
 a) ⟨Sum i : i = 0 ∨ 4 > i ≥ 1 : n ∗ (i + 1) ⟩
 
-⟨Sum i : 4 > 0 ≥ 1 : n ∗ (0 + 1) ⟩ 
-
-n 
-
-n = 5 
-
-5
+    ⟨Sum i : i = 0 ∨ 4 > i ≥ 1 : n ∗ (i + 1) ⟩
+={Particion de rango}
+    ⟨Sum i : 4 > i ≥ 1 : n ∗ (i + 1) ⟩ v     ⟨Sum i : i = 0: n ∗ (i + 1) ⟩
 
 En el orden de los axiomas, el rango unitario esta primero.
 
 b) ⟨∀ i : 3 ≤ |i| ≤ 4 ∨ 0 < i < 4 : ¬f.i ⟩
 
-⟨∀ i : 3 <= i < 4 : ¬f.i ⟩
-
-Redundatnte el 3 ≤ |i| ≤ 4, simplificado
-
-si |x| < 4
-
-3 <= 4 <= 4  v 0 < i < 4 : -f.i
-
--> ⟨∀ i : 3 ≤ |4| ≤ 4  : ¬f.i ⟩ v ⟨∀ i : 0 < i < 4 : ¬f.i ⟩
+    ⟨∀ i : 3 ≤ |i| ≤ 4 ∨ 0 < i < 4 : ¬f.i ⟩
+={Particion de rango}
+    ⟨∀ i : 3 ≤ |i| ≤ 4 : ¬f.i ⟩ v ⟨∀ i : 0 < i < 4 : ¬f.i ⟩
 
 c) ⟨Sum i : |i| ≤ 1 ∨ 0 ≤ 2 ∗ i < 7 : i ∗ n ⟩
 
-⟨Sum i : |i| ≤ 1 ∨ 0 ≤ 2 ∗ i < 7 : i ∗ n ⟩
-
- 0 ya es menor o igual que 2.
- El absoluto sera positivo siempre. Hay false 
-
-⟨Sum i : i < 7 : i ∗ n ⟩
-
-si f.x = |x| < 4
-
-⟨Sum i : |4| ≤ 1 ∨ 0 ≤ 2 ∗ 4 < 7 : 4 ∗ n ⟩
-
-⟨Sum i : false v  4 < 7 : 4 ∗ n ⟩
+    ⟨Sum i : |i| ≤ 1 ∨ 0 ≤ 2 ∗ i < 7 : i ∗ n ⟩
+={Particion de rango}
+    ⟨Sum i : 0 ≤ 2 ∗ i < 7 : i ∗ n ⟩ v ⟨Sum i : |i| ≤ 1 : i ∗ n ⟩
 
 d) ⟨Prod i : 0 ≤ i < #xs ∧ (i mod 3 = 0 ∨ i mod 3 = 1) : 2 ∗ xs.i + 1 ⟩
 
-⟨Prod i : (0 ≤ i < #xs ∧ i mod 3 = 0 ) v ( 0 ≤ i < #xs ^ i mod 3 = 1) : 2 ∗ xs.i + 1 ⟩
-
-⟨Prod i : (0 ≤ i < #xs ∧ i mod 3 = 0 )  : 2 ∗ xs.i + 1 ⟩ v ⟨Prod i : (0 ≤ i < #xs ^ i mod 3 = 1 )  : 2 ∗ xs.i + 1 ⟩
+={Distributividad de v con ^}
+    ⟨Prod i : (0 ≤ i < #xs ∧ i mod 3 = 0 ) v ( 0 ≤ i < #xs ^ i mod 3 = 1) : 2 ∗ xs.i + 1 ⟩
+={Particion de rango}
+    ⟨Prod i : (0 ≤ i < #xs ∧ i mod 3 = 0 ) : 2 ∗ xs.i + 1 ⟩ v ⟨Prod i : (0 ≤ i < #xs ^ i mod 3 = 1 )  : 2 ∗ xs.i + 1 ⟩
 
 xs = [-1, 1, 0, 3]
 
@@ -735,18 +720,18 @@ xs = [-1, 1, 0, 3]
 
 16)
 
-La particion de rango que se hizo es un atentado a los axiomas
-
-xs = []
+Particion de rango bien hecha.
+Falla para xs = []
 
 17) y 18)
 
 a) ⟨Sum i : i = 0 ∨ 4 > i ≥ 1 : n ∗ (i + 1) ⟩
 
-={ i = 0}
-    ⟨Sum i : 4 > 0 ≥ 1 : n ∗ (0 + 1) ⟩
-={Distirbutividad n y aritmetica}
-⟨Sum i : 4 > 0 ≥ 1 : n ⟩
+    ⟨Sum i : i = 0 ∨ 4 > i ≥ 1 : n ∗ (i + 1) ⟩
+={particion de rango}
+    ⟨Sum i : 4 > i ≥ 1 : n ∗ (i + 1) ⟩ v ⟨Sum i : i = 0 : n ∗ (i + 1)⟩
+={Distributividad}
+    ⟨Sum i : 4 > i ≥ 1 : n ∗ (i + 1) ⟩ v ⟨Sum i : i = 0 : i + 1⟩ * n
 
 False 
 si n = 3 
@@ -756,11 +741,12 @@ sino
  
  ⟨Sum i : i = 0 ∨ 4 > i ≥ 1 : n ∗ (i + 1) ⟩
 
-  ⟨Sum i : i = 0 ∨ 4 > i ≥ 1 : i + 1 ⟩ * n
+ ⟨Sum i : i = 0 ∨ 4 > i ≥ 1 : i + 1 ⟩ * n
 
-b) ⟨Prod i : 3 ≤ |i| ≤ 4 ∨ 0 < i < 4 : n + i ⟩
-
-⟨Prod i : 3 ≤ |i| ≤ 4 ∨ 0 < i < 4 :  i ⟩ + n
+b) 
+    ⟨Prod i : 3 ≤ |i| ≤ 4 ∨ 0 < i < 4 : n + i ⟩
+={Distributividad}
+    ⟨Prod i : 3 ≤ |i| ≤ 4 ∨ 0 < i < 4 : i ⟩ + n
 
 f.x(x = 0), n = 3
 
@@ -768,11 +754,12 @@ f.x(x = 0), n = 3
 
 3
 
-c) ⟨ ∀ i : i = 0 ∨ 4 > i ≥ 1 : ¬(f.i ∧ f.n) ⟩
-
-⟨ ∀ i : i = 0 ∨ 4 > i ≥ 1 : ¬f.i v -f.n ⟩ {Morgan}
-
-⟨ ∀ i : 4 > 0 ≥ 1 : ¬f.i v -f.n  ⟩ { i = 0 }
+c) 
+    ⟨ ∀ i : i = 0 ∨ 4 > i ≥ 1 : ¬(f.i ∧ f.n) ⟩
+={Morgan}
+    ⟨ ∀ i : i = 0 ∨ 4 > i ≥ 1 : ¬f.i v -f.n ⟩ 
+={Distributividad}
+    ⟨ ∀ i : 4 > 0 ≥ 1 : ¬f.i ⟩ v -fn (? en todo caso creo q no se puede)
 
 False 
 
@@ -780,36 +767,39 @@ si f.x = (x = 0)
 
 ⟨ ∀ i : 4 > 0 ≥ 1 : ¬0 v -0  ⟩ 
 
-True   (?)
+True   
 
-d)  ⟨Max i : 0 ≤ i < #xs : xs.i ⟩ + x
-⟨Max i : 0 ≤ i < #xs : xs.i ⟩ + x
+d)  
+    ⟨Max i : 0 ≤ i < #xs : x + xs.i ⟩
+={Distributividad}
+    ⟨Max i : 0 ≤ i < #xs : xs.i ⟩ + x
 
 si x = -1, xs = [1, 0, 3]
 
 = { x = -1}
-⟨Max i : 0 ≤ i < #xs : xs.i ⟩ -1
+    ⟨Max i : 0 ≤ i < #xs : xs.i ⟩ -1
 ={Length xs }
-⟨Max i : i pert {0, 1, 2} : xs.i ⟩ -1
+    ⟨Max i : i pert {0, 1, 2} : xs.i ⟩ -1
 ={Asignacion de xs.i}
-⟨Max i : i pert {0, 1, 2} : xs.0, xs.1, xs.2 ⟩ -1
+    ⟨Max i : i pert {0, 1, 2} : xs.0, xs.1, xs.2 ⟩ -1
 ={Logica}
-⟨Max i : i pert {0, 1, 2} : 1, 0, 3 ⟩ -1
+    ⟨Max i : i pert {0, 1, 2} : 1, 0, 3 ⟩ -1
 ={Aritmetica}
-0, -1, 2
-
-19)
+    0, -1, 2
 
 19. Aplic ́a el cambio de variable indicado, si es que se puede. Explic ́a porqu ́e puede o no puede aplicarse.
-a) ⟨Sum i : |i| < 5 : i div 2 ⟩                         con i → 2 ∗ i (o sea f.i = 2 ∗ i)
 
-⟨Sum 2 * i : |2 * i| < 5 : 2 * i div 2 ⟩
+a) 
+    ⟨Sum i : |i| < 5 : i div 2 ⟩                         con i → 2 ∗ i (o sea f.i = 2 ∗ i)
+={Cambio de variable}
+    ⟨Sum 2 * i : |2 * i| < 5 : 2 * i div 2 ⟩
 
 ¿aplicable pero con los i = -inf, 0, 1, 2 ? 2 * i es div de 2 siemrpe? 
 
-b) ⟨Sum i : i mod 2 = 0 ∧ |i| < 5 : i div 2 ⟩           con i → 2 ∗ i (o sea f.i = 2 ∗ i)
-
-⟨Sum (2 * i) : (2 * i) mod 2 = 0 ∧ |(2 * i)| < 5 : (2 * i) div 2 ⟩
+b) 
+    ⟨Sum i : i mod 2 = 0 ∧ |i| < 5 : i div 2 ⟩           con i → 2 ∗ i (o sea f.i = 2 ∗ i)
+={cambio de variable}
+    ⟨Sum (2 * i) : (2 * i) mod 2 = 0 ∧ |(2 * i)| < 5 : (2 * i) div 2 ⟩
 
 Cambio de variable aplicable, con menor rango de i para |(2 * i)| < 5, con i siendo (-inf, 0, 1, 2]
 
@@ -823,7 +813,7 @@ d) ⟨Max as : as ̸= [ ] : #as ⟩                           con (a, as) → a 
 
 ⟨Max as : as ̸= [ ] : #as ⟩
 
-No existe tal variable
+No existe tal variable, en todo caso a:as /= []
 
 20. Simplific ́a el rango y aplic ́a alguna de las reglas para la cuantificaci ́on de conteo:
 a) ⟨N a, as : a ▷ as = xs ∧ xs = [ ] : #as = 1 ⟩
@@ -845,26 +835,40 @@ b) ⟨N i : i − n = 1 : i mod 2 = 0 ⟩
     ⟨Sum i : i − n = 1 ^ i mod 2 = 0: 1 ⟩
 ={Aritmetcia )?)}
     ⟨Sum i : i = 1 + n ^ i mod 2 = 0: 1 ⟩
-={Cambio de variable}
-    ⟨Sum i : i = 1 + n ^ 1 + n mod 2 = 0: 1 ⟩
+={Cambio de variable de i}
+    ⟨Sum i : 1 + n mod 2 = 0: 1 ⟩
 ={False para un conjunto tq n mod 2 = 0}
-    ⟨Sum i : i = 1 + n ^ False = 0: 1 ⟩
+    ⟨Sum i : False = 0: 1 ⟩
 ={Abs de false en ^}
     ⟨Sum i : False : 1 ⟩
 ={A1 Rango vacio}
-    e
+     0
 
 c) ⟨N i : i = 0 ∨ 1 ≤ i < #xs + 1 : ((x ▷ xs).i) mod 2 = 0 ⟩
 
 ={TN5 Particion de rango}
-    ⟨N i : i = 0 : ((x : xs).i) mod 2 = 0 ⟩ + ⟨N i : 1 ≤ i < #xs + 1 : ((x : xs).i) mod 2 = 0 ⟩
+    ⟨N i : i = 0 : ((x : xs).i) mod 2 = 0 ⟩ + ⟨N i : 1 ≤ i < #xs + 1 : ((x : xs).i) mod 2 = 0⟩
 ={Cambio de variable}
-    ⟨N i : i = 0 : ((x : xs).0) mod 2 = 0 ⟩ + ⟨N i : 1 ≤ i < #xs + 1 : ((x : xs).i) mod 2 = 0 ⟩
+    ⟨N i : : ((x : xs).0) mod 2 = 0 ⟩ + ⟨N i : 1 ≤ i < #xs + 1 : ((x : xs).i) mod 2 = 0⟩
 ={AN 11 Definicion de conteo}
-    ⟨Sum i : i = 0 ^ ((x : xs).0) mod 2 = 0  : 1⟩ + ⟨Sum i : 1 ≤ i < #xs + 1 ^ ((x : xs).i) mod 2 = 0 : 1 ⟩
+    ⟨Sum i : ((x : xs).0) mod 2 = 0  : 1⟩ + ⟨Sum i : 1 ≤ i < #xs + 1 ^ ((x : xs).i) mod 2 = 0 : 1 ⟩
+?
 
 21) 
-⟨Sum i: 0 ≤ i < #(x:xs) : T.((x:xs).i) ⟩ = T.x + ⟨Sum i : 0 ≤ i < #xs : T.(xs.i) ⟩
+    ⟨Sum i: 0 ≤ i < #(x:xs) : T.((x:xs).i) ⟩ = T.x + ⟨Sum i : 0 ≤ i < #xs : T.(xs.i) ⟩
+={0 <= i < length x:xs = i = 0 v 1 <= i < length x:xs + 1}
+    ⟨Sum i: i = 0 v 1 ≤ i < #(x:xs) + 1 : T.((x:xs).i) ⟩ = T.x + ⟨Sum i : 0 ≤ i < #xs : T.(xs.i) ⟩
+={Particion de rango}
+    ⟨Sum i: i = 0 : T.((x:xs).i) ⟩ v ⟨Sum i: 1 ≤ i < #(x:xs) + 1 : T.((x:xs).i) ⟩= T.x + ⟨Sum i : 0 ≤ i < #xs : T.(xs.i) ⟩
+={Rango unitario}
+    ⟨Sum i: i = 0 : T.((x:xs).0) ⟩ v ⟨Sum i: 1 ≤ i < #(x:xs) + 1 : T.((x:xs).i) ⟩= T.x + ⟨Sum i : 0 ≤ i < #xs : T.(xs.i) ⟩
+={indice 0}
+    ⟨Sum i: i = 0 : T.x) ⟩ v ⟨Sum i: 1 ≤ i < #(x:xs) + 1 : T.((x:xs).i) ⟩= T.x + ⟨Sum i : 0 ≤ i < #xs : T.(xs.i) ⟩
+={termino de constante}
+    t x + ⟨Sum i: 0 ≤ i < #(x:xs) : T.((x:xs).i) ⟩= T.x + ⟨Sum i : 0 ≤ i < #xs : T.(xs.i) ⟩
+
+?
+
 
 22. (*) (Separacion de un t ́ermino) Demostr ́a los siguientes teoremas  ́utiles para la materia.
 Supon ́e que CG es un cuantificador asociado a un operador generico ⊕, que es conmutativo y asociativo
@@ -872,19 +876,11 @@ Supon ́e que CG es un cuantificador asociado a un operador generico ⊕, que es
 
 a) ⟨CG i : 0 ≤ i < n + 1 : T.i ⟩ = ⟨CG i : 0 ≤ i < n : T.i ⟩ ⊕ T.n
 
-asumo el +
-
-    ⟨CG i : 0 ≤ i < n + 1 : T.i ⟩ = ⟨CG i : 0 ≤ i < n : T.i ⟩ + T.n
-={}
-
-???
-
+??
 
 b) ⟨CG i : 0 ≤ i < n + 1 : T.i ⟩ = T.0 ⊕ ⟨CG i : 0 ≤ i < n : T.(i + 1) ⟩
 
 ??
-
-
 
 23. (Rango unitario generalizado) Sea ⊕ un cuantificador asociado a un operador conmutativo y asocia-
 tivo. Proba la siguiente regla de rango unitario generalizado (Z no depende de i ni de j):
@@ -893,13 +889,11 @@ tivo. Proba la siguiente regla de rango unitario generalizado (Z no depende de i
 
     <CG i, j : i = Z ∧ R.i.j : T.i.j ⟩ = ⟨CG j : R.Z.j : T.Z.j ⟩
 ={A7 Anidado}  
-    <CG i : i = Z <CG j: R.i.j : T.i.j>⟩ = ⟨CG j : R.Z.j : T.Z.j ⟩>
+    <CG i : i = Z : <CG j: R.i.j : T.i.j>⟩ = ⟨CG j : R.Z.j : T.Z.j ⟩>
 ={A2 Unitario}
-    <CG i : i = Z <CG j: R.z.j : T.z.j>⟩ = ⟨CG j : R.Z.j : T.Z.j ⟩>
-={A2 unitario}
+    <CG i : : <CG j: R.z.j : T.z.j>⟩ = ⟨CG j : R.Z.j : T.Z.j ⟩>
+={A2 Rango unitario}
     <CG j: R.z.j : T.z.j> = <CG j: R.z.j : T.z.j>
-
-kreo k esta bien
 
 24. Podemos definir un cuantificador de conteo N utilizando la sumatoria:
 
@@ -907,24 +901,11 @@ kreo k esta bien
 
 Demostra que ⟨Sum i : R.i ∧ T.i : k⟩ = ⟨Ni : R.i : T.i⟩ ∗ k
 
-    ⟨Sum i : R.i ∧ T.i : k⟩ = ⟨Ni : R.i : T.i⟩ ∗ k
-={Termino de constante}
-    k = ⟨Ni : R.i : T.i⟩ ∗ k
-={Distributividad a6}
-    k = ⟨Ni : R.i : T.i ∗ k⟩ 
-
-creo q asi no es, pero es mas facil si asumo q k es 1
-
-entonces queda:
-    ⟨Sum i : R.i ∧ T.i : k⟩ = ⟨Ni : R.i : T.i⟩ ∗ k
-={Asumo k = 1}
-    ⟨Sum i : R.i ∧ T.i : 1⟩ = ⟨Ni : R.i : T.i⟩ ∗ 1
-={ * 1 es neutro}
-    ⟨Sum i : R.i ∧ T.i : 1⟩ = ⟨Ni : R.i : T.i⟩
-={Definicion de conteo}
-    ⟨N i : R.i : T.i⟩ = ⟨Ni : R.i : T.i⟩
-
-sino bue qsy
+   ⟨Sum i : R.i ∧ T.i : k⟩ = ⟨Ni : R.i : T.i⟩ ∗ k
+={Definicion de sum}
+    ⟨Sum i : R.i ∧ T.i : k⟩ = ⟨Sum i : R.i ^ T.i : 1 ⟩ * k 
+={Distributividad}
+    ⟨Sum i : R.i ∧ T.i : k⟩ = ⟨Sum i : R.i ^ T.i :  1 * k ⟩  
 
 25. (*) Demostr ́a la siguiente relaci ́on entre los cuantificadores de m ́aximo y m ́ınimo cuando R es no vac ́ıo:
 
@@ -932,8 +913,6 @@ n = ⟨Min i : R.i : −T.i⟩ ≡ n = −⟨Max i : R.i : T.i⟩
 
 me recuerda a algo... 
 a uno del cuatri pasado... 
-
-
 
 26. (*) Demostr ́a los siguientes teoremas sobre ∀, utilizando los axiomas y teoremas del digesto:
 a) Intercambio de ∀ (generalizada):
@@ -943,15 +922,16 @@ b) Instanciaci ́on de ∀:
 ⟨∀i : : T.i⟩ ⇒ T.x, cuando x no esta cuantificada.
 ¿Como seria la regla de instanciacion para ∃? Enunciala y demostrala.
 
+
+es del cuatri pasado. 
+
 //lab clase 2
 
 27 y lab 7. Defin ́ı recursivamente las siguientes funciones.
 a) La funci ́on paratodo, que dada una lista de valores xs : [A] y un predicado T : A → Bool, determina
 si todos los elementos en xs hacen verdadero el predicado T, es decir:
 
-
 paratodo.xs.T ≡ ⟨ ∀ i : 0 ≤ i < #xs : T.(xs.i) ⟩
-
 
 todos.xs ≡ ⟨ ∀ i : 0 ≤ i < #xs : xs.i ⟩
 
