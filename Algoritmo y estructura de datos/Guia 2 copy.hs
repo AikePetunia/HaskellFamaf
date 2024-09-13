@@ -55,7 +55,7 @@ d)
 	<Sum i : 0 ≤  i < #xs : xs.i > + x
 
 
-2 y lab 1) FALTA DERIVAR ESPEC. 
+2 y lab 1) 
 a) 
 sum cuad.xs = ⟨ Sum i : 0 ≤ i < length.xs : xs.i ∗ xs.i⟩ 
 La sumatoria de los números de una lista multiplicados por sí mismos
@@ -495,14 +495,377 @@ contar_futbolistas xs zona = length (filter esFutbolistaEnZona xs)
 
 Salteados Lab 5-Lab9 (Por cuestiones de derivacion)
 
-f.x.n = >Sum i : 0 ≤ i < n : x^i>
+4
+	a)
+	f : Num → Nat → Num
+	 f.x.n = <Sum i : 0 ≤ i < n : x^i>			--x /= 0
+
+1) Caso base, n = 0
+
+	f.x.0 
+={especificacion}
+	<Sum i : 0 ≤ i < 0 : x^i>
+={rango false, y rango vacio}
+	0
+
+2) Planteo de HI 
+	f.x.n = <Sum i : 0 ≤ i < n : x^i>			--x /= 0
+
+3) Paso inductivo, muestro para n = n + 1
+
+	f.x.(n + 1)
+={Especificacion}
+	<Sum i : 0 ≤ i < (n + 1) : x^i>
+={Uso 0 ≤ i < n  ∨  i = n }
+	<Sum i : 0 ≤ i < n  ∨  i = n : x^i> 
+={Particion de rango}
+	<Sum i : 0 ≤ i < n : x^i> + <Sum i : i = n : x^i>
+={Hipotesis inductiva }
+	f.x.n + <Sum i : i = n : x^i>
+={Rango unitario}
+	f.x.n + x^n  
+={Como la potencia no esta escrita, definida o programada, se modulariza para x^n. Asignemos
+	exp.xn = x^n}
+ 
+Quedando: 
+	f.x.n + exp.xn   <-- Ahora debo derivar exp.xn creandome una especificacion para el mismo 
+
+	exp.xn = x^n 
+
+	Caso base n = 0
+
+		x^0
+	={Algebra}
+		1
+
+	Hipotesis inductiva: 
+		exp.xn = x^n
+
+	Caso inductivo, n = n +1
+
+		exp.x(n+1)
+	={Especificacion}
+		x^n+1
+	={Propiedad de potencias}
+		x^n * x 
+	={HI}
+		exp.x.n * x
+
+Siendo valida la especificacion como 
+
+<Sum i : 0 ≤ i < n : x^i> = f.x.n + exp.xn 
+
+<Sum i : 0 ≤ i < n : x^i> = f.x.n  y 
+x^n = exp.xn 
+
+b) 
+
+	pi : Nat → Num 
+pi.n = 4 ∗ <Sum i : 0 ≤ i < n : (−1)^i /(2 ∗ i + 1)
+
+	Caso base, n = 0
+		pi.0 
+	={Especificacion}
+		<Sum i : 0 ≤ i < 0 : (−1)^i /(2 ∗ i + 1)>
+	={rango vacio}
+		0 
+
+	Hipotesis inductiva. 
+		pi.n = <Sum i : 0 ≤ i < 0 : (−1)^i /(2 ∗ i + 1)>
+
+	Paso inductivo, n = n + 1 
+
+		pi.(n + 1)
+	={Especificacion}
+		<Sum i : 0 ≤ i < n + 1 : (−1)^i /(2 ∗ i + 1)>
+	={0 ≤ i < n  ∨  i = n }
+		<Sum i : 0 ≤ i < n  ∨  i = n : (−1)^i /(2 ∗ i + 1)>
+	={Particion de rango }
+		<Sum i : 0 ≤ i < n : (−1)^i /(2 ∗ i + 1)> + <Sum i : i = n : (−1)^i /(2 ∗ i + 1)>
+	={ Termino de constante }
+		<Sum i : 0 ≤ i < n : (−1)^i /(2 ∗ i + 1)> + (−1)^n /(2 ∗ i + 1)
+	={ HI }
+		pi.n + (−1)^n / (2 ∗ i + 1)
+	={Ambos terminos no definidos, hago especificaciones para cada uno y modularizo, denotems 
+		(1) pot.n = (-1)^n 
+		(2) numImpar = (2 * i + 1}
+
+Quedando:
+	pi.n + pot.n / numImpar 
+
+(1) pot.n
+	pot.n = -1^n 
+
+	Caso base n = 0
+		pot.0
+	={Especificacion}
+		-1^0
+	={Algebra}
+		1
+
+	Hipotesis inductiva: 
+		pot.n = -1^n
+
+	Caso inductivo, n = n +1
+
+		pot.(n+1)
+	={Especificacion}
+		-1^n+1
+	={Propiedad de potencias}
+		-1^n * (-1) 
+	={HI}
+		pot.n * (-1)
+
+(2)
+numImpar.n = <Sum i : 0 <= i < n : 2 * i + 1 >
+
+	1)Caso base n = 0
+
+		numImpar.0 
+	={Especificacion}
+		<Sum i : 0 <= i < 0 : 2 * i + 1 >
+	={Rango vacio}
+		0
+
+	2) Hipotesis inductiva
+		numImpar.n = <Sum i : 0 <= i < n : 2 * i + 1 >
+
+	3) Paso inductivo, para n = n+1
+		
+		numImpar.(n+1)
+	={Especificacion }
+		<Sum i : 0 <= i < n : 2 * i + 1 >
+	={ 0 ≤ i < n  ∨  i = n }
+		<Sum i : 0 ≤ i < n  ∨  i = n : 2 * i + 1 >
+	={Particion de rango}		
+		<Sum i : i = n : 2 * i + 1 > + <Sum i : 0 ≤ i < n : 2 * i + 1 >
+	={Rango unitario y HI }
+		2 * n + 1 + numImpar.n 
+
+Quedando toda la especificacion:
+
+pi : Nat → Num 
+pi.n = 4 ∗ <Sum i : 0 ≤ i < n : (−1)^i /(2 ∗ i + 1)
+
+Como : 
+	pi.n + pot.n / numImpar.n 
 
 
+c)
 
+	f : Nat → Nat
+	f.x = x^3
 
+	Caso base x = 0
 
+		f.0 
+	={Especificacion}
+		0^3
+	={Algebra}
+		0
 
+	Hipotesis Inductiva
+		f.x = x³
 
+	Caso inductivo, para x= x +1 
+
+		f.(x+1)
+	={Especificacion}
+		(x+1)³
+	={Algebra}
+		(x+1) * (x+1) * (x+1) =
+		(x^2 + 2x + 1) * (x + 1) =
+		x^3 + 2x^2 + x + x^2 + 2x + 1 =
+		x^3 + 3x^2 + 3x + 1
+	={Hipotesis inductiva}
+		f.x + 3x² + 3x + 1
+	={Modularizo para: 
+	(1)	cuadrado.x = x^2 }
+
+(1)
+	Caso base, x = 0
+
+		cuadrado.0
+	={Especificacion}
+		0²
+	={Algebra}
+		1
+
+	Hipotesis inductiva
+		cuadrado.x = x^2
+
+	Caso inductivo, para x = x + 1
+
+		cuadrado.(x+1)
+	={Especificacion}
+		(x+1)²
+	={Algebra}
+		x² + 2x + 1
+	={HI}
+		Cuadrado.x + 2x + 1
+
+Para 3x, y 2x es simplemente sumar x + x + x +x +x y +1 + 1
+
+	cubo :: Nat -> Nat
+	cubo.0 = 0
+	cubo.(x+1) = cubo.x + cuadrado.x + cuadrado.x + cuadrado.x + x + x + x + 1
+
+	cuadrado :: Nat -> Nat
+	cuadrado.0 = 0
+	cuadrado.(x+1) = cuadrado.x + x + x + 1
+
+d)
+
+	f.xs = ⟨ ∃ i : 0 < i ≤ #xs : ⟨Prod j : 0 ≤ j < #(xs↓i) : (xs↓i).j ⟩ = xs.(i − 1) ⟩
+
+	Caso base, xs = []
+	
+		f.[]
+	={especificacion}
+		⟨ ∃ i : 0 < i ≤ #[] : ⟨Prod j : 0 ≤ j < #([]↓i) : ([]↓i).j ⟩ = [].(i − 1) ⟩
+	={Length caso base}
+		⟨ ∃ i : 0 < i ≤ 0 : ⟨Prod j : 0 ≤ j < #([]↓i) : ([]↓i).j ⟩ = [].(i − 1) ⟩
+	={Logica y Rango vacio}
+		False	
+
+	Hipotesis inductiva
+		f.xs = ⟨ ∃ i : 0 < i ≤ #xs : ⟨Prod j : 0 ≤ j < #(xs↓i) : (xs↓i).j ⟩ = xs.(i − 1) ⟩
+
+	Caso inductivo 
+		pruebo para xs = x:xs 
+
+		f.(x:xs)
+	={especificacion}
+		⟨ ∃ i : 0 < i ≤ #(x:xs) : ⟨Prod j : 0 ≤ j < #((x:xs)↓i) : ((x:xs)↓i).j ⟩ = (x:xs).(i − 1) ⟩
+	={Def de #}
+		⟨ ∃ i : 0 < i ≤ 1 + #xs : ⟨Prod j : 0 ≤ j < #((x:xs)↓i) : ((x:xs)↓i).j ⟩ = (x:xs).(i − 1) ⟩
+	={1 < i ≤ #xs+1 ∨ i = 1}
+		⟨ ∃ i : 1 < i ≤ #xs+1 ∨ i = 1 : ⟨Prod j : 0 ≤ j < #((x:xs)↓i) : ((x:xs)↓i).j ⟩ = (x:xs).(i − 1) ⟩
+	={Particion de rango}
+		⟨ ∃ i : 1 < i ≤ #xs+1 : ⟨Prod j : 0 ≤ j < #((x:xs)↓i) : ((x:xs)↓i).j ⟩ = (x:xs).(i − 1) ⟩
+	  v ⟨ ∃ i : i = 1 : ⟨Prod j : 0 ≤ j < #((x:xs)↓i) : ((x:xs)↓i).j ⟩ = (x:xs).(i − 1) ⟩
+	={Cambio de var, i = i +1 y algebra}
+		⟨ ∃ i : 0 < i ≤ #xs : ⟨Prod j : 0 ≤ j < #((x:xs)↓(i+1)) : ((x:xs)↓(i+1)).j ⟩ = (x:xs).((i+1) − 1) ⟩
+	  v ⟨ ∃ i : i = 1 : ⟨Prod j : 0 ≤ j < #((x:xs)↓i) : ((x:xs)↓i).j ⟩ = (x:xs).(i − 1) ⟩
+	={Def de drop y de .}
+		⟨ ∃ i : 0 < i ≤ #xs : ⟨Prod j : 0 ≤ j < #(xs↓i) : (xs↓i).j ⟩ = xs.(i − 1) ⟩
+	  v ⟨ ∃ i : i = 1 : ⟨Prod j : 0 ≤ j < #((x:xs)↓i) : ((x:xs)↓i).j ⟩ = (x:xs).(i − 1) ⟩
+	={HI}
+		f.xs v ⟨ ∃ i : i = 1 : ⟨Prod j : 0 ≤ j < #((x:xs)↓i) : ((x:xs)↓i).j ⟩ = (x:xs).(i − 1) ⟩
+	={Rango unitario con i = 1}
+		f.xs v ⟨Prod j : 0 ≤ j < #((x:xs)↓1) : ((x:xs)↓1).j ⟩ = (x:xs).(1 − 1) 
+	={Def de drop y aritmetica}
+		f.xs v ⟨Prod j : 0 ≤ j < #(xs↓0) : (xs↓0).j ⟩ = (x:xs).0 
+	={Def de drop y .}
+		f.xs v ⟨Prod j : 0 ≤ j < #xs : xs.j ⟩ = x 
+	={MODULARIZO, con 
+	(1)prod.xs = ⟨Prod j : 0 ≤ j < #xs : xs.j ⟩
+	}
+
+(1)
+
+	prod.xs = ⟨Prod j : 0 ≤ j < #xs : xs.j ⟩
+
+	Caso base, xs =[]
+	
+		prod.[]
+	={Especificacion}
+		⟨Prod j : 0 ≤ j < #[] : xs.j ⟩
+	={Logica y rango vacio}
+		1
+
+	Hipotesis inductiva
+		prod.xs = ⟨Prod j : 0 ≤ j < #xs : xs.j ⟩
+
+	Caso inductivo
+		prod.(x:xs)
+	={especificacion}
+		⟨Prod j : 0 ≤ j < #(x:xs) : (x:xs).j ⟩
+	={Def de length}
+		⟨Prod j : 0 ≤ j < 1 + #xs : (x:xs).j ⟩
+	={tomo 0 ≤ j < 1 + #xs como j = 0 ∨ 1 ≤ j < xs + 1}
+		⟨Prod j : j = 0 ∨ 1 ≤ j < xs + 1 : (x:xs).j ⟩
+	={Particion de rango }
+		⟨Prod j : j = 0 : (x:xs).j ⟩ * ⟨Prod j : 1 ≤ j < xs + 1 : (x:xs).j ⟩
+	={Rango unitario}
+		⟨Prod j : j = 0 : (x:xs).0 ⟩ * ⟨Prod j : 1 ≤ j < xs + 1 : (x:xs).j ⟩
+	={Def de . , tomo j = j + 1 y algebra}
+		x * ⟨Prod j : 0 ≤ j < xs : xs.j ⟩
+	={HI}
+		x * prod.xs 
+
+Entonces nos queda que:
+ 
+f.xs = ⟨ ∃ i : 0 < i ≤ #xs : ⟨Prod j : 0 ≤ j < #(xs↓i) : (xs↓i).j ⟩ = xs.(i − 1) ⟩
+
+es: 
+	f.xs v prod.xs = x 
+
+5)
+	iguales : [A] → Bool
+	iguales.xs = ⟨∀ i,j : 0 ≤ i < j < #xs : xs ! i = xs.j⟩
+
+	Caso base, xs = []
+
+		iguales.[]
+	={especificacion}
+		⟨∀ i,j : 0 ≤ i < j < #[] : [] ! i = [].j⟩
+	={Def de length}
+		⟨∀ i,j : 0 ≤ i < j < 0 : [] ! i = [].j⟩
+	={Logica y rango vacio}
+		True 
+
+	Caso xs = ( [x] )
+		iguales.( [x] )
+	≡ { especificación }
+		⟨ ∀ i,j : 0 ≤ i < j < #[x]) : [x].i = [x.j ⟩
+	≡ { definición de indexación }
+		⟨ ∀ i,j : 0 ≤ i < j < 1 : [x].i = [x].j ⟩
+	≡ { evalúo el rango }
+		⟨ ∀ i,j : False : [x].i = [x].j ⟩
+	≡ { rango vacío }
+		True
+
+	Hipotesis inductiva
+		iguales.xs = ⟨∀ i,j : 0 ≤ i < j < #xs : xs.i = xs.j⟩
+
+	Caso inductivo: Demuestro que vale para x:y:xs (YA QUE ES I,J, busca 2 elementos.)
+
+		iguales.(x:xs)
+	={Especificacion}
+		⟨∀ i,j : 0 ≤ i < j < #(x:y:xs) : (x:y:xs).i = (x:y:xs).j⟩
+	={Def de # en caso recursivo}
+		⟨∀ i,j : 0 ≤ i < j < 1 + #x:xs : (x:y:xs).i = (x:y:xs).j⟩
+	={(i = 0 ⋀ j = 1) ⋁ 1 ≤ i < j < #(x:xs)+1}
+		⟨∀ i,j : (i = 0 ⋀ j = 1) ⋁ 1 ≤ i < j < #(x:xs)+1 : (x:y:xs).i = (x:y:xs).j⟩
+	={Particion de rango}
+		⟨∀ i,j : i = 0 ⋀ j = 1 : (x:y:xs).i = (x:y:xs).j⟩ v ⟨∀ i,j : 1 ≤ i < j < #(x:xs)+1 : (x:y:xs) ! i = (x:y:xs).j⟩
+	={Cambio de variable}
+		⟨∀ i,j : j = 1 : (x:y:xs).0 = (x:y:xs).j⟩ v ⟨∀ i,j : 1 ≤ i < j < #(x:xs)+1 : (x:y:xs).i = (x:y:xs).j⟩
+	={Rango unitario}
+		(x:y:xs).0 = (x:y:xs).1 v ⟨∀ i,j : 1 ≤ i < j < #(x:xs)+1 : (x:y:xs).i = (x:y:xs).j⟩
+	={Indexacion (toma elemento 0 = x, 1 = y)}
+		x = y v ⟨∀ i,j : 1 ≤ i < j < #(x:xs)+1 : (x:y:xs).i = (x:y:xs).j⟩
+	={Cambio de variable, i = i + 1, j = j + 1 y algebra}
+		x = y v ⟨∀ i,j : 0 ≤ i < j < #(x:xs) : (x:y:xs).(i + 1) = (x:y:xs).(j + 1)⟩
+	={Def de indexacion}
+		x = y v ⟨∀ i,j : 0 ≤ i < j < #(x:xs) : (y:xs).i = (y:xs).j⟩
+	={Def de #}
+		x = y v ⟨∀ i,j : 0 ≤ i < j < 1 + #xs : (y:xs).i = (y:xs).j⟩
+	={(i = 0 ⋀ j = 1) ⋁ 1 ≤ i < j < #xs+1}
+		x = y v ⟨∀ i,j : (i = 0 ⋀ j = 1) ⋁ 1 ≤ i < j < #xs+1 : (y:xs).i = (y:xs).j⟩
+	={Particion de rango}
+		x = y v ⟨∀ i,j :  1 ≤ i < j < #xs+1 : (y:xs).i = (y:xs).j⟩ v ⟨∀ i,j : i = 0 ⋀ j = 1: (y:xs).i = (y:xs).j⟩
+	={Cambio de variable, i = i + 1, j = j + 1 y algebra}
+		x = y v ⟨∀ i,j :  0 ≤ i < j < #xs : (y:xs).(i + 1) = (y:xs).(j + 1)⟩ v ⟨∀ i,j : i = 0 ⋀ j = 1: (y:xs).i = (y:xs).j⟩
+	={Def de . / indexaciones}
+		x = y v ⟨∀ i,j :  0 ≤ i < j < #xs : xs.i = xs.j⟩ v ⟨∀ i,j : i = 0 ⋀ j = 1: (y:xs).i = (y:xs).j⟩
+	={T2 cambio de variable}
+		x = y v ⟨∀ i,j :  0 ≤ i < j < #xs : xs.i = xs.j⟩ v ⟨∀ i,j : i = 0 ⋀ j = 1: (y:xs).0 = (y:xs).1⟩
+	={Rango unitario y Indexacion}
+		x = y v ⟨∀ i,j :  0 ≤ i < j < #xs : xs.i = xs.j⟩ v j = 1: y = ¿ xs.1 ?
+	={HI}
+		x = y v iguales.xs v j = 1: y = ¿ xs.1 ?
 
 lab 10)
 
