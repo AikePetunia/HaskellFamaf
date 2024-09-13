@@ -279,6 +279,19 @@ Paso inductivo, para n + 1. Tener en cuenta que son dos casos, uno para mod = 0,
 	={Evaluo i + 1, siendo false}
 		⟨Sum i : False : i⟩ + ⟨Sum i : True : i⟩ ?
 
+	OTRA MANERA:
+
+	={Def de 0 ≤ i < n ∨ i = n   }
+		⟨Sum i : (0 ≤ i < n ∨ i = n) ∧ i mod 2 = 0 : i⟩
+	={Distributividadq de y con o}
+		⟨Sum i : n mod 2 = 0 : n⟩ + ⟨Sum i : 0 ≤ i < n  ∧ i mod 2 = 0 : i⟩
+	={Cambio con i = n}
+		⟨Sum i : n mod 2 = 0 : n⟩ + ⟨Sum i : 0 ≤ i < n  ∧ i mod 2 = 0 : i⟩ç
+	={Del lado HI, en izq true si y solo si n es par, false si es impar }
+		True/False + HI 
+
+CONSULTAR
+
 e) 
 cuantos.p.xs = ⟨N i : 0 ≤ i < #xs : p.(xs.i)⟩ 
 Cuenta cuantas p hay en una lista
@@ -301,6 +314,45 @@ cuantosP (x:xs) | x /= 'p' = cuantosP xs 		2
 	1 + (1 (cuantosP []))
 ={Caso base 1 y aritmetica}
 	2
+
+	Derivacion:
+
+	cuantos.p.xs = ⟨N i : 0 ≤ i < #xs : p.(xs.i)⟩
+
+1) Caso base, xs = []
+
+	cuantos.p.xs = ⟨N i : 0 ≤ i < #xs : p.(xs.i)⟩
+={ xs = []}	
+	cuantos.p.xs = ⟨N i : 0 ≤ i < #[] : p.([].i)⟩
+={#[] = 0}
+	cuantos.p.xs = ⟨N i : 0 ≤ i < 0 : p.([].i)⟩
+={Rango false}
+	cuantos.p.xs = ⟨N i : False : p.([].i)⟩
+={Rango vacio}
+	0
+
+2) Hipotesis inductiva	
+		cuantos.p.xs = ⟨N i : 0 ≤ i < #xs : p.(xs.i)⟩
+
+3)Paso inductivo, xs= x:xs
+
+	⟨N i : 0 ≤ i < #(x:xs) : p.((x:xs).i)⟩
+={Def. de length xs}	
+	⟨N i : 0 ≤ i < 1 + #xs : p.((x:xs).i)⟩
+={Rango de i}
+	⟨N i : (i = 0 v 1 <= i < n + 1) : p.((x:xs).i)⟩
+={Particion de rango}
+	⟨N i : i = 0 : p.((x:xs).i)⟩ + ⟨N i : 1 <= i < n + 1 : p.((x:xs).(i + 1)⟩  
+={Rango unitario}
+	⟨N i : i = 0 : p.((x:xs).0)⟩ + ⟨N i : 1 <= i < n + 1 : p.((x:xs).(i + 1)⟩  
+={Def de . y termino de constante}
+	p.x + ⟨N i : 1 <= i < n + 1 : p.((x:xs).(i + 1))⟩  
+={Cambio de variable, i = i + 1 y algebra}
+	p.x + ⟨N i : 0 <= i < n : p.((x:xs).(i + 1)⟩
+={Def de .}
+	p.x + ⟨N i : 0 <= i < n : p.(xs.i)⟩
+={Valido por hi}
+	
 3)
 Evaludadas en el punto 2
 a)[1,2,3]
@@ -442,6 +494,15 @@ contar_futbolistas xs zona = length (filter esFutbolistaEnZona xs)
 																esFutbolistaEnZona _ = False  
 
 Salteados Lab 5-Lab9 (Por cuestiones de derivacion)
+
+f.x.n = >Sum i : 0 ≤ i < n : x^i>
+
+
+
+
+
+
+
 
 lab 10)
 
