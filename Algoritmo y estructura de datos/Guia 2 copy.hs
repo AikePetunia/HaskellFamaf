@@ -836,7 +836,7 @@ es:
 		⟨∀ i,j : 0 ≤ i < j < #(x:y:xs) : (x:y:xs).i = (x:y:xs).j⟩
 	={Def de # en caso recursivo}
 		⟨∀ i,j : 0 ≤ i < j < 1 + #x:xs : (x:y:xs).i = (x:y:xs).j⟩
-	={(i = 0 ⋀ j = 1) ⋁ 1 ≤ i < j < #(x:xs)+1}
+	={(i = 0 ⋀ j = 1) 3⋁ 1 ≤ i < j < #(x:xs)+1}
 		⟨∀ i,j : (i = 0 ⋀ j = 1) ⋁ 1 ≤ i < j < #(x:xs)+1 : (x:y:xs).i = (x:y:xs).j⟩
 	={Particion de rango}
 		⟨∀ i,j : i = 0 ⋀ j = 1 : (x:y:xs).i = (x:y:xs).j⟩ v ⟨∀ i,j : 1 ≤ i < j < #(x:xs)+1 : (x:y:xs) ! i = (x:y:xs).j⟩
@@ -866,6 +866,667 @@ es:
 		x = y v ⟨∀ i,j :  0 ≤ i < j < #xs : xs.i = xs.j⟩ v j = 1: y = ¿ xs.1 ?
 	={HI}
 		x = y v iguales.xs v j = 1: y = ¿ xs.1 ?
+
+
+b)
+
+	minimo : [Int] -> Int
+	minimo.xs = <Min i : 0 <= i < #xs ^ xs /=[] : xs ! i> --NO tiene que ser lista vacia, ademàs debo probar con una lsita no vacia (1 elemento)
+
+	1) Caso base, para xs =[X]
+
+		minimo.[x]
+	={Especificacion}
+		<Min i : 0 <= i < #[x] ^ [x] /=[] : [x] ! i>
+	={Length}
+		<Min i : 0 <= i < 1 ^ [x] /=[] : [x] ! i>
+	={Como i nunca toca 1, entonces}
+		<Min i : i = 0 ^ True : [x] ! i>
+	={Rango unitario}
+		[x] ! 0
+	={Uso de !}
+		x 
+
+	2) Hipotesis inductiva
+			minimo.xs = <Min i : 0 <= i < #xs ^ xs /=[] : xs ! i>
+	
+	3) Paso inductivo, para xs=x:xs 
+
+		minimo.(x:xs)
+	={Especificacion}
+		<Min i : 0 <= i < #(x:xs) ^ (x:xs) /=[] : (x:xs) ! i>
+	={Def de #}
+		<Min i : 0 <= i < 1 + #xs ^ (x:xs) /=[] : (x:xs) ! i>
+	={Uso de i = 0 ∨ 1 ≤ i < n + 1 y logica }
+		<Min i : i = 0 ∨ 1 ≤ i < n + 1 ^ True : (x:xs) ! i>
+	={Abs de ^ con true, particion de rango}
+		<Min i : i = 0 : (x:xs) ! i> + <Min i : 1 ≤ i < n + 1 : (x:xs) ! i>
+	={Rango unitario, def de ! (indexacion)}
+		x + <Min i : 1 ≤ i < n + 1 : (x:xs) ! i>
+	={Cambio de variable, i = i + 1 y algebra  }
+		x + <Min i : 0 ≤ i < n : (x:xs) ! (i + 1)>
+	={Def de ! (indexacion)}
+		x + <Min i : 0 ≤ i < n : xs ! i>
+	={HI? }
+
+	minimo : [Int] → Int
+	minimo.(x:[ ]) ≐ x
+	minimo.(x:(y:ys)) ≐ x min minimo.(y:ys)
+
+c)
+
+	creciente : [Int] -> Bool
+
+	si pide orden, tendre que usar operadores de mayor y menor. 
+	es una lista, tengo que comparar 2 elementos del mismo. 
+	uso de ! o . 
+	para todos los elementos de una lista es la comparacion. 
+
+	creciente.xs = <A i,j : 0 <= i < j < #xs : xs!i <= xs!j>
+
+
+	1. Caso base, para xs = []
+
+		creciente.[]
+	={Especificacion}
+		<A i,j : 0 <= i < j < #[] : []!i <= []!j>
+	={#xs = 0}
+		<A i,j : 0 <= i < j < 0 : []!i <= []!j>
+	={Logica}
+		<A i,j : False : []!i <= []!j>
+	={rango vacio}	
+		True 
+
+	2. Caso recursivo (Pruebo con un elemento pegado a la lista)
+
+		creciente.x:[]
+	={Especificacion}
+		<A i,j : 0 <= i < j < #x:[] : x:[]!i <= x:[]!j>
+	={Construccion de lista}
+		<A i,j : 0 <= i < j < #[x] : [x]!i <= [x]!j>
+	={Def de #[x]}
+		<A i,j : 0 <= i < j < 1 : [x]!i <= [x]!j>
+	={Logica}
+		<A i,j : False : [x]!i <= [x]!j>
+	={Rango vacio}
+		True
+
+	3. Hipotesis inductiva para construccion de lista 
+
+		creciente.x:xs = <A i,j : 0 <= i < j < #(x:xs) : (x:xs)!i <= (x:xs)!j>
+
+	4. Caso inductivo, para xs=(x:(x:xs))
+
+
+		creciente.(x:(x:xs))
+	={Especificacion}
+		<A i,j : 0 <= i < j < #(x:(x:xs)) : (x:(x:xs))!i <= (x:(x:xs))!j>
+	={Def de # en caso recursivo}
+		<A i,j : 0 <= i < j < 1 + #(x:xs) : (x:(x:xs))!i <= (x:(x:xs))!j>
+	={(i = 0 ⋀ j = 1) ⋁ 1 ≤ i < j < #(x:xs)+1}
+		<A i,j : (i = 0 ⋀ j = 1) ⋁ 1 ≤ i < j < #(x:xs)+1 : (x:(x:xs))!i <= (x:(x:xs))!j>
+	={Particion de rango}
+		<A i,j : i = 0 ⋀ j = 1 : (x:(x:xs))!i <= (x:(x:xs))!j> v <A i,j : 1 ≤ i < j < #(x:xs) +1 : (x:(x:xs))!i <= (x:(x:xs))!j>
+	={Cambio de variable y rango unitario}
+		(x:(x:xs))!0 <= (x:(x:xs))!1 v <A i,j : 1 ≤ i < j < #(x:xs) +1 : (x:(x:xs))!i <= (x:(x:xs))!j>
+	={Indexacion de ! (aca m doy cuenta q no conviene poner x:x si no x:y por q uno toma el primer elemento y el otro el segundo)}
+		x <= x + <A i,j : 1 ≤ i < j < #(x:xs) + 1 : (x:(x:xs))!i <= (x:(x:xs))!j>
+	={Cambio de variable, i = i + 1, j = j + 1 y algebra}
+		x <= x + <A i,j : 0 ≤ i < j < #(x:xs) : (x:(x:xs))!(i + 1) <= (x:(x:xs))!(j + 1)>
+	={Def de ! (indexacion)}
+		x <= x + <A i,j : 0 ≤ i < j < #(x:xs) : (x:xs)!i <= (x:xs)!j>
+	={HI}
+		x <= x + creciente.(x:xs)
+
+	(aca m doy cuenta q no conviene poner x:x si no x:y por q uno toma el primer elemento y el otro el segundo)
+
+
+	d) flojera 	
+
+6)
+	a)
+	
+		Caso base: 
+		psum.[  ]
+	= { especificación }
+		⟨ ∀ i : 0 ≤ i ≤ #[  ] : sum.([  ]↑i) ≥ 0 ⟩
+	= { def. # }
+		⟨ ∀ i : 0 ≤ i ≤ 0 : sum.([  ]↑i) ≥ 0 ⟩
+	= { lógica }
+		⟨ ∀ i : i = 0 : sum.([  ]↑i) ≥ 0 ⟩
+	= { rango unitario }
+		sum.([  ]↑0) ≥ 0
+	= { def ↑ y de sum  }
+		0 ≥ 0
+	= { lógica }
+		True
+
+	Hipótesis Inductiva: 
+		psum.xs = ⟨ ∀ i : 0 ≤ i ≤ #xs : sum.(xs↑i) ≥ 0 
+
+		psum.(x►xs)
+	= { especificación } 
+	⟨ ∀ i : 0 ≤ i ≤ #(x►xs) : sum.((x►xs)↑i) ≥ 0 ⟩
+	= { def de # }
+	⟨ ∀ i : 0 ≤ i ≤ #xs + 1 : sum.((x►xs)↑i) ≥ 0 ⟩
+	= { lógica }
+	⟨ ∀ i :  i = 0  ∨  1 ≤ i ≤ #xs + 1  : sum.((x►xs)↑i) ≥ 0 ⟩
+	= { partición de rango
+		(observación: estamos separando el caso del segmento inicial vacío (i = 0) de los
+		segmentos iniciales no vacíos (1 ≤ i ≤ #xs + 1)
+	}
+	⟨ ∀ i : i = 0 : sum.((x►xs)↑i) ≥ 0 ⟩ ∧ 
+	⟨ ∀ i : 1 ≤ i ≤ #xs + 1 : sum.((x►xs)↑i) ≥ 0 ⟩
+	= { Acá la prioridad es llegar a la H.I. así que nos concentramos en la segunda parte.
+		Cambio de variable i → i + 1. }
+	⟨ ∀ … ⟩ ∧  ⟨ ∀ i : 1 ≤ i + 1 ≤ #xs + 1 : sum.((x►xs)↑(i+1)) ≥ 0 ⟩
+	= { arit: resto 1 }
+	⟨ ∀ … ⟩ ∧  ⟨ ∀ i : 0 ≤ i ≤ #xs : sum.((x►xs)↑(i+1)) ≥ 0 ⟩
+	= { def de ↑ }
+	⟨ ∀ … ⟩ ∧  ⟨ ∀ i : 0 ≤ i ≤ #xs : sum.(x   ►   (xs↑i)  ) ≥ 0 ⟩
+	= { def de sum }
+	⟨ ∀ … ⟩ ∧  ⟨ ∀ i : 0 ≤ i ≤ #xs : x + sum.((xs↑i)) ≥ 0 ⟩ 
+
+	Generalizacion:
+		gpsum.n.xs = ⟨ ∀ i : 0 ≤ i ≤ #xs :  n  +  sum.(xs↑i) ≥ 0 ⟩   
+
+		psum.xs es caso particular de gpsum.n.xs cuando n = 0. Más formalmente:
+			psum.xs = gpsum.0.xs.
+
+	Verifico que es valido para generalizar
+		psum.xs
+	= { especificación psum }
+		⟨ ∀ i : 0 ≤ i ≤ #xs :  sum.(xs↑i) ≥ 0 ⟩   
+	= { aritmética }
+		⟨ ∀ i : 0 ≤ i ≤ #xs :  0  +  sum.(xs↑i) ≥ 0 ⟩   
+	= { especificación gpsum }
+		gpsum.0.xs
+
+	Caso base: 
+		gpsum.n.[ ]
+	= { especificación }
+		⟨ ∀ i : 0 ≤ i ≤ #[  ] : n + sum.([  ]↑i) ≥ 0 ⟩
+	= { def. # }
+		⟨ ∀ i : 0 ≤ i ≤ 0 : n + sum.([  ]↑i) ≥ 0 ⟩
+	= { lógica }
+		⟨ ∀ i : i = 0 : n + sum.([  ]↑i) ≥ 0 ⟩
+	= { rango unitario }
+		n + sum.([  ]↑0) ≥ 0
+	= { def ↑ y de sum  }
+		n + 0 ≥ 0
+	= { arit }
+		n ≥ 0
+
+	Hipotesis inductiva:
+		 ∀ E  :  gpsum.E.xs = ⟨ ∀ i : 0 ≤ i ≤ #xs :  E  +  sum.(xs↑i) ≥ 0 ⟩  
+
+		gpsum.n.(x►xs)
+	= { especificación } 
+		⟨ ∀ i : 0 ≤ i ≤ #(x►xs) : n + sum.((x►xs)↑i) ≥ 0 ⟩
+	= { def de # }
+		⟨ ∀ i : 0 ≤ i ≤ #xs + 1 : n + sum.((x►xs)↑i) ≥ 0 ⟩
+	= { lógica }
+		⟨ ∀ i :  i = 0  ∨  1 ≤ i ≤ #xs + 1  : n + sum.((x►xs)↑i) ≥ 0 ⟩
+	= { partición de rango
+		(observación: de nuevo estamos separando el caso del segmento inicial vacío (i = 0) de
+		los segmentos iniciales no vacíos (1 ≤ i ≤ #xs + 1)
+	}
+		⟨ ∀ i : i = 0 : n + sum.((x►xs)↑i) ≥ 0 ⟩ ∧ 
+		⟨ ∀ i : 1 ≤ i ≤ #xs + 1 : n + sum.((x►xs)↑i) ≥ 0 ⟩
+	= { Acá la prioridad es llegar a la H.I. así que nos concentramos en la segunda parte.
+		Cambio de variable i → i + 1 }
+		⟨ ∀ … ⟩ ∧  ⟨ ∀ i : 1 ≤ i + 1 ≤ #xs + 1 : n + sum.((x►xs)↑(i+1)) ≥ 0 ⟩
+	= { arit: resto 1 }
+		⟨ ∀ … ⟩ ∧  ⟨ ∀ i : 0 ≤ i ≤ #xs : n + sum.((x►xs)↑(i+1)) ≥ 0 ⟩
+	= { def de ↑ }
+		⟨ ∀ … ⟩ ∧  ⟨ ∀ i : 0 ≤ i ≤ #xs : n + sum.(x   ►   (xs↑i)  ) ≥ 0 ⟩
+	= { def de sum }
+		⟨ ∀ … ⟩ ∧  ⟨ ∀ i : 0 ≤ i ≤ #xs : n + (  x + sum.((xs↑i)) ) ≥ 0 ⟩
+	= { ¿Podemos llegar a la H.I.? Aplicamos asociatividad. }
+		⟨ ∀ … ⟩ ∧  ⟨ ∀ i : 0 ≤ i ≤ #xs : (n+x)  +   sum.((xs↑i)) ≥ 0 ⟩
+	= { Ahora sí H.I. y volvemos a mirar la primera parte. }
+		⟨ ∀ i : i = 0 : n + sum.((x►xs)↑i) ≥ 0 ⟩  ∧  gpsum.(n+x).xs
+	= { Rango unitario y más pasos como el caso base. }
+		n ≥ 0  ∧  gpsum.(n+x).xs
+
+
+b) 
+	sumAnt.xs = ⟨ ∃ i : 0 ≤ i < #xs : xs!i = sum.(xs↑i) ⟩
+
+	Caso base, para xs=[]
+
+		sumAnt.[]
+	={Especificacion}
+		⟨∃ i : 0 ≤ i < #[] : []!i = sum.([]↑i)⟩
+	={Def de #[]}
+		⟨∃ i : 0 ≤ i < 0 : []!i = sum.([]↑i)⟩
+	={Logica y rango vacio}
+		False
+
+	Hipotesis inductiva
+		⟨∃ i : 0 ≤ i < #xs : xs!i = sum.(xs↑i)⟩
+
+	Paso inductivo, para xs=x:xs
+		sumAnt.(x:xs)
+	={especifcacion}
+		⟨∃ i : 0 ≤ i < #(x:xs) : (x:s!)i = sum.((x:xs)↑i)⟩
+	={Def de # en recurcion}
+		⟨∃ i : 0 ≤ i < 1 + #xs : (x:s!)i = sum.((x:xs)↑i)⟩
+	={0 ≤ i < 1 + #xs == i = 0 v 1 <= i < #xs + 1 }
+		⟨∃ i : i = 0 v 1 <= i < #xs + 1 : (x:xs!)i = sum.((x:xs)↑i)⟩
+	={Particion de rango}
+		⟨∃ i : i = 0 : (x:xs!)i = sum.((x:xs)↑i)⟩ v ⟨∃ i : 1 <= i < #xs + 1 : (x:s!)i = sum.((x:xs)↑i)⟩
+	={Me enfoco en HI, Cambio de var, i = i + 1 y algebra}
+		⟨∃ ... ⟩ v ⟨∃ i : 0 <= i < #xs : (x:xs)!(i + 1) = sum.(x:xs)↑(i + 1)⟩
+	={Def de !}
+		⟨∃ ... ⟩ v ⟨∃ i : 0 <= i < #xs : xs!i = sum.(x:xs)↑(i + 1)⟩
+	={Def de tomar}
+		⟨∃ ... ⟩ v ⟨∃ i : 0 <= i < #xs : xs!i = sum.(x:(xs)↑(i + 1))⟩
+	={Def de sum}
+		<∃ i : i = 0 : (x:xs)!i = sum.((x:xs)↑i) ⟩ ∨ ⟨ ∃ i : 0 ≤ i < #xs : xs!i = x + sum.(xs↑(i+1))> 
+
+	no llego a HI, hago 
+
+	gsumAnt.n.xs = ⟨ ∃ i : 0 ≤ i < #xs : xs!i + n = sum.(xs↑(i))> 
+
+	Caso base, xs = []
+		gsumAnte.n.[]
+	={especifcacion}
+		⟨ ∃ i : 0 ≤ i < #[] : []!i + n = sum.([]↑(i))>
+	={Def de #}
+		⟨ ∃ i : 0 ≤ i <0 : []!i + n = sum.([]↑(i))>
+	={Logica, y rango vacio}
+		False 
+
+	Hipotesis inductiva
+		gsumAnt.n.xs = ⟨ ∃ i : 0 ≤ i < #xs : xs!i + n = sum.(xs↑i)>
+
+	Caso inductivo, xs=(x:xs)
+		gsumAnt.n.(x:xs) 
+	={Especificacion}
+		⟨ ∃ i : 0 ≤ i < #(x:xs) : (x:xs)!i + n = sum.((x:xs)↑(i))>
+	={Def de #  en recursion}
+		⟨ ∃ i : 0 ≤ i < 1 + #xs : (x:xs)!i + n = sum.((x:xs)↑(i))>
+	={Logica, 0 ≤ i < 1 + #xs == i = 0 v 1 <= i < 1 + #xs  }
+		⟨ ∃ i : i = 0 v 1 <= i < 1 + #xs : (x:xs)!i + n = sum.((x:xs)↑(i))>
+	={Particion de rango}
+		⟨ ∃ i : i = 0 : (x:xs)!i + n = sum.((x:xs)↑(i))> + ⟨ ∃ i : 1 <= i < 1 + #xs : (x:xs)!i + n = sum.(x:xs)↑(i+1))>
+	={Cambio de var i = i + 1, algebra y ignoro parte izq }
+		⟨ ∃ ... > + ⟨ ∃ i : 0 <= i < #xs : (x:xs)!(i+1) + n = sum.(x:xs)↑(i+1)>
+	={Def de !}
+		⟨ ∃ ... > + ⟨ ∃ i : 0 <= i < #xs : xs!i + n = sum.(x:xs)↑(i+1)>
+	={Def de take}
+		⟨ ∃ ... > + ⟨ ∃ i : 0 <= i < #xs : xs!i + n = sum.(x:(xs)↑(i))>
+	={Def de sum}
+		⟨ ∃ ... > + ⟨ ∃ i : 0 <= i < #xs : xs!i + n = x + sum.(xs)↑(i)>
+	={Aritmetica}
+		⟨ ∃ ... > + ⟨ ∃ i : 0 <= i < #xs : xs!i (+ n - x) = sum.(xs)↑(i)>
+	={termine del lado derecho, sigo izq}
+		⟨ ∃ i : i = 0 : (x:xs)!i + n = sum.((x:xs)↑(i))> + ⟨ ∃ i : 0 <= i < #xs : xs!i (+ n - x) = sum.(xs)↑(i)>
+	={Rango unitario, y hago n = n - x}
+		(x:xs)!0 + n = sum(x:xs)↑0 + ⟨ ∃ i : 0 <= i < #xs : xs!i + n = sum.(xs)↑(i)>
+	={Def de ! y take}
+		x + n = x + sum xs + ⟨ ∃ i : 0 <= i < #xs : xs!i + n = sum.(xs↑i)>
+	={HI, recuerod n = n - x}
+		x + n = x + sum xs + gsumAnt.n.xs 
+	={aritmetica, tacho x}
+	    n = sum xs + gsumAnt.n.xs 
+
+		gsum_ant :: Num -> [Num] -> Bool
+		gsum_ant.n.[ ] = False
+		gsum_ant.n.(x:xs) = n = sum xs ∨ gsum_ant.(n-x).xs
+		sum_ant.xs = gsum_ant.0.xs
+
+c) 
+	sum8.xs = ⟨ ∃ i : 0 ≤ i ≤ #xs : sum.(xs↑i) = 8 ⟩ .
+
+	Caso base, xs = []
+
+		sum8.[]
+	={Especificacion}
+		⟨ ∃ i : 0 ≤ i ≤ #[] : sum.([]↑i) = 8 ⟩
+	={#[] en caso base}
+		⟨ ∃ i : 0 ≤ i ≤ 0 : sum.([]↑i) = 8 ⟩
+	={Logica, y rango vacio }
+		False 
+
+	Hipotesis inductiva. Vale:
+	 sum8.xs  =	⟨ ∃ i : 0 ≤ i ≤ #xs : sum.(xs↑i) = 8 ⟩
+
+	Caso inductivo. Demuestro para x:xs 
+
+		sum8.(x:xs)
+	={Especificacion} 
+		⟨ ∃ i : 0 ≤ i ≤ #(x:xs) : sum.((x:xs)↑i) = 8 ⟩
+	={Def de # en recursion}
+		⟨ ∃ i : 0 ≤ i ≤ 1 + #xs : sum.((x:xs)↑i) = 8 ⟩
+	={Logica}
+		⟨ ∃ i : i = 0 v 1 <= i < #xs + 1 : sum.((x:xs)↑i) = 8 ⟩
+	={Particion de rango}
+		⟨ ∃ i : i = 0 : sum.((x:xs)↑i) = 8 ⟩ + ⟨ ∃ i : 1 <= i < #xs + 1 : sum.((x:xs)↑i) = 8 ⟩
+	={Ignoro la part izq. Cambio de variable, i = i +1, y algebra }
+		⟨ ∃ ... ⟩ + ⟨ ∃ i : 0 <= i < #xs : sum.((x:xs)↑(i + 1)) = 8 ⟩
+	={Def de take}
+		⟨ ∃ ... ⟩ + ⟨ ∃ i : 0 <= i < #xs : sum.(x:(xs)↑i) = 8 ⟩
+	={Def de sum}
+		⟨ ∃ ... ⟩ + ⟨ ∃ i : 0 <= i < #xs : x + sum (xs↑i) = 8 ⟩
+
+	NO LLEGO A HI, GENERALIZO, tq:
+
+		gSum8.xs = ⟨ ∃ i : 0 <= i < #xs : x + sum (xs↑i) = 8 ⟩
+
+	Caso base, xs = []
+
+		gSum8.[]
+	={Especificacion}
+		⟨ ∃ i : 0 <= i < #[] : x + sum ([]↑i) = 8 ⟩
+	={# en caso base}
+		⟨ ∃ i : 0 <= i < 0 : x + sum ([]↑i) = 8 ⟩
+	={Logica y rango vacio}
+		False 
+	
+	Hipotesis inductiva
+		gSum8.xs = ⟨ ∃ i : 0 <= i < #xs : n + sum (xs↑i) = 8 ⟩
+
+	Caso inductivo demuestro para x:xs 
+
+		gSum8.(x:xs)
+	={Especificacion}
+		⟨ ∃ i : 0 <= i < #(x:xs) : x + sum ((x:xs)↑i) = 8 ⟩
+	={# en caso recursivo }
+		⟨ ∃ i : 0 <= i < 1 + #xs : x + sum ((x:xs)↑i) = 8 ⟩
+	={Logica}
+		⟨ ∃ i : i = 0 v 1 <= i < #xs + 1: x + sum ((x:xs)↑i) = 8 ⟩
+	={Particion de rango}
+		⟨ ∃ i : i = 0 : x + sum ((x:xs)↑i) = 8 ⟩ + ⟨ ∃ i : 1 <= i < #xs + 1: x + sum ((x:xs)↑i) = 8 ⟩
+	={Rango unitario}
+		x + sum ((x:xs)↑0) = 8 + ⟨ ∃ i : 1 <= i < #xs + 1: x + sum ((x:xs)↑i) = 8 ⟩
+	={Def de take y sum}
+		x + x + sum xs = 8 + ⟨ ∃ i : 1 <= i < #xs + 1: x + sum ((x:xs)↑i) = 8 ⟩
+	={Aritmetica, cambio de variable i = i + 1}
+		x + x + sum xs = 8 + ⟨ ∃ i : 0 <= i < #xs : x + sum ((x:xs)↑(i + 1) = 8 ⟩
+	={Def de take y sum}
+		x + x + sum xs = 8 + ⟨ ∃ i : 0 <= i < #xs : x + x + sum (xs↑i) = 8 ⟩
+	={n = x + x}
+		n + sum xs = 8 + ⟨ ∃ i : 0 <= i < #xs : n + sum (xs↑i) = 8 ⟩
+	={HI}
+		n + sum xs = gSum8.xs
+
+d) f.xs = ⟨Max i : 0 ≤ i < #xs ∧ sum.(xs↑i) = sum.(xs↓i) : i ⟩ .
+
+	Caso base, xs=[]
+		f.[]
+	={especificacion}
+		⟨Max i : 0 ≤ i < #[] ∧ sum.([]↑i) = sum.([]↓i) : i ⟩ 
+	={#[] en caso base}
+		⟨Max i : 0 ≤ i < 0 ∧ sum.([]↑i) = sum.([]↓i) : i ⟩ 
+	={Logica, def de sum }
+		⟨Max i : False ^ True : i  ⟩
+	={Logica}
+		⟨Max i : False : i  ⟩
+	={Rango vacio }
+		-inf 
+
+	Hipotesis inducitva 
+		f.xs = ⟨Max i : 0 ≤ i < #xs ∧ sum.(xs↑i) = sum.(xs↓i) : i ⟩ 
+
+	Caso inductivo, para xs = x:xs 
+
+		f.(x:xs)
+	={Especificacion }
+		⟨Max i : 0 ≤ i < #(x:xs) ∧ sum.((x:xs)↑i) = sum.((x:xs)↓i) : i ⟩ 
+	={# en caso recursivo}
+		⟨Max i : 0 ≤ i < 1 + #xs ∧ sum.((x:xs)↑i) = sum.((x:xs)↓i) : i ⟩ 
+	={Logica}
+		⟨Max i : i = 0 v 1 <= i < #xs + 1 ∧ sum.((x:xs)↑i) = sum.((x:xs)↓i) : i ⟩ 
+	={Particion de rango}
+		⟨Max i : i = 0 : i ⟩ + ⟨Max i : 1 <= i < #xs + 1 ∧ sum.((x:xs)↑i) = sum.((x:xs)↓i) : i ⟩ 
+	={Rango unitario}
+		0 + ⟨Max i : 1 <= i < #xs + 1 ∧ sum.((x:xs)↑i) = sum.((x:xs)↓i) : i ⟩ 
+	={Cambio de variable, i = i + 1 y algebra}
+		0 + ⟨Max i : 0 <= i < #xs ∧ sum.((x:xs)↑(i + 1) = sum.((x:xs)↓(i + 1) : (i + 1) ⟩ 
+	={Def de Take y Sum }
+		0 + ⟨Max i : 0 <= i < #xs ∧ x + sum.(xs↑i) = sum.((x:xs)↓(i + 1) : (i + 1) ⟩ 
+	={Def de Drop y sum }
+		0 + ⟨Max i : 0 <= i < #xs ∧ x + sum.(xs↑i) = sum.(xs↓i) : (i + 1) ⟩ 
+	={Termino de constante )? }
+		0 + ⟨Max i : 0 <= i < #xs ∧  x +sum.(xs↑i) = sum.(xs↓i) : i  ⟩ + 1
+	={No llego a HI generalizo }
+		
+	Generalizado: 
+		g.f.xs =  ⟨Max i : 0 <= i < #xs ∧ x + sum.(xs↑i) = sum.(xs↓i) : i  ⟩
+	
+	
+	Caso base, xs = []
+
+		g.f.[]
+	={Especificacion}
+		⟨Max i : 0 <= i < #[] ∧ x + sum.([]↑i) = sum.([]↓i) : i  ⟩
+	={# en caso base}
+		⟨Max i : 0 <= i < 0 ∧ x + sum.([]↑i) = sum.([]↓i) : i  ⟩
+	={Logica, def de sum }
+		⟨Max i : False ^ True : i  ⟩
+	={Logica}
+		⟨Max i : False : i  ⟩
+	={Rango vacio }
+		-inf 
+
+	Hipotesis inductiva
+		g.f.xs =  ⟨Max i : 0 <= i < #xs ∧ n + sum.(xs↑i) = sum.(xs↓i) : i  ⟩
+
+	asumamo que n es para la suma x + x, generalizar
+
+	Paso inductivo, para xs = x:xs 
+
+		g.f.(x:xs)
+	={Especificacion}
+		⟨Max i : 0 <= i < #(x:xs) ∧ x + sum.((x:xs)↑i) = sum.((x:xs)↓i) : i  ⟩
+	={Def de # en caso recursivo }
+		⟨Max i : 0 <= i < 1 + #xs ∧ x + sum.((x:xs)↑i) = sum.((x:xs)↓i) : i  ⟩
+	={LOGICA}
+		⟨Max i : i = 0 v 1 <= i < #xs + 1 ∧ x + sum.((x:xs)↑i) = sum.((x:xs)↓i) : i  ⟩
+	={Particion de rango }
+		⟨Max i : i = 0 : i  ⟩ + ⟨Max i : 1 <= i < #xs + 1 ∧ x + sum.((x:xs)↑i) = sum.((x:xs)↓i) : i  ⟩
+	={Rango unitario, algebra, cambio de var i = i +1}
+		0 + ⟨Max i : 0 <= i < #xs  ∧ x + sum.((x:xs)↑(i + 1) = sum.((x:xs)↓(i + 1) : (i + 1)  ⟩
+	={Def de sum y take }
+		0 + ⟨Max i : 0 <= i < #xs  ∧ x + x + sum.(xs↑i) = sum.((x:xs)↓(i + 1) : (i + 1)  ⟩
+	={ x + x = n (para hi) def de sum y drop }
+		0 + ⟨Max i : 0 <= i < #xs  ∧ n + sum.(xs↑i) = sum.xs↓i : (i + 1)  ⟩
+	={termino de constante}
+		0 + ⟨Max i : 0 <= i < #xs  ∧ n + sum.(xs↑i) = sum.xs↓i : i  ⟩ + 1
+	={HI}
+		0 + ⟨Max i : 0 <= i < #xs  ∧ n + sum.(xs↑i) = sum.xs↓i : i  ⟩ + 1
+	
+		g.f.xs + 1
+
+7)
+
+a)
+	cuad : Nat -> Bool 
+	Dado un natural determina si es el cuadrado de un numero 
+
+	-No hay listas, uso de n 
+	-Devuelve un true 
+	-Habra aritmetica
+	-Habra de unicidad, uso de existe 
+
+	esCuad.n  = <E i : 0 <= i <= n : i*i = n >
+
+	Caso base
+	 	esCuad.0 
+	={especificacion}
+		<E i : 0 <= i <= 0 : i*i = 0 >
+	={Logica}
+		<E i : i = 0 : i*i = 0 >
+	={Constante ?}
+		0 
+	
+	Hipotesis inductiva 
+		esCuad.n  = <E i : 0 <= i < n : i*i = n >
+
+	Paso inductivo, para n = n + 1
+		esCuad.(n+1)
+	={Especificacion}
+		<E i : 0 <= i <= n + 1 : i*i = n + 1 >
+	={Logica 0 ≤ i ≤ n ∨ i = n+1}
+		<E i : 0 ≤ i ≤ n ∨ i = n+1 : i*i = n + 1 >
+	={Particion de rango}
+		<E i : i = n+1 : i*i = n + 1 > v <E i : 0 ≤ i ≤ n : i*i = n + 1 >
+	={no hay hi}
+
+		Generalizo : 
+	gEsCuad.m.n = <E i : 0 ≤ i ≤ n : i*i -m = n > -- m = 1, y lo paso negando para acercarme
+
+	Caso base 
+		gEsCuad.m.0 
+	={Especificacion }
+		<E i : 0 ≤ i ≤ 0 : i*i -m = 0 >
+	={Logica}
+		<E i : i == 0: i*i -m = 0 >
+	={Rango unitario}
+		0*0 -m = 0 
+	={Logica }
+		m = 0
+
+	Hipotesis inductiva
+		gEsCuad.m.n = <E i : 0 ≤ i ≤ n : i*i -m = n >
+
+	Caso inductivo
+		gEsCuad.m.(n + 1)
+	={Especificacion}
+		<E i : 0 ≤ i ≤ (n + 1) : i*i -m = (n + 1) >
+	={Logica}
+		<E i : 0 ≤ i ≤ n v i = n + 1 : i*i -m = (n + 1) >
+	={Particion de rango }
+		<E i : i = n + 1 : i*i -m = (n + 1) > v <E i : 0 ≤ i ≤ n : i*i -m = (n + 1) >
+	={Aritmetica, paso el +1 y saco fc de -}
+		<E i : i = n + 1 : i*i -m = (n + 1) > v <E i : 0 ≤ i ≤ n : i*i -(m + 1) = n >
+	={HI}
+		<E i : i = n + 1 : i*i -m = (n + 1) > v gEsCuad.(m + 1).n
+	={Rango unitario}
+		n + 1 * n + 1 -m = (n + 1) v gEsCuad.(m + 1).n
+	={Aritmetica }
+		n * n + n = m v gEsCuad.(m + 1).n
+
+	gEsCuad.m.0 = (m=0)
+	gEsCuad.m.(n+1) = gEsCuad.(m+1).n ∨ (n*n + n = m)
+	esCuad.n = gEsCuad.0.n
+
+
+b)
+	n8 : [Num] → Nat, que cuenta la cantidad de segmentos iniciales de una lista cuya suma es igual a 8.
+
+	- Es conteo 
+	- Es una lista de enteros que da entero
+	- cuenta segmentos (concatena)
+	- da 8
+
+	cuenta8.xs = <N as, bs : xs = as++bs : sum.as = 8 >
+
+	Caso base 
+		cuenta8.[]
+	={Especificacion}
+		<N as, bs : [] = as++bs : sum.as = 8 >
+	={Logica }
+		<N as, bs : False : sum.as = 8>
+	={Rango vacio}
+		0
+
+	Hipotesis inductiva 
+		cuenta8.xs = <N as, bs : xs = as++bs : sum.as = 8 >
+	
+	Caso inductivo
+		cuenta8.(x:xs)
+	={Especificacion}
+		<N as, bs : (x:xs) = as++bs : sum.as = 8 >
+	= {tercero excluido } --Por que es o as es vacio y el otro no, y asi.
+		<N as, bs : (x:xs) = as++bs ^ True : sum.as = 8 >
+	={Logica, puede haber uno con lista vacia y otro no }
+		<N as, bs : (x:xs) = as++bs ^ (as = [] v as /= []) : sum.as = 8 >
+	={Distributividad}
+		<N as, bs : ((x:xs) = as++bs ^ as = []) v ((x:xs) = as++bs ^ as /= []) : sum.as = 8 >
+	={Particion de rango}
+		<N as, bs : ((x:xs) = as++bs ^ as /= []) : sum.as = 8 > + <N as, bs : ((x:xs) = as++bs ^ as = []) : sum.as = 8 >
+	={Por logica si una lista no es vacia, se le pega un elemento}
+		<N as, bs : ((x:xs) = (a:as)++bs ^ (a:as) /= []) : sum.as = 8 > + <N as, bs : ((x:xs) = as++bs ^ as = []) : sum.as = 8 >
+	={Por logica, elemino (a:as) /= []}
+		<N as, bs : ((x:xs) = (a:as)++bs) : sum.as = 8 > + <N as, bs : ((x:xs) = as++bs ^ as = []) : sum.as = 8 >
+	={Def de concat }
+		<N as, bs : ((x:xs) = (a:(as++bs)) : sum.as = 8 > + <N as, bs : ((x:xs) = as++bs ^ as = []) : sum.as = 8 >
+	={Prop de construccion de lista }
+		<N as, bs : a = x ^ xs = (as++bs) : sum.as = 8 > + <N as, bs : ((x:xs) = as++bs ^ as = []) : sum.as = 8 >
+	={Elim de variable por reemplazo}
+		<N as, bs : xs = (as++bs) : sum.(x:as) = 8 > + <N as, bs : ((x:xs) = as++bs ^ as = []) : sum.as = 8 >
+	={def de suma }
+		<N as, bs : xs = (as++bs) : x + sum.(as) = 8 > + <N as, bs : ((x:xs) = as++bs ^ as = []) : sum.as = 8 >
+	={Generalizo, hago especificacion para la part derecha }
+
+	gSumanOcho.k.xs = 〈 N as,bs : xs=as++bs : k + sum.as=8 〉
+
+	Caso base :
+
+	gSumanOcho.k.[ ]
+	= { especificación }
+		〈 N as,bs : [ ] = as++bs : k + sum.as=8 〉
+	= { prop de ++ }
+		〈 N as,bs : as = [ ] ∧ bs = [ ] : k + sum.as=8 〉
+	= { eliminación de variable }
+		〈 N bs : bs = [ ] : k + sum.[ ]=8 〉
+		10
+		= { def de sum y aritmética }
+		〈 N bs : bs = [ ] : k = 8 〉
+	= { rango unitario }
+		( k = 8 → 1
+		☐ ¬ k =8 →
+		)
+
+	gSumanOcho.k.(x▶xs)
+		〈 N as,bs : ((x▶xs) =as++bs ∧ as = [ ] ) : k + sum.as=8 〉 +
+		〈 N as,bs : xs=(as++bs): k + x+ sum.as=8 〉
+	= { HI para gSumanOcho.(k+x).xs }
+		〈 N as,bs : ((x▶xs) = as++bs ∧ as = [ ] ) : k + sum.as=8 〉 + gSumanOcho.(k+x).xs
+	= { eliminación de variable }
+		〈 N bs : (x▶xs) = bs : k + sum.[ ] =8 〉 + gSumanOcho.(k+x).xs
+	= { def de sum y aritmética }
+		〈 N bs : (x▶xs) = bs : k = 8 〉 + gSumanOcho.(k+x).xs
+	= { rango unitario }
+		( k = 8 → 1
+		☐ ¬ k = 8 → 0
+		) + gSumanOcho.(k+x).xs
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 lab 10)
 
@@ -1119,9 +1780,9 @@ Bounded. 				DONE
 Derivacion en cuantificaciones 	DONE 
 Explicar algunos teoremas 
 Una buena diferencia entre Type y Data 
-
+En una derivacion, que sea de listas, tengo que hacer un caso de lista vacia, uno de un elemento de lista y otro de lista pegado un elemento? 
 Data constructores
-
+¿Como concluyo una derivacion modularizacio lo q sea?
 type sinonimo de tipo. 
 
 ¿Como lee haskell todo lo de coso? Ej, lab 13, c) NO ENTIENDO LA LOGICA DE HASKELL
