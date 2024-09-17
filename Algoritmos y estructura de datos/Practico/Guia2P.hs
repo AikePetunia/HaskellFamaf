@@ -60,11 +60,11 @@ Derivacion:
 
 La funcion sum y lenght estan definidas como:
 
-sum [] = 0
-sum (x:xs) = x + sum xs 
+			sum [] = 0
+			sum (x:xs) = x + sum xs 
 
-length [] = 0 
-length (x:xs) = 1 + length xs 
+			length [] = 0 
+			length (x:xs) = 1 + length xs 
 
 Sabiendo esto puedo derivar la especifiacion:
 
@@ -1333,8 +1333,6 @@ e) La lista xs de numeros enteros tiene la misma cantidad de elementos pares e i
 f) La lista xs posee un segmento no inicial y no final cuyos valores son mayores a los valores del resto
 de la misma.
 
-nose 
-
 11)
 a)
 	sumin.xs = ⟨Min as, bs, cs : xs = as ++ bs ++ cs : sum.bc ⟩
@@ -1394,7 +1392,7 @@ a)
 	={Especificacion}
 		⟨Min as, bs, cs : (xs = (as ++ bs ++ cs)) : 0 + sum.cs⟩
 	={Aritmetica}
-			⟨Min as, bs, cs : (xs = (as ++ bs ++ cs)) : sum.cs⟩
+		⟨Min as, bs, cs : (xs = (as ++ bs ++ cs)) : sum.cs⟩
 	={True, se cumple.}
 
 	entonces, si se tiene que:
@@ -1454,6 +1452,7 @@ b)
 		8
 
 	2) Hipotesis inducitva
+
 		f.xs = ⟨N as, bs, cs : xs = as ++ bs ++ cs : 8 = sum.bs ⟩
 
 	3) caso recursivo, para xs = x:xs
@@ -1490,6 +1489,7 @@ b)
 	⟨N as, bs, cs : x:xs = as ++ cs ++ bs ^ bs = [] : 8 = sum.bs ⟩
 		v ⟨N as, bs, cs : xs = (as ++ cs ++ bs) : 8 = x + sum.bs ⟩
 
+
 	--Pasos para Segmentacion
 		--Caso base de la espc. (Opcional). Su variacion:
 			-- Caso base en []
@@ -1515,8 +1515,7 @@ b)
 		--Recordar teoremas del practico.
 		--Recordar funciones como prod y suma 
 
-
-
+{-
 consulta / dudas:
 
 Bounded. 				DONE
