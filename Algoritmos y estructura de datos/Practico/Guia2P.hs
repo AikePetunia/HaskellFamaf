@@ -177,44 +177,43 @@ Derivacion:
 	x^n * x ?
 
 d) 
-La derivacion tiene dos casos. 
+Especificacion: 
+sumPar.n = ⟨sum i : 0 ≤ i ≤ n ∧ par.i : i⟩
 
-Caso base, n = 0 , y voy a aplicar i mod 2 de una. 
+Donde par.i = n mod 2 == 0
 
-	⟨Sum i : 0 ≤ i ≤ 0 ∧ i mod 2 = 0 : i⟩
-={Rango false y abs}
-	⟨Sum i : False  : i⟩
-={rango vacio de sum}
-	0
+1. Caso base, n = 0
 
-Hipotesis inductiva, sumParN = ⟨Sum i : 0 ≤ i ≤ n ∧ i mod 2 = 0 : i⟩
+    sumPar.0
+={Especificacion}
+    ⟨sum i : 0 ≤ i ≤ 0 ∧ par.i : i⟩
+={Logica}
+    ⟨sum i : i = 0 ∧ par.i : i⟩
+={Rango unitario}
+    ⟨sum i : par.0 : 0⟩
+={logica de lista}
+    0
 
-Paso inductivo, para n + 1. Tener en cuenta que son dos casos, uno para mod = 0, y otro para mod /= 1
- 
-		⟨Sum i : 0 ≤ i ≤ n+1 ∧ i mod 2 = 0 : i⟩
-	={Def de n +1 en rango,(i = 0)  ∨ (1 ≤  i  < n+1)  }
-		⟨Sum i : ((i = 0)  ∨ (1 ≤  i  < n+1)) ∧ i mod 2 = 0 : i⟩
-	={Distributividad de ^ con v y particion de rango}
-		⟨Sum i : (1 ≤  i  < n+1) ∧ i mod 2 = 0 : i⟩ + ⟨Sum i : (i = 0) ∧ i mod 2 = 0 : i⟩
-	={cambio de var i = i + 1, y algebra}
-		⟨Sum i : (0 ≤  i  < n) ∧ (i + 1) mod 2 = 0 : i⟩ + ⟨Sum i : (i = 0) ∧ i mod 2 = 0 : i⟩
-	={i = 0, evaluo siendo true por algebra}
-		⟨Sum i : (0 ≤  i  < n) ∧ (i + 1) mod 2 = 0 : i⟩ + ⟨Sum i : True : i⟩
-	={Evaluo i + 1, siendo false}
-		⟨Sum i : False : i⟩ + ⟨Sum i : True : i⟩ ?
+2. Hipotesis inductiva  
+    sumPar.n = ⟨sum i : 0 ≤ i ≤ n ∧ par.i : i⟩
 
-	OTRA MANERA:
+3. Caso inductivo, n = n + 1
 
-	={Def de 0 ≤ i < n ∨ i = n   }
-		⟨Sum i : (0 ≤ i < n ∨ i = n) ∧ i mod 2 = 0 : i⟩
-	={Distributividadq de y con o}
-		⟨Sum i : n mod 2 = 0 : n⟩ + ⟨Sum i : 0 ≤ i < n  ∧ i mod 2 = 0 : i⟩
-	={Cambio con i = n}
-		⟨Sum i : n mod 2 = 0 : n⟩ + ⟨Sum i : 0 ≤ i < n  ∧ i mod 2 = 0 : i⟩ç
-	={Del lado HI, en izq true si y solo si n es par, false si es impar }
-		True/False + HI 
-
-CONSULTAR
+    sumPar.(n + 1)
+={Especificacion}
+    ⟨sum i : 0 ≤ i ≤ n + 1 ∧ par.i : i⟩
+={Logica}
+    ⟨sum i : (i = n + 1 v 0 <= i <= n) ∧ par.i : i⟩
+={Distributividad, p =  i = n +1, q = 0 <= i <= n, r = par.i}
+    ⟨sum i : (i = n + 1 ∧ par.i ) v (0 <= i <= n ∧ par.i)  : i⟩
+={Particion de rango}
+    ⟨sum i : i = n + 1 ∧ par.i : i⟩ + ⟨sum i :  0 <= i <= n ∧ par.i : i⟩
+={Hipotesis, especificacion }
+    ⟨sum i : i = n + 1 ∧ par.i : i⟩ + sumPar.n 
+={Cambio de variable }
+    ⟨sum i : par.n + 1 : n + 1⟩ + sumPar.n 
+={termino de constante}
+    n + 1 + sumPar.n 
 
 e) 
 	Derivacion:
@@ -427,66 +426,58 @@ Como :
 
 c)
 
-	f : Nat → Nat
-	f.x = x^3
+	f : Int → Int 
 
-	Caso base x = 0
+cubo.x = x^3
+Caso base 
+    cubo.0 
+={especificacion}
+    0³
+={Algebra}
+    0
 
-		f.0 
-	={Especificacion}
-		0^3
-	={Algebra}
-		0
+Hipotesis inductiva 
+    cubo.x = x^3
 
-	Hipotesis Inductiva
-		f.x = x³
+Caso inductivo 
+    cubo.(x+1)
+={Espeficacion}
+    (x+1)³
+={Algebra}
+    (x + 1)² * (x+1)
+={Algebra}
+    x^3+3x^2+3x+1
+={Hipotesis inductiva / Especificacion}
+    cubo.x + 3x² + 3x + 1
+={Modularizacion, ya que 3x² no esta programado por Haskell}
 
-	Caso inductivo, para x= x +1 
+Modularizacion:
+    Especificacion:
+        3ekisCuadrao.x = 3x²
 
-		f.(x+1)
-	={Especificacion}
-		(x+1)³
-	={Algebra}
-		(x+1) * (x+1) * (x+1) =
-		(x^2 + 2x + 1) * (x + 1) =
-		x^3 + 2x^2 + x + x^2 + 2x + 1 =
-		x^3 + 3x^2 + 3x + 1
-	={Hipotesis inductiva}
-		f.x + 3x² + 3x + 1
-	={Modularizo para: 
-	(1)	cuadrado.x = x^2 }
+caso base 
+    3ekisCuadrao.0 
+={Especificacion}   
+    3(0)²
+={Aritmetica }
+    0
 
-(1)
-	Caso base, x = 0
+Hipotesis inductiva 
+    3ekisCuadrao.x = 3x²
 
-		cuadrado.0
-	={Especificacion}
-		0²
-	={Algebra}
-		1
+Caso inductivo. 
+    3ekisCuadrao.(x+1)
+={Especificacion}
+    3(x+1)²
+={Algebra}
+    3x²+ 6x + 3
+={HI, Especificacion}
+    3ekisCuadrao.(x+1) + 6x + 3
 
-	Hipotesis inductiva
-		cuadrado.x = x^2
-
-	Caso inductivo, para x = x + 1
-
-		cuadrado.(x+1)
-	={Especificacion}
-		(x+1)²
-	={Algebra}
-		x² + 2x + 1
-	={HI}
-		Cuadrado.x + 2x + 1
-
-Para 3x, y 2x es simplemente sumar x + x + x +x +x y +1 + 1
-
-	cubo :: Nat -> Nat
-	cubo.0 = 0
-	cubo.(x+1) = cubo.x + cuadrado.x + cuadrado.x + cuadrado.x + x + x + x + 1
-
-	cuadrado :: Nat -> Nat
-	cuadrado.0 = 0
-	cuadrado.(x+1) = cuadrado.x + x + x + 1
+Quedando:
+    cubo.x + 3ekisCuadrao.(x+1) + 3x + 1 + 6x + 3
+    cubo.x + 3ekisCuadrao.(x+1) + 9x + 4
+    cubo.x + 3ekisCuadrao.(x+1) + x + x + x + x + x + x + x + x + x + 4
 
 d)
 
@@ -1045,93 +1036,183 @@ c)
 	={HI}
 		n + sum xs = gSum8.xs
 
-d) f.xs = ⟨Max i : 0 ≤ i < #xs ∧ sum.(xs↑i) = sum.(xs↓i) : i ⟩ .
+Generalizacion:
+    f.xs = ⟨Max i : 0 ≤ i < #xs ∧ sum.(xs↑i) = sum.(xs↓i) : i ⟩
 
-	Caso base, xs=[]
-		f.[]
-	={especificacion}
-		⟨Max i : 0 ≤ i < #[] ∧ sum.([]↑i) = sum.([]↓i) : i ⟩ 
-	={#[] en caso base}
-		⟨Max i : 0 ≤ i < 0 ∧ sum.([]↑i) = sum.([]↓i) : i ⟩ 
-	={Logica, def de sum }
-		⟨Max i : False ^ True : i  ⟩
-	={Logica}
-		⟨Max i : False : i  ⟩
-	={Rango vacio }
-		-inf 
+1) Analisis de especificacion. 
+    -- Cuatificador max, entonces si hago particion de rango es max
+    -- El rango es gran, tiene dos sums
+    -- cuenta con take y drop
+    -- El termino es i
+    -- La generalizacion seria de x + algo
+    -- La suma de take es = a la suma de drop
 
-	Hipotesis inducitva 
-		f.xs = ⟨Max i : 0 ≤ i < #xs ∧ sum.(xs↑i) = sum.(xs↓i) : i ⟩ 
+2) Especificacion:
+        f.xs = ⟨Max i : 0 ≤ i < #xs ∧ sum.(xs↑i) = sum.(xs↓i) : i ⟩
 
-	Caso inductivo, para xs = x:xs 
+3) Caso base, demuestro para xs=[]
+    
+    f.[]
+={Especificacion}
+    ⟨Max i : 0 ≤ i < #[] ∧ sum.([]↑i) = sum.([]↓i) : i ⟩
+={Por definicion de #}
+    ⟨Max i : 0 ≤ i < 0 ∧ sum.([]↑i) = sum.([]↓i) : i ⟩
+={Por logica}
+    ⟨Max i : False ∧ sum.([]↑i) = sum.([]↓i) : i ⟩
+={Aca hay dos caminos:
+    1) Abosorvente de False
+    2*) Evaluar las sum}
+    ⟨Max i : False ∧ sum.[] = sum.[] : i ⟩
+={Por def de sum en caso base}
+    ⟨Max i : False ∧ 0 = 0 : i ⟩
+={0 = 0 es una verdad, True}
+    ⟨Max i : False ∧ True : i ⟩
+={Por logica de ^}   
+    ⟨Max i : False : i ⟩
+={Rango vacio}  
+    -inf 
 
-		f.(x:xs)
-	={Especificacion }
-		⟨Max i : 0 ≤ i < #(x:xs) ∧ sum.((x:xs)↑i) = sum.((x:xs)↓i) : i ⟩ 
-	={# en caso recursivo}
-		⟨Max i : 0 ≤ i < 1 + #xs ∧ sum.((x:xs)↑i) = sum.((x:xs)↓i) : i ⟩ 
-	={Logica}
-		⟨Max i : i = 0 v 1 <= i < #xs + 1 ∧ sum.((x:xs)↑i) = sum.((x:xs)↓i) : i ⟩ 
-	={Particion de rango}
-		⟨Max i : i = 0 : i ⟩ + ⟨Max i : 1 <= i < #xs + 1 ∧ sum.((x:xs)↑i) = sum.((x:xs)↓i) : i ⟩ 
-	={Rango unitario}
-		0 + ⟨Max i : 1 <= i < #xs + 1 ∧ sum.((x:xs)↑i) = sum.((x:xs)↓i) : i ⟩ 
-	={Cambio de variable, i = i + 1 y algebra}
-		0 + ⟨Max i : 0 <= i < #xs ∧ sum.((x:xs)↑(i + 1) = sum.((x:xs)↓(i + 1) : (i + 1) ⟩ 
-	={Def de Take y Sum }
-		0 + ⟨Max i : 0 <= i < #xs ∧ x + sum.(xs↑i) = sum.((x:xs)↓(i + 1) : (i + 1) ⟩ 
-	={Def de Drop y sum }
-		0 + ⟨Max i : 0 <= i < #xs ∧ x + sum.(xs↑i) = sum.(xs↓i) : (i + 1) ⟩ 
-	={Termino de constante )? }
-		0 + ⟨Max i : 0 <= i < #xs ∧  x +sum.(xs↑i) = sum.(xs↓i) : i  ⟩ + 1
-	={No llego a HI generalizo }
-		
-	Generalizado: 
-		g.f.xs =  ⟨Max i : 0 <= i < #xs ∧ x + sum.(xs↑i) = sum.(xs↓i) : i  ⟩
-	
-	
-	Caso base, xs = []
+4) Hipotesis inductiva, recuerdo que mi especificacion es : 
+        f.xs = ⟨Max i : 0 ≤ i < #xs ∧ sum.(xs↑i) = sum.(xs↓i) : i ⟩
 
-		g.f.[]
-	={Especificacion}
-		⟨Max i : 0 <= i < #[] ∧ x + sum.([]↑i) = sum.([]↓i) : i  ⟩
-	={# en caso base}
-		⟨Max i : 0 <= i < 0 ∧ x + sum.([]↑i) = sum.([]↓i) : i  ⟩
-	={Logica, def de sum }
-		⟨Max i : False ^ True : i  ⟩
-	={Logica}
-		⟨Max i : False : i  ⟩
-	={Rango vacio }
-		-inf 
+5) Paso inductivo, veo para xs = x:xs
 
-	Hipotesis inductiva
-		g.f.xs =  ⟨Max i : 0 <= i < #xs ∧ n + sum.(xs↑i) = sum.(xs↓i) : i  ⟩
+    f.(x:xs)
+={Especificacion}
+    ⟨Max i : 0 ≤ i < #(x:xs) ∧ (sum.((x:xs)↑i) = sum.((x:xs)↓i)) : i ⟩
+={Por # en caso recursivo}
+    ⟨Max i : 0 ≤ i < 1 + #xs ∧ (sum.((x:xs)↑i) = sum.((x:xs)↓i)) : i ⟩
+={Logica}
+    ⟨Max i : (i = 0 v 1 <= i < #xs + 1) ∧ (sum.((x:xs)↑i) = sum.((x:xs)↓i)) : i ⟩
+={Distributividad}
+    ⟨Max i : (i = 0 ^ (sum.((x:xs)↑i) = sum.((x:xs)↓i) v (1 <= i < #xs + 1 ^ (sum.((x:xs)↑i) = sum.((x:xs)↓i) )) : i ⟩
+={Particion de rango }
+    ⟨Max i : (i = 0 ^ (sum.((x:xs)↑i) = sum.((x:xs)↓i) : i ⟩ 
+      max ⟨Max i : (1 <= i < #xs + 1 ^ (sum.((x:xs)↑i) = sum.((x:xs)↓i))) : i ⟩
+={Cambio de variable}
+    <Max : (sum.((x:xs)↑0) = sum.((x:xs)↓0) : 0  >
+      max ⟨Max i : (1 <= i < #xs + 1 ^ (sum.((x:xs)↑i) = sum.((x:xs)↓i))) : i ⟩
+={Por logica}
+    sum.((x:xs)↑0 = sum.((x:xs)↓0) 
+      max ⟨Max i : (1 <= i < #xs + 1 ^ (sum.((x:xs)↑i) = sum.((x:xs)↓i))) : i ⟩
+={Por def de take}
+    sum.[] = sum.(x:xs) 
+      max ⟨Max i : (1 <= i < #xs + 1 ^ (sum.((x:xs)↑i) = sum.((x:xs)↓i))) : i ⟩
+={Por def de sum.[]}
+    0 = sum.(x:xs) 
+      max ⟨Max i : (1 <= i < #xs + 1 ^ (sum.((x:xs)↑i) = sum.((x:xs)↓i))) : i ⟩
+={Recursion de sum}
+    0 = x + sum.xs  
+      max ⟨Max i : (1 <= i < #xs + 1 ^ (sum.((x:xs)↑i) = sum.((x:xs)↓i))) : i ⟩
+={Cambio de variable, i = i + 1, aritmetica}
+    x + sum.xs  
+      max ⟨Max i : (0 <= i < #xs ^ (sum.((x:xs)↑(i + 1) = sum.((x:xs)↓(i + 1))) : (i + 1) ⟩
+={Por def de take }
+    x + sum.xs  
+        max ⟨Max i : (0 <= i < #xs ^ (sum.(x:(xs)↑i) = sum.((x:xs)↓(i + 1))) : (i + 1) ⟩
+={Por def de drop }
+    x + sum.xs  
+            max ⟨Max i : (0 <= i < #xs ^ (sum.(x:(xs)↑i) = sum.(xs↓i) : (i + 1) ⟩
+={Por def de sum}
+    x + sum.xs  
+            max ⟨Max i : (0 <= i < #xs ^ x + sum.(xs↑i) = sum.(xs↓i) : (i + 1) ⟩
+={Constante}
+    x + sum.xs  
+            max ⟨Max i : (0 <= i < #xs ^ x + sum.(xs↑i) = sum.(xs↓i) : i ⟩ + 1
 
-	asumamo que n es para la suma x + x, generalizar
+    Notemos que no llegamos a la hipotesis inductiva por el x + que nos queda en el lado cercano a la HI. 
+    Debemos de generalizar para los casos de este tipo. 
+    Definamos la generalizacion de la especificacion como: 
 
-	Paso inductivo, para xs = x:xs 
+        gF.E.xs = ⟨Max i : 0 ≤ i < #xs ∧ E + sum.(xs↑i) = sum.(xs↓i) : i ⟩
 
-		g.f.(x:xs)
-	={Especificacion}
-		⟨Max i : 0 <= i < #(x:xs) ∧ x + sum.((x:xs)↑i) = sum.((x:xs)↓i) : i  ⟩
-	={Def de # en caso recursivo }
-		⟨Max i : 0 <= i < 1 + #xs ∧ x + sum.((x:xs)↑i) = sum.((x:xs)↓i) : i  ⟩
-	={LOGICA}
-		⟨Max i : i = 0 v 1 <= i < #xs + 1 ∧ x + sum.((x:xs)↑i) = sum.((x:xs)↓i) : i  ⟩
-	={Particion de rango }
-		⟨Max i : i = 0 : i  ⟩ + ⟨Max i : 1 <= i < #xs + 1 ∧ x + sum.((x:xs)↑i) = sum.((x:xs)↓i) : i  ⟩
-	={Rango unitario, algebra, cambio de var i = i +1}
-		0 + ⟨Max i : 0 <= i < #xs  ∧ x + sum.((x:xs)↑(i + 1) = sum.((x:xs)↓(i + 1) : (i + 1)  ⟩
-	={Def de sum y take }
-		0 + ⟨Max i : 0 <= i < #xs  ∧ x + x + sum.(xs↑i) = sum.((x:xs)↓(i + 1) : (i + 1)  ⟩
-	={ x + x = n (para hi) def de sum y drop }
-		0 + ⟨Max i : 0 <= i < #xs  ∧ n + sum.(xs↑i) = sum.xs↓i : (i + 1)  ⟩
-	={termino de constante}
-		0 + ⟨Max i : 0 <= i < #xs  ∧ n + sum.(xs↑i) = sum.xs↓i : i  ⟩ + 1
-	={HI}
-		0 + ⟨Max i : 0 <= i < #xs  ∧ n + sum.(xs↑i) = sum.xs↓i : i  ⟩ + 1
-	
-		g.f.xs + 1
+6) Verifiquemos que se cumple que: 
+    f.xs = gF.0.xs 
+
+    Entonces:
+
+        gF.0.xs 
+    ={Especificacion}
+        ⟨Max i : 0 ≤ i < #xs ∧ 0 + sum.(xs↑i) = sum.(xs↓i) : i ⟩
+    ={Logica aritmetica }
+        ⟨Max i : 0 ≤ i < #xs ∧ sum.(xs↑i) = sum.(xs↓i) : i ⟩
+    Concluimos que si, efectivamente se cumple que 
+    f.xs = gF.0.xs 
+    Ya que la especificacion es la misma. Notar que E = 0 por neutro de sum.
+
+7) Caso base, para xs = []: 
+        gF.E.[]
+    ={Especificacion}
+      ⟨Max i : 0 ≤ i < #[] ∧ E + sum.([]↑i) = sum.([]↓i) : i ⟩
+    ={Por definicion de #}
+        ⟨Max i : 0 ≤ i < 0 ∧ E + sum.([]↑i) = sum.([]↓i) : i ⟩
+    ={Por logica}
+        ⟨Max i : False ∧ E + sum.([]↑i) = sum.([]↓i) : i ⟩
+    ={Aca hay dos caminos:
+        1) Abosorvente de False
+        2*) Evaluar las sum}
+        ⟨Max i : False ∧ E + sum.[] = sum.[] : i ⟩
+    ={Por def de sum en caso base}
+        ⟨Max i : False ∧  E + 0 = 0 : i ⟩
+    ={0 = 0 es una verdad, True}
+        ⟨Max i : False ∧ False : i ⟩
+    ={Por logica de ^}   
+        ⟨Max i : True  : i ⟩
+    ={Rango vacio}  
+        True
+
+8) Caso inductivo, para xs = (x:xs)
+
+    gF.E.(x:xs)
+={Especificacion}
+    ⟨Max i : 0 ≤ i < #xs ∧ n + sum.(xs↑i) = sum.(xs↓i) : i ⟩
+={Por # en caso recursivo}
+    ⟨Max i : 0 ≤ i < 1 + #xs ∧ (n + (sum.((x:xs)↑i) = sum.((x:xs)↓i))) : i ⟩
+={Logica}
+    ⟨Max i : (i = 0 v 1 <= i < #xs + 1) ∧ (n + (sum.((x:xs)↑i) = sum.((x:xs)↓i))) : i ⟩
+={Distributividad}
+    ⟨Max i : (i = 0 ^ (n + sum.((x:xs)↑i) = sum.((x:xs)↓i) v (1 <= i < #xs + 1 ^ (nEn + sum.((x:xs)↑i) = sum.((x:xs)↓i) )) : i ⟩
+={Particion de rango }
+    ⟨Max i : (i = 0 ^ (n + sum.((x:xs)↑i) = sum.((x:xs)↓i) : i ⟩ 
+      max ⟨Max i : (1 <= i < #xs + 1 ^ (n + ( sum.((x:xs)↑i)) = sum.((x:xs)↓i))) : i ⟩
+={Cambio de variable}
+    <Max : (n + sum.((x:xs)↑0) = sum.((x:xs)↓0) : 0  >
+      max ⟨Max i : (1 <= i < #xs + 1 ^ (n + ( sum.((x:xs)↑i)) = sum.((x:xs)↓i))) : i ⟩
+={Por logica}
+    n + sum.((x:xs)↑0 = sum.((x:xs)↓0) 
+      max ⟨Max i : (1 <= i < #xs + 1 ^ n +( sum.((x:xs)↑i) = sum.((x:xs)↓i))) : i ⟩
+={Por def de take}
+    n + sum.[] = sum.(x:xs) 
+      max ⟨Max i : (1 <= i < #xs + 1 ^ n + (  sum.((x:xs)↑i) = sum.((x:xs)↓i))) : i ⟩
+={Por def de sum.[]}
+    n = sum.(x:xs) 
+      max ⟨Max i : (1 <= i < #xs + 1 ^ n +(  sum.((x:xs)↑i) = sum.((x:xs)↓i))) : i ⟩
+={Recursion de sum}
+    n = x + sum.xs  
+      max ⟨Max i : (1 <= i < #xs + 1 ^ n +( sum.((x:xs)↑i) = sum.((x:xs)↓i))) : i ⟩
+={Cambio de variable, i = i + 1, aritmetica}
+    n = x + sum.xs  
+      max ⟨Max i : (0 <= i < #xs ^ n +( sum.((x:xs)↑(i + 1) = sum.((x:xs)↓(i + 1))) : (i + 1) ⟩
+={Por def de take }
+    n = x + sum.xs  
+        max ⟨Max i : (0 <= i < #xs ^ n + (sum.(x:(xs)↑i) = sum.((x:xs)↓(i + 1))) : (i + 1) ⟩
+={Por def de drop }
+    n = x + sum.xs  
+            max ⟨Max i : (0 <= i < #xs ^ n +( sum.(x:(xs)↑i) = sum.(xs↓i) : (i + 1) ⟩
+={Por def de sum}
+    n = x + sum.xs  
+            max ⟨Max i : (0 <= i < #xs ^ n + (x + sum.(xs↑i)) = sum.(xs↓i) : (i + 1) ⟩
+={Constante}
+    n = x + sum.xs  
+            max ⟨Max i : (0 <= i < #xs ^ n + (x + sum.(xs↑i)) = sum.(xs↓i) : i ⟩ + 1
+={Asociatividad aritmetica}
+    n = x + sum.xs  
+                max ⟨Max i : (0 <= i < #xs ^ (n + x) + sum.(xs↑i)) = sum.(xs↓i) : i ⟩ + 1
+={Para usar HI, uso E = n + x}
+    n = x + sum.xs  
+                    max ⟨Max i : (0 <= i < #xs ^ E + sum.(xs↑i)) = sum.(xs↓i) : i ⟩ + 1
+={HI}
+    n = x + sum.xs max gF.E.xs
 
 		--Pasos para Generalizar
 		--Caso base en  [] o 0, de la espc. (Opcional). Su variacion:
