@@ -40,102 +40,35 @@ esVocal c | c == 'a' = True
 
 paraTodo :: [Bool] -> Bool
 paraTodo [] = True                                      --1
-paraTodo (x:xs) | x == False = False                    --2
+paraTodo (x:xs) | not x = False                    --2
                 | otherwise = paraTodo xs               --3
 
-{-
-chekiado !
-
-Dada la lista Paratodo[True , False, True]
-
-    paraTodo[True , False, True]
-={Notacion en terminos de constructores}
-    paraTodo True:False:True:[]
-={Caso 3}
-    paraTodo False:True[]
-={Caso 2}
-    False == False = False
-={False}
-    False
-
-Dada la lista paraTodo[True, True]
-
-    paraTodo[True, True]
-={Notacion en terminos constructores}
-    paraTodo True:True:[]
-={caso 3}
-    paraTodo True:[]
-={Caso 3}
-    paraTodo []
-={Caso 1, caso base}
-    True
--}
-
 --b) sumatoria :: [Int] -> Int, que calcula la suma de todos los elementos de una lista de enteros.
--- <Sum i : 0 <= i ^ i < length.xs : xs.i> 
 
-sum :: [Int] -> Int
-sum [] = 0                          --1
-sum (x:xs) = x + sum xs             --2
+sum1 :: [Int] -> Int
+sum1 [] = 0                          --1
+sum1 (x:xs) = x + sum xs             --2
 
 --chekiado !
 
-{-
-sum [1, 5, -4]
+--c) productoria :: [Int] -> Int, que calcula el producto de todos los elementos de la lista de enteros.
 
-    sum [1, 5, -4]
-={Notacion en terminos de constructores}
-    sum 1:5:-4:[]
-={Caso 2}
-    1 + sum 5:-4:[]
-={Caso 2}
-    1 + (5 + sum -4:[])
-={Caso 2}
-    1 + (5 + ((-4) sum []))
-={Caso 1, caso base}
-    1 + 5 + (-4) + 0
-={Aritmentica}
-    2
 
-c) productoria :: [Int] -> Int, que calcula el producto de todos los elementos de la lista de enteros.
-<Prod i : 0 <= i ^ i < length.xs : xs.i > 
--}
+prod1 :: [Int] -> Int
+prod1 [] = 0                           --1
+prod1 (x:xs) = x * prod xs             --2
 
-prod :: [Int] -> Int
-prod [] = 0                           --1
-prod (x:xs) = x * prod xs             --2
-
-{-
-prod [2, 4, 1]
-
-   prod [2, 4, 1]
-={Notacion en terminos de constructores}
-    prod 2:4:1[]
-={Caso 2}
-    2 * prod 4:1:[]
-={Caso 2}
-    2 * (4 * prod 1:[])
-={Caso 2}
-    2 * (4 * (1 prod []))
-={Caso 1, caso base}
-    2 * 4 *  1 * 0
-={Aritmentica}
-    8
-
-d) factorial :: Int -> Int, que toma un n ́umero n y calcula n!.
-<A i : 0 <= i ^ i < length.xs : n * n-1>                (?)
--}
+-- d) factorial :: Int -> Int, que toma un n ́umero n y calcula n!.
 
 factorial :: Int -> Int
-factorial 0 = 1 
+factorial 0 = 1
 factorial n = n * factorial (n-1)
 
 --chekiado!
+
 {-
 e) Utiliza la funci ́on sumatoria para definir, promedio :: [Int] -> Int, que toma una lista de
 n ́umeros no vacia y calcula el valor promedio (truncado, usando divisi ́on entera).
-
-<sum i : 0 <= i ^ i < length.xs : xs.i 'div' lenght.xs >
 -}
 
 promedio :: [Int] -> Int
@@ -150,7 +83,7 @@ promedio xs = sum xs `div` length xs
 --    La variable libre no necesariamente tiene que ser un i, j, puede ser una lista.
 --    a) La variable libre es xs
 
-varA :: [Int] -> Bool   
+varA :: [Int] -> Bool
 varA [] = True                                     --1
 varA (x:xs) | x == 0 = False                        --2
             | x > 0 = varA xs                          --3
@@ -209,14 +142,17 @@ xs = [11, 2, 5, 8] 5
 
 varC :: Eq a => [a] -> [a] -> Bool
 varC [] [] = True
-varC _ _ = False
-varC (x:xs) (y:ys) = (x == y) && varC xs ys
+varC (x:xs) (y:ys) = x == y && varC xs ys
 
---    d) La variable libre es xs
+--chekiado!
+
+-- d) La variable libre es xs
 
 varD :: [Int] -> Bool
-varD [] = False                                             --1
-varD (x:y:xs) = (x == y + 1) && varD xs                --2
+varD [] = False                                       --1
+varD (x:y:xs) = x == y + 1 && varD xs                --2
+
+--DUDOSO. COPILA COMO QUIERE
 
 {-
 xs = [−5, −3, 4, 8]
@@ -259,7 +195,7 @@ xs = [11, 2, 5, 8]
     --variable libre: n 
 
 prod :: Int -> Int
-prod n = n * prod 
+prod n = n * prod
 
 {-
 b) ⟨Sum i: 0 ≤ i < #xs : xs.i ⟩/ #xs
@@ -285,12 +221,13 @@ sum :: [Int] -> Int
 sum [] = 0                                          --1
 sum (x:xs) = x + sum xs 'div' lenght xs             --2
 
-prod :: Int -> Int -> Int -> Bool
-prod i j n | i > n = False
+prod2 :: Int -> Int -> Int -> Bool
+prod2 i j n | i > n = False
            | j > n = False
            | i * j == n = True
-           | otherwise = False 
+           | otherwise = False
 
+--Chekiado !
 
 --10 y lab 5)
 
@@ -299,9 +236,11 @@ prod i j n | i > n = False
 --
 --todos.xs ≡ ⟨ ∀ i : 0 ≤ i < #xs : xs.i ⟩
 
-todosxs :: [Bool] -> Bool 
-todosxs [] = True 
-todosxs (x:xs) = x && todos xs
+todosxs :: [Bool] -> Bool
+todosxs [] = True
+todosxs (x:xs) = x && todosxs xs
+
+--chekiado!
 
 --11 y lab 6)
 
@@ -312,35 +251,36 @@ todosxs (x:xs) = x && todos xs
 --variable libre xs
 
 esMaximo :: [Int] -> Bool
-esMaximo [] = True 
-esMaximo (x:xs) = max(xs) esMaximo xs 
+esMaximo [] = False -- Una lista vacía no tiene máximo
+esMaximo [x] = True -- Una lista con un solo elemento es siempre máxima
+esMaximo (x:xs) = x >= head xs && esMaximo xs
 
 --chekiado !
 
 --c) El producto de los elementos pares de xs
 
--- -<prod i : 0 ≤ i < length(xs) ∧ mod 2 (xs !! i) : (xs !! i)>
+-- -<prod i : 0 ≤ i < length(xs) ∧ `mod` 2 (xs !! i) : (xs !! i)>
 
 -- variable libre xs 
 
 productoPar :: [Int] -> Int
-productoPar [] = 1  
+productoPar [] = 1
 productoPar (x:xs)
-                  | mod 2 x = x * productoPar xs
+                  | x `mod` 2 == 0 = x * productoPar xs     --alt: even x 
                   | otherwise = productoPar xs
+
+--Solo multiplica numeros pares.
 
 --chekiado !
 
 -- d) La suma de los elementos en posicion par de xs 
 
--- <sum i : 0 <= i < length xs ^ mod 2 (xs !! i) : xs !! i >
-
 --variable libre xs
 
 sumPar :: [Int] -> Int
 sumPar [] = 0
-sumPar (x:xs) | mod 2 x = x + sumPar xs 
-              | otherwise = sumPar xs 
+sumPar (x:xs) | x `mod` 2 == 0 = x + sumPar xs
+              | otherwise = sumPar xs
 
 --chekiado !
 
@@ -351,41 +291,64 @@ sumPar (x:xs) | mod 2 x = x + sumPar xs
 --si todos los elementos en xs hacen verdadero el predicado T, es decir:
 --
 --paratodo.xs.T ≡ ⟨ ∀ i : 0 ≤ i < #xs : T.(xs.i) ⟩
---
---todos.xs ≡ ⟨ ∀ i : 0 ≤ i < #xs : xs.i ⟩
 
--- --func ej 10
-todosxs :: [Bool] -> Bool 
-todosxs [] = True 
-todosxs (x:xs) = x && todos xs
+paraTodo1 :: [a] -> (a -> Bool) -> Bool
+paraTodo1 [] _ = True
+paraTodo1 (x:xs) t = t x && paraTodo1 xs t
 
-paraTodo :: [a] -> (a -> Bool) -> Bool
-paraTodo [] _ = True
-paraTodo (x:xs) t = t x && paraTodo xs t
+{-
+Para testear:
+
+ghci
+Prelude> numeros = [2,4,6,8]
+Prelude> esPar x = x `mod` 2 == 0
+Prelude> paraTodo numeros esPar
+True
+
+Prelude> numeros2 = [2,4,5,8]
+Prelude> esMayorA5 x = x > 5
+Prelude> paraTodo numeros esMayorA5
+False
+-}
 
 -- chekiado !
 
 -- b) La función existe, que dada una lista de valores xs : [A] y un predicado T : A → Bool, determina si
 -- algún elemento en xs hace verdadero el predicado T, es decir:
-
 -- existe : [A] → (A → Bool) → Bool
 -- existe.xs.T ≡ ⟨ ∃ i : 0 ≤ i < #xs : T.(xs.i) ⟩
-
 -- Puede ser de ayuda recordar la función del ejercicio 9.
 
 -- --ej 9 
 
-algunof :: [A] -> Bool
-algunof.[] = False
-algunof.(x:xs) = f.x || algunof.xs
+algunof :: Eq a => [a] -> Bool
+algunof [] = False
+algunof [x] = False
+algunof (x:y:xs) = x /= y || algunof (y:xs)
 
--- ->
+-- >
+
+paraTodo2 :: [a] -> (a -> Bool) -> Bool
+paraTodo2 [] _ = True
+paraTodo2 (x:xs) t = t x && paraTodo2 xs t
 
 existe :: [a] -> (a -> Bool) -> Bool
 existe [] _ = True
-existe (x:xs) t = t x && paraTodo xs t
+existe (x:xs) t = t x && existe xs t
 
--- chekiado !
+
+esPar :: Int -> Bool
+esPar x = x `mod` 2 == 0
+
+resultado1 = existe [1, 3, 5, 7] esPar  -- Debería ser False
+resultado2 = existe [1, 2, 3, 5] esPar  -- Debería ser True
+
+main :: IO ()
+main = do
+    print resultado1  -- Imprime False
+    print resultado2  -- Imprime True
+
+--Nda false en ambos. 
 
 -- c)
 
@@ -396,10 +359,26 @@ existe (x:xs) t = t x && paraTodo xs t
 -- sumatoria : [A] → (A → Num) → Num
 -- sumatoria.xs.T = ⟨sum i : 0 ≤ i < #xs : T.(xs.i) ⟩
 
-sumatoria :: [a] -> (a -> Int) -> Int 
+-- Función sumatoria que suma los resultados de aplicar T a los elementos de la lista xs
+sumatoria :: [a] -> (a -> Int) -> Int
 sumatoria [] _ = 0
 sumatoria (x:xs) t = t x + sumatoria xs t
 
+{-
+    -- Función que devuelve 1 si el número es par, 0 si es impar
+    esPar :: Int -> Int
+    esPar x = if x `mod` 2 == 0 then 1 else 0
+
+    -- Ejemplo de uso
+    main :: IO ()
+    main = do
+        let lista = [1, 2, 3, 4, 5, 6]
+        let sumaPares = sumatoria lista esPar
+        print sumaPares  -- Esto debería imprimir 3, ya que hay 3 números pares en la lista (2, 4, 6)
+
+    --let lista = [1, 2, 3, 4, 5, 6]
+    --sumatoria lista esPar
+-}
 -- chekiado !
 
 -- d)
@@ -414,18 +393,29 @@ productoria :: [a] -> (a -> Int) -> Int
 productoria [] _ = 0
 productoria (x:xs) t = t x + productoria xs t
 
+-- Función que devuelve 1 si el número es par, 0 si es impar
+{-
+esPar :: Int -> Int
+esPar x = if x `mod` 2 == 0 then 1 else 0
+
+-- Ejemplo de uso
+main :: IO ()
+main = do
+    let lista = [1, 2, 3, 4, 5, 6]
+    let sumaPares = productoria lista esPar
+    print sumaPares  -- Esto debería imprimir 3, ya que hay 3 números pares en la lista (2, 4, 6)
+
+--let lista = [1, 2, 3, 4, 5, 6]
+--sumatoria lista esPar
+-}
 -- chekiado !
 
--- lab 8)
-
-paraTodo :: [a] -> (a -> Bool) -> Bool
-paraTodo [] _ = True                            -- 1
-paraTodo (x:xs) t = t x && paraTodo xs t        -- 2
+--lab 8 skip
 
 -- Lab 9)
 -- a)
 todosPares :: [Int] -> Bool
-todosPares = all even 
+todosPares = all even
 
 -- chekiado ! 
 
@@ -435,63 +425,58 @@ hayMultiplo x = any (\y -> y `mod` x == 0)
 
 -- chekiado ! 
 -- c)
-sumaCuadrados :: Int -> Int 
-sumaCuadrados n = n >= 0 && sum (map (^2) [0..(n-1)])
+sumaCuadrados :: Int -> Int
+sumaCuadrados n = sum (map (^2) [0..(n-1)])
 
--- noanda
+-- Chekiado ! 
 -- d)
 existeDivisor :: Int -> [Int] -> Bool
-existeDivisior n (x:xs) = (\x -> x /= 0 && n `mod` x == 0)
+existeDivisor n = any (\x -> n `mod` x == 0)
 
--- como lo hago recursivo sin usar recursividad
-
+-- Chekiado !
 -- e)
+existeDivisor2 :: Int -> [Int] -> Bool
+existeDivisor2 n = any (\x -> n `mod` x == 0)
+
 esPrimo :: Int -> Bool
-esPrimo n = n mod 2 /= 0 && esPrimo n
+esPrimo n = n > 1 && not (existeDivisor2 n [2..(n-1)])
 
 -- Por que me dice me fije si n es primo si me pide ver una lista? en todo caso hecho antes.
-
 -- f)
 
-factorial :: Int -> Int
-factorial 0 = 1 
-factorial n = n * factorial (n-1)
+factorial1 :: Int -> Int
+factorial1 n = product [1..n]
 
--- CREO que esta evitada 
-
--- sino
-
-factorial :: Int -> Int
-factorial n = product [1..n]
+-- Chekiada !
 
 -- g)
-esPrimo :: Int -> Bool
-esPrimo n
-  | n <= 1    = False
-  | n == 2    = True
-  | even n    = False
-  
-multiplicaPrimos :: [Int] -> Int 
-multiplicaPrimos (x:xs) = product (filter esPrimo xs) 
+existeDivisor1 :: Int -> [Int] -> Bool
+existeDivisor1 n = any (\x -> n `mod` x == 0)
 
+esPrimo3 :: Int -> Bool
+esPrimo3 n = n > 1 && not (existeDivisor1 n [2..(n-1)])
+
+multiplicaPrimos :: [Int] -> Int
+multiplicaPrimos xs = product (filter esPrimo xs)
+
+--chekiada !
 -- h)
 
-fib :: Int -> Int
-fib 0 = 0
-fib 1 = 1
-fib n = fib (n - 1) + fib (n - 2)
+esFib :: Int -> Bool
+esFib n = n >= 0 && n == fib (fibIndex n)
+  where
+    fibIndex x = length (takeWhile (< x) (fibs)) - 1
+    fibs = 0 : 1 : zipWith (+) fibs (tail fibs) -- ??? chatgpt
 
-esFib :: Int -> Int
-esFib n
-  | n < 0     = esFib n 
-  | otherwise = fib n 
+todosFib :: [Int] -> Bool
+todosFib xs = all esFib xs
 
+--chekiada !
 -- MAP
 map :: (a -> b) -> [a] -> [b]
 
 -- definida:
-map f [] = []
-map f (x:xs) = f x : map f xs
+map f xs = map f xs
 
 -- La función map:
 --     Toma 2 argumentos, uno de los cuales es una función
@@ -532,27 +517,29 @@ filter p (x:xs) | p x = x : filter p xs
 -- Prelude> filter esPositivo [1, -4, 6, 2, -8]
 -- [1, 6, 2]
 
--- 29.
+-- 29. lab 10 
 
 duplicaValorXS :: [Int] -> [Int]
-duplicaValorXS [] = []
-duplicaValorXS (x:xs) = x * 2 : duplicaValorXS xs 
+duplicaValorXS xs = map (* 2) xs
 
 -- b) 
 
-duplicaValorXS :: [Int] -> [Int]
-duplicaValorXS [] = []
-duplicaValorXS (x:xs) = map (* 2 ) xs  
-
+duplicaValorXS1 :: [Int] -> [Int]
+duplicaValorXS1 [] = []
+duplicaValorXS1 (x:xs) = map (* 2 ) xs
 
 -- chekiado !
 
--- lab 10 hecho arriba lol)
-
 -- lab 11)
+-- Laboratorio 11 Program ́a una funci ́on que dada una lista de n ́umeros xs, calcula una lista que tiene como
+-- elementos aquellos n ́umeros de xs que son primos.
 
-esPrimo :: Int -> Bool
-esPrimo n | n < 2 = False
+
+-- c) Revis ́a tu definici ́on del ejercicio g. ¿C ́omo podes mejorarla?
+
+-- a) Definila usando recursi ́on.
+esPrimo2 :: Int -> Bool
+esPrimo2 n | n < 2 = False
           | otherwise = all (\x -> n `mod` x /= 0) [2..(n-1)]
 
 primosRec :: [Int] -> [Int]
@@ -563,33 +550,29 @@ primosRec (x:xs)
 
 -- chekiado !
 
--- con filter:
+-- b) Definila utilizando la funci ́on filter.
 
-esPrimo :: Int -> Bool
-esPrimo n | n < 2 = False
+esPrimo1 :: Int -> Bool
+esPrimo1 n | n < 2 = False
           | otherwise = all (\x -> n `mod` x /= 0) [2..(n-1)]
 
 primosFilter :: [Int] -> [Int]
-primosFilter xs = filter esPrimo xs
-
+primosFilter = filter esPrimo
 
 -- chekiado !
 
-
 -- Lab 12)
 -- a)
-primIgualesA :: a -> [a] -> [a]
+primIgualesA :: Eq a => a -> [a] -> [a]
 primIgualesA n [] = []
-primIgualesA n (x:xs) | n == x = x : primIguales n xs 
+primIgualesA n (x:xs) | n == x = x : primIgualesA n xs
                       | otherwise = []
-
 
 -- chekiado !
 
 -- b)
-primIgualesA :: Eq a => a -> [a] -> [a]
-primIgualesA n = takeWhile (== n)
-
+primIgualesA1 :: Eq a => a -> [a] -> [a]
+primIgualesA1 n = takeWhile (== n)
 
 -- chekiado !
 
@@ -598,15 +581,28 @@ primIgualesA n = takeWhile (== n)
 -- lab 13) 
 -- DA ES LO MISMO
 
-primIguales :: [a] -> [a]
-primIguales [] = []
-primIguales (x:xs) = x : takeWhile (==x) xs 
+primIgualesA2 :: Eq a => [a] -> [a]
+primIgualesA2 [] = []
+primIgualesA2 (x:xs) = x : takeWhile (==x) xs
 
 -- Chekiado !
 
+primIgualesA3 :: Eq a => [a] -> [a]
+primIgualesA3 [] = []
+primIgualesA3 [x] = [x]
+primIgualesA3 (x:xs)
+    | x == head xs = x : primIgualesA3 xs
+    | otherwise = [x]
+
+-- chekiado !
+
+--b)
+
 primIguales :: Eq a => [a] -> [a]
-primIguales [] = []
-primIguales (x:xs) = primIgualesA x (x:xs)
+primIguales xs
+    | null xs = []
+    | otherwise = primIgualesA3 (takeWhile (== head xs) xs)
+
 
 -- chekiado !
 
@@ -622,13 +618,13 @@ primQueCumplen (x:xs) p
 
 --     esta esta cool
 
-primQueCumplen :: [a] -> (a -> Bool) -> [a]
-primQueCumplen ls p = takeWhile p ls
+primQueCumplen1 :: [a] -> (a -> Bool) -> [a]
+primQueCumplen1 ls p = takeWhile p ls
 
 -- lab 16) https://prnt.sc/42X9B29JjDxH
 
 -- lab 17)
--- a) f :: (a -> Bool) -> [[a]] -> [a]
+-- a)  f :: (a -> Bool) -> [[a]] -> [a]
 
 -- b) [[a]] -> [a]
 
