@@ -1,6 +1,8 @@
 --Lab 1)
 --Laboratorio 1 Defin ́ı en Haskell las funciones derivadas en el ejercicio 2 y evalu ́a las mismas en los ejemplosutilizados en el ejercicio 3.
 --La sumatoria de los números de una lista multiplicados por sí mismos
+{-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
+{-# HLINT ignore "Use camelCase" #-}
 
 sumCuad :: [Int] -> Int
 sumCuad [] = 0					--1
@@ -405,15 +407,16 @@ instance Ord NotaMusical
 
 --lab 11)
 
---a) a) Defin ́ı la funci ́on primerElemento que devuelve el primer elemento de una lista no vac ́ıa, o Nothing si la lista es vac ́ıa.
+--a) Defin ́ı la funci ́on primerElemento que devuelve el primer elemento de una lista no vac ́ıa, o Nothing si la lista es vac ́ıa.
 -- data Maybe a = Nothing | Just a		esta en el preludio. No es necesario definirlo.
 
 primerElemento :: [a] -> Maybe a
 primerElemento [] = Nothing
-primerElemento (x:xs) = head primerElemento xs 
+primerElemento (x:xs) = Just x 
 
 --Lab 12)
 --i. Program ́a las siguientes funciones:
+
 data Deportista = Ajedrecista | Ciclista  | Velocista  | Tenista   | Futbolista     
 data Cola = VaciaC | Encolada Deportista Cola
 
@@ -430,11 +433,16 @@ atender (Encolada _ resto) = Just resto --El resto es un nombre que doy yo, que 
 y::Cola
 y = Encolada Tenista (Encolada Ciclista VaciaC)
 
+--chekiada !
+--para probar:
+-- encolar y
+
 --atender Encolada Ajedrecista (Encolada Ciclista (Encolada Velocista VaciaC))
 --b)encolar :: Deportista -> Cola -> Cola, que agrega una persona a una cola de deportistas, en la
 -- ́ultima posici ́on.
 data Deportista = Ajedrecista | Ciclista  | Velocista  | Tenista   | Futbolista deriving (Show, Eq)    
 data Cola = VaciaC | Encolada Deportista Cola deriving (Show, Eq)
+
 encolar :: Deportista -> Cola -> Cola
 encolar d VaciaC = Encolada d VaciaC
 encolar d (Encolada d' cola) = Encolada d cola
@@ -443,32 +451,31 @@ y :: Cola
 y = Encolada Tenista (Encolada Ciclista (Encolada Velocista (Encolada Futbolista VaciaC)))
 
 --para probar:
--- encolar y
-
+--encolar y
+--Chekiada !
 --c)busca :: Cola -> Zona -> Maybe Deportista, que devuelve el/la primera futbolista dentro de la
 --cola que juega en la zona que se corresponde con el segundo par ́ametro. Si no hay futbolistas jugando en esa zona devuelve Nothing.
 
 --Sinonimos de tipo
-type Altura = Int
-type NumCamiseta = Int
+data Zona = Arco | Defensa | Mediocampo | Delantera deriving (Show, Eq)
+data PiernaHabil = Izquierda | Derecha deriving (Show)
 
---Tipos algebraicos sin par ́ametros (aka enumerados)
+data Deportista = Ajedrecista | Ciclista | Velocista | Tenista | Futbolista Zona deriving (Show)
 
-data Zona = Arco | Defensa | Mediocampo | Delantera
-data PiernaHabil = Izquierda | Derecha
+data Cola = VaciaC | Encolada Deportista Cola deriving (Show)
 
---coso
-data Deportista = Ajedrecista | Ciclista  | Velocista  | Tenista   | Futbolista Zona  deriving(Show)   
---Necesario poner zona, por que si no estaria pidiendo un parametro que no existe.
-data Cola = VaciaC | Encolada Deportista Cola 		deriving(Show)
+-- Función que busca un Deportista de tipo Futbolista en la Cola según la Zona
+busca :: Cola -> Zona -> Maybe Deportista
+busca VaciaC _ = Nothing -- caso base
+busca (Encolada deportista cola) zona =
+    case deportista of
+        Futbolista z | z == zona -> Just deportista
+        _ -> busca cola zona
 
-
-busca :: Cola -> Zona -> Maybe Deportista 
-busca VaciaC _ = Nothing --caso base
-busca (Encolada d Zona) zona =  
-	case d of 							--SI Y SOLO SI es futbolista, entra en case.
-		Futbolista z -> if z == zona 				-- si es futbolista, que se fije si la zona esta en las zonas.
-		_ -> busca cola zona 				-- Busca la zona.
+{-
+Si d es FUTBOLISTA, que entre a buscar la zona que se da en z. 
+Si d No ES futbolista, que devuelva nothing
+-}
 
 y :: Cola 
 y = Encolada Futbolista Delantera (Encolada Futbolista Defensa (Encolada Velocista (Encolada Futbolista Arco VaciaC)))
@@ -479,7 +486,6 @@ y = Encolada Futbolista Delantera (Encolada Futbolista Defensa (Encolada Velocis
 --I)i. ¿Como se debe instanciar el tipo ListaAsoc para representar la informaci ́on almacenada en una gu ́ıa telef ́onica?
 data ListaAsoc a b = Vacia | Nodo a b (ListaAsoc a b)
 type Padron = ListaAsoc Int String  --(a == Int, b == String) Irrelevant.
-
 
 type GuiaTelefonica = ListaAsoc String String -- (a == string, b == string )
 guia :: GuiaTelefonica
@@ -494,26 +500,40 @@ la_long Vacia = 0
 la_long (Nodo _ _ resto) = 1 + la_long resto 
 
 --b)  la_concat :: ListaAsoc a b -> ListaAsoc a b -> ListaAsoc a b, que devuelve la concatena- ci ́on de dos listas de asociaciones.
-data ListaAsoc a b = Vacia | Nodo a b (ListaAsoc a b)
+data ListaAsoc a b = Vacia | Nodo a b (ListaAsoc a b) deriving (Show)
 
 la_concat :: ListaAsoc a b -> ListaAsoc a b -> ListaAsoc a b
 la_concat Vacia otraLista = otraLista --Si no tiene nada la primera, doy la segunda 
-la_concat (Nodo _ _ resto) otraLista = noda a b (la_concat resto otraLista) --resto == (la_concat resto otraLista)
+la_concat (Nodo a b resto) otraLista = Nodo a b (la_concat resto otraLista) --resto == (la_concat resto otraLista)
+
+        {-
+            lista1 :: ListaAsoc Int String
+            lista1 = Nodo 1 "uno" (Nodo 2 "dos" Vacia)
+
+            lista2 :: ListaAsoc Int String
+            lista2 = Nodo 3 "tres" (Nodo 4 "cuatro" Vacia)
+
+            resultado :: ListaAsoc Int String
+            resultado = la_concat lista1 lista2
+
+            Para testear: print resultado
+        -}
+
 
 --c) la_agregar :: Eq a => ListaAsoc a b -> a -> b -> ListaAsoc a b, que agrega un nodo a la lista de asociaciones si la clave no est ́a en la lista, o actualiza el valor si la clave ya se encontraba.
 data ListaAsoc a b = Vacia | Nodo a b (ListaAsoc a b) deriving (Eq, Show)
 
 la_agregar :: Eq a => ListaAsoc a b -> a -> b -> ListaAsoc a b
-la_agregar Vacia _ _ = Nodo _ _ Vacia -- _ _ son a y b
-la_agregar (Nodo a b resto) _ _ =
-	| a == clave = nodo a valor resto 
-	| otherwise = Nodo a b (la_agregar _ _ valor) --recursividad
+la_agregar Vacia clave valor = Nodo clave valor Vacia -- Crear un nuevo nodo
+la_agregar (Nodo a b resto) clave valor 
+    | a == clave = Nodo a valor resto  -- Actualizar el valor del nodo existente
+    | otherwise  = Nodo a b (la_agregar resto clave valor)  -- Recurre al resto de la lista
 
 --d) la_pares :: ListaAsoc a b -> [(a, b)] que transforma una lista de asociaciones en una lista de pares clave-dato.
 data ListaAsoc a b = Vacia | Nodo a b (ListaAsoc a b) 
 
 la_pares :: ListaAsoc a b -> [(a, b)]
-la_pares Vacia a b = [] 
+la_pares Vacia = [] 
 la_pares (Nodo a b resto) = (a,b) : la_pares resto 
 
 --e)la_busca :: Eq a => ListaAsoc a b -> a -> Maybe b que dada una lista y una clave devuelve el dato asociado, si es que existe. En caso contrario devuelve Nothing.
@@ -521,9 +541,8 @@ data ListaAsoc a b = Vacia | Nodo a b (ListaAsoc a b) deriving (Eq, Show)
 
 la_busca :: Eq a => ListaAsoc a b -> a -> Maybe b 
 la_busca Vacia a = Nothing 
-la_busca (Nodo a b resto) a --Es mejor "decir que es b y q es a?"
-	| a == a = just b
-	| otherwise = la_busca resto a
+la_busca (Nodo a b resto) z | z == a = Just b --Es mejor "decir que es b y q es a?" 
+                        | otherwise = la_busca resto a
 
 --f)la_borrar :: Eq a => a -> ListaAsoc a b -> ListaAsoc a b que dada una clave a elimina la entrada en la lista.
 data ListaAsoc a b = Vacia | Nodo a b (ListaAsoc a b) deriving (Eq, Show)
@@ -534,7 +553,7 @@ la_borrar clave (Nodo a b resto)
   | clave == a = resto  -- Si la clave coincide, elimina el nodo actual (devuelve el resto de la lista).
   | otherwise = Nodo a b (la_borrar clave resto)  -- Si no coincide, sigue buscando en el resto de la lista.
 
-
+--everything is ok 
 
 {-
 consulta / dudas:
