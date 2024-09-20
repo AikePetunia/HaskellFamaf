@@ -32,6 +32,7 @@ igaE (x:xs) = x == x && igaE xs			--2
 
 expXN :: Int -> Int -> Int
 expXN x n = x^n + expXN
+--Chekiado !
 
 --sum par.n = ⟨ Sum i : 0 ≤ i ≤ n ∧ par.i : i⟩ donde par.i .= i mod 2 = 0. 
 --Suma todo número par.
@@ -40,6 +41,7 @@ sumPar :: [Int] -> Int
 sumPar [] = 0							--1
 sumPar (x:xs) | x `mod` 2 == 0 = x + sumPar xs			--2
 	      | otherwise = sumPar xs				--3
+--Chekiado !
 
 --cuantos.p.xs = ⟨N i : 0 ≤ i < #xs : p.(xs.i)⟩ 
 --Cuenta cuantas p hay en una lista
@@ -48,6 +50,8 @@ cuantosP :: [Char] -> Int
 cuantosP [] = 0						--1
 cuantosP (x:xs) | x /= 'p' = cuantosP xs 		--2
 		| x == 'p' = 1 + cuantosP xs		--3
+
+--Chekiado !
 	
 --['p','p','a']
 
@@ -63,20 +67,19 @@ cuantosP (x:xs) | x /= 'p' = cuantosP xs 		--2
 -- ={Caso base 1 y aritmetica}
 	--2
 
---lab 2)
---where, case, tipo de datos (data)
-
 -- Laboratorio 2)
 -- A) Implementa el tipo carrera
 -- B) Defin ́ı la siguiente funci ́on, usando pattern matching: titulo :: Carrera -> String que devuelve el nombre completo de la carrera en forma de string. Por ejemplo, para el constructor Matematica, debe devolver ”Licenciatura en Matem ́atica”.
 
 data Carrera = Matematica | Fisica | Computacion | Astronomia
 
-titulo :: Carrera -> String
-titulo n | n == "Matematica" = "Licenciatura en matematica"
-	 | n == "Fisica" = "Licenciatura en fisica"
-	 | n == "Computacion" = "Licenciatura en computacion"
-	 | n == "Astronomia" = "Licenciatura en astronomia"
+titulo :: Carrera -> String 
+titulo Matematica = "Licenciatura en matematica"
+titulo Fisica = "Licenciatura en fisica"
+titulo Computacion = "Licenciatura en computacion"
+titulo Astronomia = "Licenciatura en astronomia"
+
+-- chekiada !
 
 --Alternativamente
 
@@ -88,21 +91,14 @@ titulo n = case n of
     Fisica        -> "Licenciatura en fisica"
     Computacion   -> "Licenciatura en computacion"
     Astronomia    -> "Licenciatura en astronomia"
-    
---Alternativamente
 
-data Carrera = Matematica | Fisica | Computacion | Astronomia 
-
-titulo :: Carrera -> String
-titulo    Matematica    = "Licenciatura en matematica"
-titulo    Fisica        = "Licenciatura en fisica"
-titulo    Computacion   = "Licenciatura en computacion"
-titulo    Astronomia    = "Licenciatura en astronomia"
+-- chekiada !
 
 --C) Para escribir m ́usica se utiliza la denominada notaci ́on musical, la cual consta de notas (do, re, mi, ...).
 --Adem ́as, estas notas pueden presentar alg ́un modificador ♯ (sostenido) o ♭ (bemol), por ejemplo do♯, si♭, etc.
 --Por ahora nos vamos a olvidar de estos modificadores (llamados alteraciones) y vamos a representar las notas basicas.
 --Defin ́ı el tipo NotaBasica con constructores Do, Re, Mi, Fa, Sol, La y Si
+
 --D)El sistema de notaci ́on musical anglosaj ́on, tambi ́en conocido como notaci ́on o cifrado americano, relaciona
 --las notas b ́asicas con letras de la A a la G. Este sistema se usa por ejemplo para las tablaturas de guitarra.
 --Program ́a usando pattern matching la funci ́on:
@@ -110,8 +106,10 @@ titulo    Astronomia    = "Licenciatura en astronomia"
 --que relaciona las notas Do, Re, Mi, Fa, Sol, La y Si con los caracteres ’C’ , ’D’, ’E’, ’F’, ’G’, ’A’ y ’B’
 --respectivamente.
 
+--c)
 data NotaBasicas = Do | Re | Mi | Fa | Sol | La | Si
 
+--d)
 cifradoAmericano :: NotaBasicas -> Char
 cifradoAmericano Do = 'c'
 cifradoAmericano Re = 'd'
@@ -121,25 +119,10 @@ cifradoAmericano Sol ='g'
 cifradoAmericano La = 'a'
 cifradoAmericano Si = 'b'
 
---Alternativamente
-
-data NotaBasicas = Do | Re | Mi | Fa | Sol | La | Si
-
-cifradoAmericano :: NotaBasicas −> Char
-cifradoAmericano n = case n of 
-			Do = 'c'
- 			Re = 'd'
- 			Mi = 'e'
- 			Fa = 'f'
- 			Sol ='g'
- 			La = 'a'
- 			Si = 'b'
-
-
+--Chekiado ! 
 --Lab 3)
 
 --a) Complet ́a la definici ́on del tipo NotaBasica para que las expresiones
-
 
 data NotaBasicas = Do | Re | Mi | Fa | Sol | La | Si
     deriving (Eq, Show, Ord, Bounded, Enum)
@@ -163,15 +146,26 @@ minimoElemento' (x:xs) = min x (minimoElemento' xs)
 -- Para ello revis ́a la clase Bounded. Ayuda: Para probar esta funci ́on dentro de ghci con listas vac ́ıas, indic ́a el
 -- tipo concreto con tipos de la clase Bounded, por ejemplo: ([1,5,10]::[Int]), ([]::[Bool]), etc.
 
-minimoElemento' :: (Bounded a, Ord a, Num a) => [a] -> a
-minimoElemento' [] = maxBound --Nueutro Por la tablita de neutros
-minimoElemento' [x] = x 
-minimoElemento' (x:xs) = min x (minimoElemento' xs)
+minimoElemento'' :: (Bounded a, Ord a, Num a) => [a] -> a
+minimoElemento'' [] = maxBound --Nueutro Por la tablita de neutros
+minimoElemento'' [x] = x 
+minimoElemento'' (x:xs) = min x (minimoElemento'' xs)
+
+--no anda, no se por que. 
 
 -- c) Us ́a la funci ́on minimoElemento para determinar la nota m ́as grave de la melod ́ıa: [Fa, La, Sol, Re, Fa]
 -- En las definiciones de los ejercicios siguientes, deben agregar deriving s ́olo cuando sea estrictamente necesario.
 
+-- Definición del tipo de notas
+data Nota = Do | Re | Mi | Fa | Sol | La | Si deriving (Eq, Ord, Show)
+-- Do < Re < Mi < Fa < Sol < La < Si. Por eso se ordena bien
+-- Función para encontrar el mínimo elemento
+minimoElemento :: (Ord a) => [a] -> a
+minimoElemento [x] = x 
+minimoElemento (x:xs) = min x (minimoElemento xs)
+
 --Lab 5)
+
 --a)Implement ́a el tipo Deportista y todos sus tipos accesorios (NumCamiseta, Altura, Zona, etc) tal como est ́an definidos arriba.
 -- Sinonimos de tipo
 type Altura = Int
@@ -190,42 +184,113 @@ type ManoHabil = PiernaHabil
 
 -- Deportista es un tipo algebraico con constructores param ́etricos
 
-data Deportista = Ajedrecista −−Constructor sin argumentos
-					| Ciclista Modalidad −− Constructor con un argumento
-					| Velocista Altura −− Constructor con un argumento
-					| Tenista TipoReves ManoHabil Altura −− Constructor con tres argumentos
-					| Futbolista Zona NumCamiseta PiernaHabil Altura −− Constructor con cuatro argumentos
+data Deportista = Ajedrecista                                        -- Constructor sin argumentos
+					| Ciclista Modalidad                             -- Constructor con un argumento
+					| Velocista Altura                               -- Constructor con un argumento
+					| Tenista TipoReves ManoHabil Altura             -- Constructor con tres argumentos
+					| Futbolista Zona NumCamiseta PiernaHabil Altura -- Constructor con cuatro argumentos
 
 --b)  ¿Cu ́al es el tipo del constructor Ciclista?
-Ciclista :: Modalidad -> Deportista
+
+ --Ciclista :: Modalidad -> Deportista
 
 --c) Program ́a la funci ́on contar_velocistas :: [Deportista] -> Int que dada una lista de deportistas xs,
 -- devuelve la cantidad de velocistas que hay dentro de xs. Programar contar_velocistas sin usar igualdad,
 -- utilizando pattern matching.
+
+-- Sinónimos de tipo
+type Altura = Int
+type NumCamiseta = Int
+
+-- Tipos algebraicos sin parámetros (aka enumerados)
+data Zona = Arco | Defensa | Mediocampo | Delantera
+data TipoReves = DosManos | UnaMano
+data Modalidad = Carretera | Pista | Monte | BMX
+data PiernaHabil = Izquierda | Derecha
+
+-- Sinónimo
+type ManoHabil = PiernaHabil
+
+-- Tipo algebraico con constructores paramétricos
+data Deportista = 
+      Ajedrecista                  -- Constructor sin argumentos
+    | Ciclista Modalidad           -- Constructor con un argumento
+    | Velocista Altura             -- Constructor con un argumento
+    | Tenista TipoReves ManoHabil Altura  -- Constructor con tres argumentos
+    | Futbolista Zona NumCamiseta PiernaHabil Altura  -- Constructor con varios argumentos
+
 contar_velocistas :: [Deportista] -> Int
 contar_velocistas [] = 0
-contar_velocistas = 1 + contar_velocistas xs 
+contar_velocistas (Velocista _ : xs) = 1 + contar_velocistas xs
+contar_velocistas (Ciclista _ : xs) = contar_velocistas xs
+contar_velocistas (Tenista _ _ _ : xs) = contar_velocistas xs
+contar_velocistas (Futbolista _ _ _ _ : xs) = contar_velocistas xs
+contar_velocistas (Ajedrecista : xs) = contar_velocistas xs 
+
+{-
+deportistas :: [Deportista]
+deportistas = [   Ajedrecista,  Ciclista Carretera, Velocista 180, Tenista DosManos Izquierda 175, Futbolista Delantera 10 Izquierda 170 ]
+-}
+-- Contar velocistas en la lista
 
 --d y e) Program ́a la funci ́on contar_futbolistas :: [Deportista] -> Zona -> Int que dada una lista de deportistas xs, y una zona z, devuelve la cantidad de futbolistas incluidos en xs que juegan en la zona z. No
 --usar igualdad, s ́olo pattern matching. el e) es usar filter. 
 
+type Altura = Int
+type NumCamiseta = Int
+
+-- Tipos algebraicos sin parámetros (aka enumerados)
+data Zona = Arco | Defensa | Mediocampo | Delantera
+data TipoReves = DosManos | UnaMano
+data Modalidad = Carretera | Pista | Monte | BMX
+data PiernaHabil = Izquierda | Derecha
+
+-- Sinónimo
+type ManoHabil = PiernaHabil
+
+-- Tipo algebraico con constructores paramétricos
+data Deportista = 
+      Ajedrecista                  -- Constructor sin argumentos
+    | Ciclista Modalidad           -- Constructor con un argumento
+    | Velocista Altura             -- Constructor con un argumento
+    | Tenista TipoReves ManoHabil Altura  -- Constructor con tres argumentos
+    | Futbolista Zona NumCamiseta PiernaHabil Altura  -- Constructor con varios argumentos
+    
 contar_futbolistas :: [Deportista] -> Zona -> Int
-contar_futbolistas xs zona = length (filter esFutbolistaEnZona xs)
-															where
-																esFutbolistaEnZona (Futbolista z _ _ _) = z == zona  
-																esFutbolistaEnZona _ = False  lab 10)
+contar_futbolistas [] _                                          = 0
+contar_futbolistas ((Futbolista Arco _ _ _):xs) Arco             = 1 + contar_futbolistas xs Arco
+contar_futbolistas ((Futbolista Defensa _ _ _):xs) Defensa       = 1 + contar_futbolistas xs Defensa
+contar_futbolistas ((Futbolista Mediocampo _ _ _):xs) Mediocampo = 1 + contar_futbolistas xs Mediocampo
+contar_futbolistas ((Futbolista Delantera _ _ _):xs) Delantera   = 1 + contar_futbolistas xs Delantera
+contar_futbolistas (_:xs) z                                      = contar_futbolistas xs z
+
+--Chekiado !
+
+{-
+Para testear:
+
+-- *Main> contar_futbolistas [Ajedrecista, Velocista 1] Arco
+-- 0
+
+-- *Main> contar_futbolistas [Ajedrecista, Futbolista Arco 1 Izquierda 180, Velocista 1, Futbolista Defensa 2 Derecha 175] Arco
+-- 1
+-}
+
+--lab 6-9 son de practico 
 -- LABORATORIO 10)
 --a) Implement ́a la funci ́on sonidoNatural como est ́a definida arriba.
-sonidoNatural :: NotaBasica -> Int
-			sonidoNatural Do = 0
-			sonidoNatural Re = 2
-			sonidoNatural Mi = 4
-			sonidoNatural Fa = 5
-			sonidoNatural Sol = 7
-			sonidoNatural La = 9
-			sonidoNatural Si = 11
+
+sonidoNatural :: NotaBasica −> Int
+sonidoNatural Do = 0
+sonidoNatural Re = 2
+sonidoNatural Mi = 4
+sonidoNatural Fa = 5
+sonidoNatural Sol = 7
+sonidoNatural La = 9
+sonidoNatural Si = 11
 
 --b) Defin ́ı el tipo enumerado Alteracion que consta de los constructores Bemol, Natural y Sostenido.
+
 data NotaBasica = Do | Re | Mi | Fa | Sol | La | Si
 data Alteracion = Bemol | Natural | Sostenido 
 
@@ -242,89 +307,90 @@ data NotaMusical = Nota
 --d) Defin ́ı la funci ́on sonidoCromatico :: NotaMusical -> Int que devuelve el sonido de una nota, incre-
 -- mentando en uno su valor si tiene la alteraci ́on Sostenido, decrementando en uno si tiene la alteraci ́on Bemol
 -- y dejando su valor intacto si la alteraci ́on es Natural
+
+sonidoNatural :: NotaBasica -> Int
+sonidoNatural Do = 0
+sonidoNatural Re = 2
+sonidoNatural Mi = 4
+sonidoNatural Fa = 5
+sonidoNatural Sol = 7
+sonidoNatural La = 9
+sonidoNatural Si = 11
+
 data NotaBasica = Do | Re | Mi | Fa | Sol | La | Si
 data Alteracion = Bemol | Sostenido | Natural 
-type Nota = (NotaBasica, Alteracion)
-data NotaMusical = Nota 
+
+data NotaMusical = Nota NotaBasica Alteracion deriving (Ord, Eq)
 
 sonidoCromatico :: NotaMusical -> Int
-sonidoCromatico (Nota, Alteracion) = 
-    let base = case nota of 			--Caso base de NotaMusical
-                      Do  -> 0
-                      Re  -> 2
-                      Mi  -> 4
-                      Fa  -> 5
-                      Sol -> 7
-                      La  -> 9
-                      Si  -> 11
-        ajuste = case Alteracion of		--Caso de alteracion, se agrega 1 o se descuenta 1.
-                       Bemol     -> -1
-                       Sostenido -> 1
-                       Natural   -> 0
-    in base + ajuste 		--Opera el 1.
+sonidoCromatico (Nota s Natural) = sonidoNatural s 
+sonidoCromatico (Nota s Bemol) = (sonidoNatural s ) -1
+sonidoCromatico (Nota s Sostenido) = (sonidoNatural s ) + 1
+
+
+instance Eq NotaMusical
+    where 
+        nota1 == nota2 = sonidoCromatico nota1 == sonidoCromatico nota2
 
 --e) Inclu ́ı el tipo NotaMusical a la clase Eq de manera tal que dos notas que tengan el mismo valor de sonidoCromatico se consideren iguales.
 
+
+sonidoNatural :: NotaBasica -> Int
+sonidoNatural Do = 0
+sonidoNatural Re = 2
+sonidoNatural Mi = 4
+sonidoNatural Fa = 5
+sonidoNatural Sol = 7
+sonidoNatural La = 9
+sonidoNatural Si = 11
+
 data NotaBasica = Do | Re | Mi | Fa | Sol | La | Si
 data Alteracion = Bemol | Sostenido | Natural 
-type Nota = (NotaBasica, Alteracion)
-data NotaMusical = Nota 
-				deriving(Eq)
 
-sonidoCromatico :: Eq => NotaMusical -> Int
-sonidoCromatico (Nota, Alteracion) = 
-    let base = case nota of 			--Caso base de NotaMusical
-                      Do  -> 0
-                      Re  -> 2
-                      Mi  -> 4
-                      Fa  -> 5
-                      Sol -> 7
-                      La  -> 9
-                      Si  -> 11
-        ajuste = case Alteracion of		--Caso de alteracion, se agrega 1 o se descuenta 1.
-                       Bemol     -> -1
-                       Sostenido -> 1
-                       Natural   -> 0
-    in base + ajuste 		--Opera el 1.
+data NotaMusical = Nota NotaBasica Alteracion deriving (Ord)
 
-instance Eq Nota 
-	where 
-		Natural == Natural = sonidoCromatico Bemol == Bemol = sonidoCromatico Sostenido == Sostenido
+sonidoCromatico :: NotaMusical -> Int
+sonidoCromatico (Nota s Natural) = sonidoNatural s 
+sonidoCromatico (Nota s Bemol) = (sonidoNatural s ) -1
+sonidoCromatico (Nota s Sostenido) = (sonidoNatural s ) + 1
+
+
+instance Eq NotaMusical
+    where 
+        nota1 == nota2 = sonidoCromatico nota1 == sonidoCromatico nota2
+
 
 --f) Inclu ́ı el tipo NotaMusical a la clase Ord definiendo el operador <=. Se debe definir que una nota es me-
 -- nor o igual a otra si y s ́olo si el valor de sonidoCromatico para la primera es menor o igual al valor de
 -- sonidoCromatico para la segunda.
 
+
+sonidoNatural :: NotaBasica -> Int
+sonidoNatural Do = 0
+sonidoNatural Re = 2
+sonidoNatural Mi = 4
+sonidoNatural Fa = 5
+sonidoNatural Sol = 7
+sonidoNatural La = 9
+sonidoNatural Si = 11
+
 data NotaBasica = Do | Re | Mi | Fa | Sol | La | Si
 data Alteracion = Bemol | Sostenido | Natural 
-type Nota = (NotaBasica, Alteracion)
-data NotaMusical = Nota 
-				deriving(Eq, Ord)
 
-sonidoCromatico :: (Eq, Ord) => NotaMusical -> Int
-sonidoCromatico (Nota, Alteracion) = 
-    let base = case nota of 			--Caso base de NotaMusical
-                      Do  -> 0
-                      Re  -> 2
-                      Mi  -> 4
-                      Fa  -> 5
-                      Sol -> 7
-                      La  -> 9
-                      Si  -> 11
-        ajuste = case Alteracion of		--Caso de alteracion, se agrega 1 o se descuenta 1.
-                       Bemol     -> -1
-                       Sostenido -> 1
-                       Natural   -> 0
-    in base + ajuste 		--Opera el 1.
+data NotaMusical = Nota NotaBasica Alteracion 
 
-instance Eq Nota 
-	where 
-		Natural == Natural = sonidoCromatico Bemol == Bemol = sonidoCromatico Sostenido == Sostenido
+sonidoCromatico :: NotaMusical -> Int
+sonidoCromatico (Nota s Natural) = sonidoNatural s 
+sonidoCromatico (Nota s Bemol) = (sonidoNatural s ) -1
+sonidoCromatico (Nota s Sostenido) = (sonidoNatural s ) + 1
 
-instance Ord Nota
-	where
-		Bemol >= Natural >= Sostenido
 
+instance Eq NotaMusical
+    where 
+        nota1 == nota2 = sonidoCromatico nota1 == sonidoCromatico nota2
+
+instance Ord NotaMusical
+    where nota1 <= nota2 = sonidoCromatico nota1 <= sonidoCromatico nota2
 
 --codigo de chat gipiti 
 -- instance Eq NotaMusical where
@@ -341,6 +407,7 @@ instance Ord Nota
 
 --a) a) Defin ́ı la funci ́on primerElemento que devuelve el primer elemento de una lista no vac ́ıa, o Nothing si la lista es vac ́ıa.
 -- data Maybe a = Nothing | Just a		esta en el preludio. No es necesario definirlo.
+
 primerElemento :: [a] -> Maybe a
 primerElemento [] = Nothing
 primerElemento (x:xs) = head primerElemento xs 
@@ -614,6 +681,9 @@ primero lista = head lista
 resto :: [a] -> [a]
 resto lista = tail lista
 -- Devuelve la lista sin el primer elemento
+
+
+foldr foldl?
 -}
 
 
