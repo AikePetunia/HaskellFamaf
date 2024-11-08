@@ -1024,6 +1024,47 @@ Para testear:
 
 -- *Main> contar_futbolistas [Ajedrecista, Futbolista Arco 1 Izquierda 180, Velocista 1, Futbolista Defensa 2 Derecha 175] Arco
 -- 1
+
+type Año = Int
+type Nombre = String 
+type Artista = String 
+type Temas = [String]
+type Duracion = Int 
+
+data Lanzamiento = Album Nombre Artista Temas Año
+                   | Sencillo  Nombre Artista Duracion Año deriving (Show)
+
+
+thriller :: Lanzamiento
+thriller = Album "Thriller" "Michael Jackson" ["Wanna be starting Something", "Baby me mine", "This girl is mine", "Thriller", "Beat it", "Billie Jean", "Human nature", "Pretty young thing", "The lady in my life"] 1982
+
+yesterday :: Lanzamiento
+yesterday = Sencillo "Yesterday" "The Beatles" 125 1965
+
+esDiscoLargo :: Lanzamiento -> Bool 
+esDiscoLargo (Album _ _ temas _) = length temas >= 5
+esDiscoLargo _ = False 
+
+esSencilloActual :: Lanzamiento -> Bool
+esSencilloActual (Sencillo _ _ _ año) = año >= 2020 
+esSencilloActual _ = False  
+
+tracksAlbumMasLargo :: [Lanzamiento] -> Int 
+tracksAlbumMasLargo [] = 0
+tracksAlbumMasLargo ((Album _ _ temas _):xs) = max (length temas) (tracksAlbumMasLargo xs)
+tracksAlbumMasLargo (_:xs) = tracksAlbumMasLargo xs 
+
+data ColaLanzamiento = Vacia | Encolada Lanzamiento ColaLanzamiento deriving (Show)
+
+colaReproduccion :: ColaLanzamiento
+colaReproduccion = Encolada thriller (Encolada yesterday Vacia)
+
+albumsDelArtista :: ColaLanzamiento -> String -> ColaLanzamiento
+albumsDelArtista Vacia _ = Vacia 
+albumsDelArtista (Encolada (Album n artista t a) colaLanzamiento) artistaDado | artista == artistaDado = Encolada (Album n artista t a) (albumsDelArtista colaLanzamiento artistaDado)
+                                                                              | otherwise = albumsDelArtista colaLanzamiento artistaDado
+albumsDelArtista (Encolada _ cs) a = albumsDelArtista cs a
+
 -}
 
 --lab 6-9 son de practico 
@@ -1105,8 +1146,18 @@ sonidoCromatico (Nota s Sostenido) = (sonidoNatural s ) + 1
 
 instance Eq NotaMusical
     where 
-        nota1 == nota2 = sonidoCromatico nota1 == sonidoCromatico nota2
+        nota1 == nota2 = --Si las dos nota (que es NotaMusical) son iguales, entonces:
+            sonidoCromatico nota1 == sonidoCromatico nota2
 
+{-
+ghci> Nota Do Sostenido == Nota Re Natural
+False
+ghci> Nota Do Sostenido == Nota Re Sostenido
+False
+ghci> Nota Do Sostenido == Nota Do Sostenido
+True
+ghci> 
+-}
 
 --f) Inclu ́ı el tipo NotaMusical a la clase Ord definiendo el operador <=. Se debe definir que una nota es me-
 -- nor o igual a otra si y s ́olo si el valor de sonidoCromatico para la primera es menor o igual al valor de
@@ -1136,11 +1187,22 @@ instance Eq NotaMusical
     where 
         nota1 == nota2 = sonidoCromatico nota1 == sonidoCromatico nota2
 
-instance Ord NotaMusical
-    where 
-      nota1 <= nota2 = 
-        sonidoCromatico 
-      nota1 <= sonidoCromatico nota2
+instance Ord NotaMusical where
+    -- Definir cómo comparar si una nota es menor o igual a otra.
+    nota1 <= nota2 = sonidoCromatico nota1 <= sonidoCromatico nota2
+
+    -- Definir cómo comparar si una nota es mayor que otra.
+    nota1 >= nota2 = sonidoCromatico nota1 >= sonidoCromatico nota2
+
+    -- Definir cómo comparar el orden en que las notas deben ser ordenadas.
+    compare nota1 nota2 = compare (sonidoCromatico nota1) (sonidoCromatico nota2)
+
+    -- Definir el operador de menor que.
+    nota1 < nota2 = sonidoCromatico nota1 < sonidoCromatico nota2
+
+    -- Definir el operador de mayor que.
+    nota1 > nota2 = sonidoCromatico nota1 > sonidoCromatico nota2
+
 {-
 --
 -- instance Eq PiedrasPreciosas 
@@ -1187,6 +1249,11 @@ primerElemento :: [a] -> Maybe a
 primerElemento [] = Nothing
 primerElemento (x:xs) = Just x 
 
+{-
+ ghci> primerElemento  [1,2,3,44]
+Just 1
+-}
+
 --Lab 12)
 --i. Program ́a las siguientes funciones:
 
@@ -1217,8 +1284,9 @@ data Deportista = Ajedrecista | Ciclista  | Velocista  | Tenista   | Futbolista 
 data Cola = VaciaC | Encolada Deportista Cola deriving (Show, Eq)
 
 encolar :: Deportista -> Cola -> Cola
-encolar d VaciaC = Encolada d VaciaC
-encolar d (Encolada d' cola) = Encolada d cola --La recursion de cola hace que se agregue en ultima posicion
+encolar :: Deportista -> Cola -> Cola
+encolar n VaciaC = Encolada n VaciaC
+encolar n (Encolada deportista cola) = Encolada n (Encolada deportista cola) --Lo ultimo es Cola. n es el deportista. De igual manera, se puede poner cola.
 
 y :: Cola 
 y = Encolada Tenista (Encolada Ciclista (Encolada Velocista (Encolada Futbolista VaciaC)))
@@ -1229,30 +1297,54 @@ y = Encolada Tenista (Encolada Ciclista (Encolada Velocista (Encolada Futbolista
 --c)busca :: Cola -> Zona -> Maybe Deportista, que devuelve el/la primera futbolista dentro de la
 --cola que juega en la zona que se corresponde con el segundo par ́ametro. Si no hay futbolistas jugando en esa zona devuelve Nothing.
 
---Sinonimos de tipo
-data Zona = Arco | Defensa | Mediocampo | Delantera deriving (Show, Eq)
-data PiernaHabil = Izquierda | Derecha deriving (Show)
 
-data Deportista = Ajedrecista | Ciclista | Velocista | Tenista | Futbolista Zona deriving (Show)
+type Altura = Int
+type NumCamiseta = Int
 
-data Cola = VaciaC | Encolada Deportista Cola deriving (Show)
+-- Tipos algebraicos sin parámetros (aka enumerados)
+data Zona = Arco | Defensa | Mediocampo | Delantera deriving(Show, Eq)
 
--- Función que busca un Deportista de tipo Futbolista en la Cola según la Zona
+data TipoReves = DosManos | UnaMano deriving(Show)
+
+data Modalidad = Carretera | Pista | Monte | BMX deriving(Show)
+
+data PiernaHabil = Izquierda | Derecha deriving(Show)
+
+
+-- Sinónimo
+type ManoHabil = PiernaHabil
+
+-- Tipo algebraico con constructores paramétricos
+
+data Deportista = 
+      Ajedrecista                  -- Constructor sin argumentos
+    | Ciclista Modalidad           -- Constructor con un argumento
+    | Velocista Altura             -- Constructor con un argumento
+    | Tenista TipoReves ManoHabil Altura  -- Constructor con tres argumentos
+    | Futbolista Zona NumCamiseta PiernaHabil Altura -- Constructor con varios argumentos
+    deriving(Show)
+
+data Cola = VaciaC | Encolada Deportista Cola deriving(Show)
+
 busca :: Cola -> Zona -> Maybe Deportista
-busca VaciaC _ = Nothing -- caso base
-busca (Encolada deportista cola) zona =
-    case deportista of
-        Futbolista z 
-        | z == zona -> Just deportista --Condicion -> Output
-        _ -> busca cola zona
-
-{-
-Si d es FUTBOLISTA, que entre a buscar la zona que se da en z. 
-Si d No ES futbolista, que devuelva nothing
--}
+busca VaciaC z = Nothing 
+busca (Encolada (Futbolista zona n p a) cola) z | z == zona = Just (Futbolista zona n p a) 
+                                                | otherwise = busca cola z
+busca (Encolada _ cola) z = busca cola z
 
 y :: Cola 
-y = Encolada Futbolista Delantera (Encolada Futbolista Defensa (Encolada Velocista (Encolada Futbolista Arco VaciaC)))
+y = Encolada (Futbolista Delantera 1 Izquierda 180) 
+    (Encolada (Futbolista Defensa 2 Derecha 175) 
+    (Encolada (Velocista 9) 
+    (Encolada (Futbolista Arco 3  Izquierda 170) VaciaC)))
+
+{-
+ghci> busca y Arco
+Just (Futbolista Arco 3 Izquierda 170)
+ghci> busca y Defensa
+Just (Futbolista Defensa 2 Derecha 175)
+ghci> 
+-}
 
 --II) Tail? Head? Una lista? 
 

@@ -27,9 +27,19 @@ tiempoPelis [] añoDado = 0
 tiempoPelis ((Pelicula _ _ duracion añoEstreno):xs) añoDado | añoEstreno == añoDado = duracion + tiempoPelis xs añoDado
                                                             | otherwise = tiempoPelis xs añoDado 
 
-
+{-
+ghci> tiempoPelis [(Pelicula "as" "asd" 120 2024), (Pelicula "asd" "sdfoji" 1222 2020)] 2020
+1222
+ghci> tiempoPelis [(Pelicula "as" "asd" 120 2024), (Pelicula "asd" "sdfoji" 1222 2020)] 2024
+120
+-}
 
 data ColaVideo = Vacia | Encolada Video ColaVideo deriving Show
 
 colaReproduccion :: ColaVideo
-colaReproduccion = Encolada elPadrino (Encolada breakingBadS01E01 Vacia))
+colaReproduccion = Encolada theOfficeS02E05 (Encolada theOfficeS02E05 Vacia)
+
+seriesActuales :: ColaVideo -> ColaVideo
+seriesActuales Vacia = Vacia 
+seriesActuales (Encolada (CapSerie nombre nroCap temporada 2024) colaVideo) = Encolada (CapSerie nombre nroCap temporada 2024) (seriesActuales colaVideo) 
+seriesActuales (Encolada _ colaVideo) = seriesActuales colaVideo
