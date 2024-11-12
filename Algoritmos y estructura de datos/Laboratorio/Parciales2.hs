@@ -19,7 +19,7 @@ data PiedrasPreciosas = Diamante Color Dureza Peso Precio
 cuantosDiamantes :: [PiedrasPreciosas] -> Color -> Int
 cuantosDiamantes [] _ = 0 
 cuantosDiamantes ((Diamante Azul _ _ _):xs) Azul = 1 + cuantosDiamantes xs Azul  
-cuantosDiamantes ((Diamante Rosa _ _ _):xs)Rosa = 1 + cuantosDiamantes xs Rosa  
+cuantosDiamantes ((Diamante Rosa _ _ _):xs) Rosa = 1 + cuantosDiamantes xs Rosa  
 cuantosDiamantes ((Diamante Amarillo _ _ _):xs) Amarillo = 1 + cuantosDiamantes xs Amarillo  
 cuantosDiamantes ((Diamante Marron _ _ _):xs) Marron = 1 + cuantosDiamantes xs Marron  
 cuantosDiamantes ((Diamante Gris _ _ _):xs) Gris = 1 + cuantosDiamantes xs Gris  
