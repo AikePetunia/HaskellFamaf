@@ -3,6 +3,7 @@ Cronograma https://docs.google.com/spreadsheets/d/1uqIAqYlwsiWiiqjQR0N8Z4tArhjNj
 https://famaf.aulavirtual.unc.edu.ar/pluginfile.php/37074/mod_resource/content/1/practico1-2024.pdf
 https://docs.google.com/document/d/1eFpoykGRExEi2lTYVkoDGXVgBSB271xBQXLShsFIJvs/edit
 http://aprendehaskell.es/content/Introduccion.html#sobre-esta-guia
+https://drive.google.com/drive/u/0/folders/1R6nRs5OlGPxfWFt71Ke3itI5jdE9-0gJ
 ayuda para coso 
 Parte de ayuda practico 1:
 https://famaf.aulavirtual.unc.edu.ar/course/view.php?id=285&section=5#tabs-tree-start
